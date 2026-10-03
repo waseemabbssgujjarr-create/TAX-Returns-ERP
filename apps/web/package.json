@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:fresh": "pnpm clean && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint && tsc --noEmit",
