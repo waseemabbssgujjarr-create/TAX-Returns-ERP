@@ -65,14 +65,7 @@ const envSchema = z
     WORKER_PORT: z.coerce.number().default(3001),
   })
   .superRefine((data, ctx) => {
-    if (!data.DATABASE_MIGRATIONS_URL && !data.DATABASE_DIRECT_URL) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'DATABASE_MIGRATIONS_URL or DATABASE_DIRECT_URL is required',
-        path: ['DATABASE_MIGRATIONS_URL'],
-      })
-    }
-
+    // Migrations URLs are deployment-only (prisma migrate / cpanel:build), not worker runtime.
     if (data.NODE_ENV === 'production' && data.OPENAI_API_KEY.length === 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,

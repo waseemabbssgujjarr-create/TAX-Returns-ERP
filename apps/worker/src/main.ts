@@ -18,8 +18,8 @@ async function bootstrap() {
   app.use(cookieParser())
   app.useGlobalFilters(new ProblemDetailsFilter())
 
-  const port = process.env['WORKER_PORT'] ?? 3001
-  await app.listen(port)
+  const port = Number(process.env['PORT'] ?? process.env['WORKER_PORT'] ?? 3001)
+  await app.listen(port, '0.0.0.0')
 
   Logger.log(`Worker running on port ${port}`, 'Bootstrap')
 }

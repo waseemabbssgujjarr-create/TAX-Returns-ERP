@@ -146,7 +146,8 @@ You usually need **two** Node applications (or one Node app + worker via systemd
 
 - **Application root:** `apps/worker`
 - **Start:** `node dist/main` after build (or `pnpm --filter @taxdesk/worker start`)
-- Expose via internal `127.0.0.1:3001` or a separate subdomain `api.tax.aderalabs.tech` with its own Node app / reverse proxy.
+- **Port:** cPanel sets `PORT`; worker falls back to `WORKER_PORT` (default `3001`). Runtime needs `DATABASE_URL` only — set `DATABASE_MIGRATIONS_URL` for `pnpm cpanel:build` / migrate, not for `node dist/main`.
+- Expose via internal `127.0.0.1` on that port or a separate subdomain `api.tax.aderalabs.tech` with its own Node app / reverse proxy.
 
 Restart both apps after each deploy from cPanel Node UI or:
 
