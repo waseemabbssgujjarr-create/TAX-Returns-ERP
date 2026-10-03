@@ -118,6 +118,8 @@ pnpm prisma:migrate          # uses DATABASE_MIGRATIONS_URL — run only on depl
 pnpm build
 ```
 
+On cPanel you can use `pnpm cpanel:install` then `pnpm cpanel:build` (generate + migrate + `@taxdesk/web` build). Start the Next.js app with `node apps/web/server.cjs` (`PORT` from the environment; no hardcoded port).
+
 If migrations must use a different env file, export `DATABASE_MIGRATIONS_URL` only for that command, then run the worker with runtime env that **excludes** migrations URL (see comments in `.env.example`).
 
 Optional demo data (non-production only):
@@ -137,7 +139,7 @@ You usually need **two** Node applications (or one Node app + worker via systemd
 - **Application root:** `apps/web` **or** repo root with start command `pnpm --filter @taxdesk/web start`
 - **Application mode:** Production
 - **Node version:** 20.x
-- **Startup file / script:** `node_modules/next/dist/bin/next` with args `start -p $PORT`, or `pnpm --filter @taxdesk/web start`
+- **Startup file / script:** `node apps/web/server.cjs` from the repo root (or `node server.cjs` if the application root is `apps/web`). Alternatives: `node_modules/next/dist/bin/next` with args `start -p $PORT`, or `pnpm --filter @taxdesk/web start`
 - Map the subdomain `tax.aderalabs.tech` to this app in **Setup Node.js App** (Passenger or proxy to the Node port).
 
 ### Worker (NestJS)

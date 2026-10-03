@@ -20,6 +20,8 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,json,md,css}\" --ignore-path .gitignore",
     "clean": "pnpm -r clean && rimraf node_modules",
     "prepare": "husky",
+    "cpanel:install": "corepack prepare pnpm@9.12.0 --activate && pnpm install --frozen-lockfile",
+    "cpanel:build": "pnpm prisma:generate && pnpm prisma:migrate && pnpm --filter @taxdesk/web build",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev",
