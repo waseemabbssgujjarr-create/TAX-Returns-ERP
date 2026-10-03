@@ -1,6 +1,10 @@
 'use client'
 
-import { PenaltyClientTypeSchema, PenaltyFilingKindSchema } from '@taxdesk/schemas'
+import {
+  PenaltyClientTypeSchema,
+  PenaltyFilingKindSchema,
+  type PenaltyEstimateResult,
+} from '@taxdesk/schemas'
 import { Button } from '@taxdesk/ui'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
@@ -35,7 +39,20 @@ export function PenaltyCalculatorWidget() {
   const [taxPayable, setTaxPayable] = useState('')
   const [daysLate, setDaysLate] = useState('0')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<Awaited<ReturnType<typeof estimatePenalty>> | null>(null)
+  const [result, setResult] = useState<PenaltyEstimateResult | null>(null)
+
+  function unavailableResult(reason: string): PenaltyEstimateResult {
+    return {
+      available: false,
+      rulesVersion: null,
+      penaltyPaisa: null,
+      minimumAppliedPaisa: null,
+      cappedAtMaxPaisa: false,
+      reductionPercentApplied: null,
+      explanationKeys: [],
+      blockedReason: reason,
+    }
+  }
 
   async function handleCalculate() {
     if (!accessToken) return
@@ -50,7 +67,7 @@ export function PenaltyCalculatorWidget() {
       })
       setResult(res)
     } catch {
-      setResult({ available: false, blockedReason: t('unavailable') })
+      setResult(unavailableResult(t('unavailable')))
     } finally {
       setLoading(false)
     }

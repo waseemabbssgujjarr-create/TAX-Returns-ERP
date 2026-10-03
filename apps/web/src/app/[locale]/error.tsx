@@ -1,24 +1,39 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface ErrorPageProps {
   error: Error & { digest?: string }
   reset: () => void
 }
 
+const COPY = {
+  en: {
+    title: 'Something went wrong',
+    description: 'An unexpected error occurred. Please try again.',
+    action: 'Try again',
+  },
+  ur: {
+    title: 'کچھ غلط ہو گیا',
+    description: 'غیر متوقع خرابی۔ دوبارہ کوشش کریں۔',
+    action: 'دوبارہ کوشش کریں',
+  },
+} as const
+
 /**
  * Route-level error boundary.
- * Shown when an unhandled error is thrown in a Server Component.
+ * Avoids next-intl hooks so this still renders if i18n or the root layout failed.
  */
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
-  const t = useTranslations('errors')
+  const [locale, setLocale] = useState<'en' | 'ur'>('en')
 
   useEffect(() => {
-    // Log to error tracking (Sentry) in production
     console.error('[ErrorBoundary]', error)
+    const lang = document.documentElement.lang
+    if (lang === 'ur') setLocale('ur')
   }, [error])
+
+  const copy = COPY[locale]
 
   return (
     <main
@@ -28,14 +43,14 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
       <p className="text-5xl" role="img" aria-label="Error">
         ⚠️
       </p>
-      <h2 className="text-foreground text-xl font-semibold">{t('unexpected.title')}</h2>
-      <p className="text-muted-foreground text-sm">{t('unexpected.description')}</p>
+      <h2 className="text-foreground text-xl font-semibold">{copy.title}</h2>
+      <p className="text-muted-foreground text-sm">{copy.description}</p>
       <button
         type="button"
         onClick={reset}
         className="bg-primary hover:bg-primary-hover focus-visible:ring-primary mt-2 rounded-md px-4 py-2 text-sm font-medium text-white focus-visible:ring-2"
       >
-        {t('unexpected.action')}
+        {copy.action}
       </button>
     </main>
   )
