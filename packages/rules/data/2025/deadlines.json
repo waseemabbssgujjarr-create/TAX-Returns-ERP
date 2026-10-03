@@ -1,0 +1,52 @@
+{
+  "_warning": "DRAFT PLACEHOLDER DATA — All dates are ILLUSTRATIVE. Must be verified against FBR notifications and any extensions announced for TY2025.",
+  "id": "deadlines_2025",
+  "effectiveFrom": "2024-07-01",
+  "effectiveTo": "2025-06-30",
+  "sourceReference": "Income Tax Ordinance 2001, Section 118 / FBR — PLACEHOLDER",
+  "reviewedBy": "PENDING",
+  "reviewedOn": "2025-01-01",
+  "version": "0.1.0-DRAFT",
+  "deadlines": [
+    {
+      "id": "return_filing_individual",
+      "labelKey": "deadlines.returnFilingIndividual",
+      "date": "2025-09-30",
+      "appliesTo": ["SALARIED_INDIVIDUAL", "BUSINESS_INDIVIDUAL", "FREELANCER_IT_EXPORTER"],
+      "description": "Income tax return filing deadline for individuals (PLACEHOLDER — verify with FBR)",
+      "penaltyDescription": "Late filing penalty under Section 182 (PLACEHOLDER — verify)"
+    },
+    {
+      "id": "advance_tax_q1",
+      "labelKey": "deadlines.advanceTaxQ1",
+      "date": "2024-09-15",
+      "appliesTo": ["BUSINESS_INDIVIDUAL", "AOP_PARTNERSHIP"],
+      "description": "1st quarter advance tax instalment — 25% of estimated annual liability (PLACEHOLDER)",
+      "penaltyDescription": "Default surcharge under Section 205 (PLACEHOLDER)"
+    },
+    {
+      "id": "advance_tax_q2",
+      "labelKey": "deadlines.advanceTaxQ2",
+      "date": "2024-12-15",
+      "appliesTo": ["BUSINESS_INDIVIDUAL", "AOP_PARTNERSHIP"],
+      "description": "2nd quarter advance tax instalment (PLACEHOLDER)",
+      "penaltyDescription": "Default surcharge under Section 205 (PLACEHOLDER)"
+    },
+    {
+      "id": "advance_tax_q3",
+      "labelKey": "deadlines.advanceTaxQ3",
+      "date": "2025-03-15",
+      "appliesTo": ["BUSINESS_INDIVIDUAL", "AOP_PARTNERSHIP"],
+      "description": "3rd quarter advance tax instalment (PLACEHOLDER)",
+      "penaltyDescription": "Default surcharge under Section 205 (PLACEHOLDER)"
+    },
+    {
+      "id": "advance_tax_q4",
+      "labelKey": "deadlines.advanceTaxQ4",
+      "date": "2025-06-15",
+      "appliesTo": ["BUSINESS_INDIVIDUAL", "AOP_PARTNERSHIP"],
+      "description": "4th quarter advance tax instalment (PLACEHOLDER)",
+      "penaltyDescription": "Default surcharge under Section 205 (PLACEHOLDER)"
+    }
+  ]
+}

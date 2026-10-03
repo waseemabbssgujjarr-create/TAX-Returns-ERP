@@ -1,0 +1,1666 @@
+{
+  "meta": {
+    "appName": "TaxDesk PK",
+    "description": "Manage clients, documents, tax years, computation, wealth reconciliation, notices, billing and client collaboration in one secure workspace built for Pakistani tax professionals."
+  },
+  "nav": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "sidebarLabel": "Main navigation",
+    "dashboard": "Dashboard",
+    "clients": "Clients",
+    "returns": "Returns",
+    "documents": "Documents",
+    "calendar": "Calendar",
+    "billing": "Billing",
+    "firm": "Firm Settings",
+    "adminUsers": "Users",
+    "adminSessions": "Sessions",
+    "adminAudit": "Audit log",
+    "searchPlaceholder": "Search or jump to…",
+    "notifications": "Notifications",
+    "userMenu": "User menu",
+    "admin": "Admin",
+    "administration": "Administration",
+    "adminSubNav": "Admin sections",
+    "adminRoles": "Roles",
+    "adminSecurity": "Security events",
+    "adminFirmSettings": "Firm settings",
+    "adminIntegrations": "Integrations"
+  },
+  "auth": {
+    "brand": "TaxDesk PK",
+    "logout": "Sign out",
+    "languageSwitcher": {
+      "label": "Language",
+      "switchToEnglish": "Switch to English",
+      "switchToUrdu": "Switch to Urdu",
+      "englishShort": "Eng",
+      "urduShort": "Urdu",
+      "englishAria": "English",
+      "urduAria": "Urdu"
+    },
+    "login": {
+      "title": "Sign in",
+      "tagline": "Your tax practice, organised.",
+      "formLabel": "Sign in to TaxDesk PK",
+      "firmSlugLabel": "Firm ID",
+      "firmSlugPlaceholder": "your-firm",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "submitButton": "Sign in",
+      "forgotPassword": "Forgot password?",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "invalidCredentials": "Email or password is incorrect.",
+      "accountLocked": "Account locked. Please check your email.",
+      "networkError": "Connection error. Please try again.",
+      "apiUnavailable": "Cannot reach the API. Start Docker Desktop, then run: docker compose up -d postgres redis && pnpm dev",
+      "noAccess": "Don't have firm access?",
+      "registerLink": "Request access"
+    },
+    "twoFa": {
+      "title": "Two-factor authentication",
+      "formLabel": "Verify authenticator code",
+      "instruction": "Enter the 6-digit code from your authenticator app.",
+      "codeLabel": "Authentication code",
+      "submitButton": "Verify",
+      "recoveryLink": "Can't access your authenticator?",
+      "backToLogin": "Back to sign in",
+      "invalidCode": "Incorrect code. {count} attempts remaining before lockout.",
+      "invalidCodeGeneric": "Incorrect code.",
+      "lockedRedirect": "Account locked. Please sign in again."
+    },
+    "recover": {
+      "title": "Recovery code",
+      "formLabel": "Sign in with a recovery code",
+      "instruction": "Enter one of your 10-character recovery codes.",
+      "codeLabel": "Recovery code",
+      "codePlaceholder": "XXXXXXXXXX",
+      "submitButton": "Verify",
+      "backToTwoFa": "Back to authenticator",
+      "invalidCode": "Incorrect recovery code.",
+      "allUsed": "Contact your firm Owner to reset your authenticator."
+    },
+    "setup": {
+      "title": "Set up authenticator",
+      "stepScan": "Scan",
+      "stepVerify": "Verify",
+      "stepRecovery": "Recovery codes",
+      "scanInstruction": "Scan this QR code with your authenticator app.",
+      "verifyInstruction": "Enter the 6-digit code from your app to confirm setup.",
+      "recoveryWarning": "Save these now — they won't be shown again.",
+      "qrAlt": "QR code for authenticator setup",
+      "manualEntry": "Enter key manually",
+      "manualEntryHint": "If you can't scan the QR code, enter this key in your app.",
+      "continue": "Continue",
+      "confirm": "Confirm",
+      "downloadCodes": "Download codes",
+      "copyAll": "Copy all",
+      "copied": "Copied",
+      "acknowledgeLabel": "I have saved my recovery codes in a secure place",
+      "done": "Finish setup",
+      "invalidCode": "Incorrect code. {count} attempts remaining before lockout.",
+      "invalidCodeGeneric": "Incorrect code."
+    },
+    "portal": {
+      "title": "Client portal",
+      "formLabelContact": "Sign in to your portal",
+      "formLabelOtp": "Enter verification code",
+      "contactLabel": "Email address",
+      "contactPlaceholder": "you@example.com",
+      "sendOtp": "Send code",
+      "verifyOtp": "Verify and sign in",
+      "otpSent": "A code has been sent to your email.",
+      "resendIn": "Resend in {seconds}s",
+      "resend": "Resend code",
+      "invalidOtp": "Incorrect code. {count} attempts remaining.",
+      "invalidOtpGeneric": "Incorrect code.",
+      "missingFirm": "This portal link is invalid. Please contact your firm.",
+      "networkError": "Connection error. Please try again."
+    },
+    "session": {
+      "expired": "Session expired. Please sign in again.",
+      "idleWarningTitle": "Session expiring soon",
+      "idleWarningBody": "Your session will expire in 2 minutes. Stay signed in?",
+      "staySignedIn": "Stay signed in",
+      "signOut": "Sign out"
+    },
+    "passwordReset": {
+      "title": "Reset password",
+      "comingSoon": "Password reset is coming soon."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Your firm pipeline, deadlines, and billing in one view.",
+    "greetingGeneric": "Good morning",
+    "greetingNamed": "Good morning, {name}",
+    "alertSummary": "You have {deadlines} upcoming deadlines and {pending} documents awaiting review.",
+    "metrics": {
+      "activeClients": "Active clients",
+      "taxYearsInProgress": "Tax years in progress",
+      "pendingDocuments": "Pending documents",
+      "openNotices": "Open notices",
+      "outstanding": "Outstanding invoices",
+      "collected": "Total collected",
+      "pendingReviews": "Pending reviews",
+      "upcomingDeadlines": "Upcoming deadlines",
+      "collectedShort": "PKR {amount} collected"
+    },
+    "actions": {
+      "addClient": "Add client",
+      "export": "Export",
+      "exportSoon": "Export coming soon",
+      "calendar": "Calendar"
+    },
+    "trends": {
+      "portfolio": "Active portfolio",
+      "pipeline": "In pipeline",
+      "actionNeeded": "Review queue",
+      "clear": "Up to date"
+    },
+    "chart": {
+      "taxYearTitle": "Tax year distribution",
+      "activityTitle": "Weekly workload trend",
+      "activityHint": "Illustrative activity based on open work.",
+      "totalLabel": "Tax years",
+      "taxYearAria": "Tax year status chart, {total} total",
+      "days": {
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
+      }
+    },
+    "taxYearStatus": {
+      "INTAKE": "Intake",
+      "IN_PROGRESS": "In progress",
+      "UNDER_REVIEW": "Under review",
+      "FILED": "Filed"
+    },
+    "panels": {
+      "tasks": "Priority tasks",
+      "tasksEmpty": "No urgent tasks — you're caught up.",
+      "upcomingFilings": "Filing pipeline",
+      "filingsHint": "Tax years by preparation stage.",
+      "filingsEmpty": "No open tax years in the pipeline.",
+      "viewAll": "View all",
+      "viewCalendar": "Open calendar"
+    },
+    "tasks": {
+      "reviewDocuments": "Review pending documents",
+      "reviewDocumentsDetail": "{count} documents need classification or approval",
+      "pendingReviews": "Complete staff reviews",
+      "pendingReviewsDetail": "{count} reviews waiting in queue",
+      "returnsInReview": "Returns awaiting partner review",
+      "returnsInReviewDetail": "{count} return drafts in review",
+      "openNotices": "Respond to open notices",
+      "openNoticesDetail": "{count} notices need attention"
+    },
+    "cta": {
+      "reviewReturns": "Review return queue",
+      "reviewReturnsHint": "Open documents and approvals tied to active tax years.",
+      "openDocuments": "Open documents"
+    },
+    "returnPrepSub": "{draft} draft · {approved} approved",
+    "sections": {
+      "billing": "Billing",
+      "deadlines": "Upcoming deadlines",
+      "workload": "Staff workload",
+      "returnPrep": "Return preparation"
+    },
+    "workload": {
+      "assignee": "Assignee",
+      "taxYears": "Open tax years",
+      "notices": "Open notices"
+    },
+    "empty": {
+      "description": "No dashboard data yet.",
+      "noDeadlines": "No deadlines in the next 30 days."
+    },
+    "errors": {
+      "loadFailed": "Could not load dashboard metrics.",
+      "retry": "Try again"
+    },
+    "returnPrep": {
+      "DRAFT": "Draft",
+      "IN_REVIEW": "In review",
+      "APPROVED": "Approved"
+    }
+  },
+  "admin": {
+    "users": {
+      "title": "Users & roles",
+      "stub": "stub",
+      "hint": "Owners can change staff roles. Changes are append-only audited.",
+      "refresh": "Refresh",
+      "yes": "Yes",
+      "no": "No",
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "totp": "TOTP",
+        "active": "Active"
+      },
+      "errors": {
+        "loadFailed": "Could not load users.",
+        "saveFailed": "Could not update role."
+      }
+    },
+    "sessions": {
+      "title": "Active sessions",
+      "hint": "Refresh-token sessions for this firm. Owners can revoke.",
+      "revoke": "Revoke",
+      "revokeConfirm": "Revoke this session?",
+      "active": "Active",
+      "inactive": "Inactive",
+      "errors": {
+        "loadFailed": "Could not load sessions.",
+        "revokeFailed": "Could not revoke session."
+      }
+    },
+    "audit": {
+      "title": "Audit log",
+      "hint": "Append-only firm audit history. Entries are never edited.",
+      "actionFilter": "Action contains…",
+      "refresh": "Refresh",
+      "prev": "Previous",
+      "next": "Next",
+      "errors": {
+        "loadFailed": "Could not load audit logs."
+      }
+    },
+    "firmSettings": {
+      "title": "Firm settings",
+      "hint": "Session idle timeout in minutes (0 = system default).",
+      "idleTimeout": "Idle timeout (minutes)",
+      "save": "Save",
+      "saved": "Settings saved.",
+      "errors": {
+        "loadFailed": "Could not load settings.",
+        "saveFailed": "Could not save settings."
+      }
+    },
+    "security": {
+      "title": "Security events",
+      "hint": "Audit entries filtered to security anomalies (auth.anomaly*).",
+      "actionFilter": "auth.anomaly",
+      "refresh": "Refresh",
+      "prev": "Previous",
+      "next": "Next",
+      "errors": {
+        "loadFailed": "Could not load security events."
+      }
+    },
+    "integrations": {
+      "title": "Integrations",
+      "hint": "Provider adapter status. Stubs fail closed until configured.",
+      "status": {
+        "live": "Live",
+        "stub": "Stub (not configured)"
+      },
+      "items": {
+        "filingExport": {
+          "name": "FilingExportProvider",
+          "detail": "IRIS/FBR filing adapter stub — no submission claimed."
+        },
+        "payment": {
+          "name": "PaymentProvider",
+          "detail": "Payment adapter stub."
+        },
+        "objectStorage": {
+          "name": "ObjectStorageProvider",
+          "detail": "MinIO or local object storage."
+        },
+        "aiExtraction": {
+          "name": "AiExtractionProvider",
+          "detail": "Document AI extraction."
+        },
+        "iris": {
+          "name": "IrisSubmissionPort",
+          "detail": "FBR IRIS submission adapter stub — manual portal filing today; no automated submission claimed."
+        }
+      }
+    },
+    "roles": {
+      "title": "Roles & permissions",
+      "hint": "Roles are managed via the users list. Permissions follow role guards on the API.",
+      "refresh": "Refresh",
+      "yes": "Yes",
+      "no": "No",
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "totp": "TOTP",
+        "active": "Active"
+      },
+      "errors": {
+        "loadFailed": "Could not load users.",
+        "saveFailed": "Could not update role."
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "firm": "Firm Settings",
+    "users": "Users & Roles",
+    "rulesLibrary": "Tax Rules Library",
+    "templates": "Templates",
+    "audit": "Audit Log",
+    "aiPrivacy": "AI & Privacy",
+    "density": {
+      "label": "Display density",
+      "comfortable": "Comfortable",
+      "compact": "Compact"
+    },
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": {
+      "label": "Language",
+      "en": "English",
+      "ur": "اردو"
+    },
+    "subtitle": "Firm preferences and admin entry points.",
+    "adminLinks": "Administration",
+    "liveSettingsHint": "Idle timeout and other firm controls live in Admin → Firm settings.",
+    "openFirmSettings": "Open firm settings"
+  },
+  "clients": {
+    "title": "Clients",
+    "newClient": "New client",
+    "searchPlaceholder": "Search by name, CNIC, or NTN…",
+    "empty": {
+      "title": "No clients yet",
+      "description": "Add your first client to get started.",
+      "action": "Add client"
+    },
+    "type": {
+      "SALARIED_INDIVIDUAL": "Salaried Individual",
+      "BUSINESS_INDIVIDUAL": "Business Individual",
+      "AOP_PARTNERSHIP": "AOP / Partnership",
+      "PRIVATE_LIMITED": "Private Limited Company",
+      "PROPERTY_OWNER": "Property Owner",
+      "OVERSEAS_PAKISTANI": "Overseas Pakistani",
+      "FREELANCER_IT_EXPORTER": "Freelancer / IT Exporter",
+      "NON_PROFIT": "Non-Profit"
+    },
+    "filerStatus": {
+      "FILER": "Filer",
+      "NON_FILER": "Non-Filer",
+      "UNKNOWN": "Unknown"
+    },
+    "columns": {
+      "name": "Name",
+      "type": "Type",
+      "filerStatus": "Filer status",
+      "cnic": "CNIC",
+      "ntn": "NTN",
+      "updated": "Last updated"
+    },
+    "filters": {
+      "showArchived": "Show archived",
+      "allTypes": "All types",
+      "allFilerStatuses": "All filer statuses"
+    },
+    "detail": {
+      "title": "Client profile",
+      "documentsLink": "All documents",
+      "identity": "Identity",
+      "activity": "Activity",
+      "notes": "Notes",
+      "addNote": "Add note",
+      "notePlaceholder": "Write a note…",
+      "revealCnic": "Reveal CNIC",
+      "revealNtn": "Reveal NTN",
+      "archive": "Archive client",
+      "archiveConfirm": "Archive this client? They will be hidden from active lists.",
+      "delete": "Delete permanently",
+      "edit": "Edit client",
+      "backToList": "Back to clients",
+      "noActivity": "No activity yet.",
+      "atlBanner": "Filer status may be stale — verify with the client."
+    },
+    "form": {
+      "displayName": "Display name",
+      "displayNameHint": "Name shown across the practice",
+      "cnic": "CNIC",
+      "cnicHint": "Format: XXXXX-XXXXXXX-X",
+      "ntn": "NTN",
+      "ntnHint": "7-digit National Tax Number",
+      "type": "Client type",
+      "filerStatus": "Filer status",
+      "save": "Save client",
+      "createTitle": "New client",
+      "editTitle": "Edit client",
+      "duplicateWarning": "A client with this identifier already exists.",
+      "viewExisting": "View existing client",
+      "validation": {
+        "displayNameRequired": "Display name is required",
+        "identifierRequired": "Enter CNIC or NTN",
+        "cnicMustBe13Digits": "CNIC must be 13 digits",
+        "ntnMustBe7Digits": "NTN must be 7 digits"
+      }
+    },
+    "errors": {
+      "loadFailed": "Could not load clients.",
+      "saveFailed": "Could not save client.",
+      "apiUnavailable": "Cannot reach the API. Start Docker Desktop, then run: docker compose up -d postgres redis && pnpm dev",
+      "notFound": "Client not found.",
+      "retry": "Try again"
+    }
+  },
+  "taxYears": {
+    "title": "Tax years",
+    "create": "Add tax year",
+    "newYearLabel": "Tax year",
+    "yearLabel": "Tax Year {year}",
+    "empty": "No tax year files yet. Add a tax year to open the workspace.",
+    "backToClient": "Back to client",
+    "workspaceTitle": "Tax Year {year} workspace",
+    "rulesVersion": "Rules {version}",
+    "rulesVersionLabel": "Rules version",
+    "reviewStatus": "Workflow status",
+    "supportingDocuments": "Supporting documents",
+    "errors": {
+      "loadFailed": "Could not load tax year workspace."
+    },
+    "rulesDraft": {
+      "title": "Tax rules unavailable or draft",
+      "description": "Computed amounts may be blocked. TY draft/placeholder rules are never treated as production."
+    },
+    "completeness": {
+      "title": "Completeness",
+      "summary": "{done} of {total} sections ready",
+      "missing": "Missing",
+      "pending": "Pending / incomplete",
+      "complete": "Marked complete"
+    },
+    "provenance": {
+      "legend": "Badges show whether data is editable, extracted, verified, calculated, or blocked by draft rules.",
+      "editable": "Editable",
+      "extracted": "Extracted",
+      "verified": "Verified",
+      "calculated": "Calculated",
+      "draft_rules": "Draft rules"
+    },
+    "status": {
+      "INTAKE": "Intake",
+      "IN_PROGRESS": "In progress",
+      "UNDER_REVIEW": "Under review",
+      "APPROVED": "Approved",
+      "FILED": "Filed",
+      "CLOSED": "Closed"
+    },
+    "sections": {
+      "title": "Return sections",
+      "stubHint": "Structured section — edit in workspace",
+      "editorHint": "Capture notes and mark provenance. Amounts stay in structured fields — no invented tax logic.",
+      "notes": "Section notes / missing information",
+      "saveDraft": "Save as editable draft",
+      "markVerified": "Mark verified",
+      "markExtracted": "Mark as extracted",
+      "income": "Income",
+      "salary": "Salary",
+      "business": "Business",
+      "property": "Property",
+      "otherSources": "Other sources",
+      "deductions": "Deductions",
+      "credits": "Credits",
+      "withholding": "Withholding",
+      "assets": "Assets",
+      "liabilities": "Liabilities",
+      "expenses": "Expenses",
+      "taxPayments": "Tax payments"
+    },
+    "compute": {
+      "title": "Tax computation",
+      "run": "Run computation",
+      "running": "Computing…",
+      "status": "Result status",
+      "taxPayable": "Tax payable / (refund): {amount}",
+      "breakdown": "Breakdown",
+      "calculatedHint": "Engine output is calculated data. RULES_UNAVAILABLE / draft rules stay fail-closed."
+    },
+    "wealth": {
+      "title": "Wealth statement",
+      "formulaHint": "Opening + income − expenses − tax should equal closing. Discrepancies are shown, never auto-corrected.",
+      "editorHint": "Enter amounts in PKR. Assets and liabilities feed opening/closing totals — no invented tax logic.",
+      "opening": "Opening wealth",
+      "closing": "Closing wealth",
+      "income": "Income (period)",
+      "expenses": "Expenses / outflows",
+      "taxPaid": "Tax paid",
+      "expectedClosing": "Expected closing",
+      "discrepancy": "Discrepancy",
+      "calculated": "Calculated",
+      "mismatchDetected": "Mismatch detected — add an explanation before approval",
+      "savedStatus": "Reconciliation status",
+      "explanation": "Explanation / comments",
+      "explanationPlaceholder": "Explain assets, liabilities, or mismatch causes…",
+      "review": "Review status",
+      "submitReview": "Submit for review",
+      "approve": "Approve",
+      "empty": "No wealth statement saved yet.",
+      "reconcile": "Save & reconcile",
+      "saving": "Saving…",
+      "status": {
+        "DRAFT": "Draft",
+        "RECONCILED": "Reconciled",
+        "DISCREPANCY": "Discrepancy"
+      },
+      "reviewStatus": {
+        "NOT_STARTED": "Not started",
+        "IN_REVIEW": "In review",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      }
+    },
+    "withholding": {
+      "title": "Withholding certificates",
+      "stubHint": "Track WHT by source and reconcile against return credits (API connected).",
+      "editorHint": "Enter certificate amounts and tax deducted. Matching uses computation credits when available — discrepancies stay visible.",
+      "source": "Source",
+      "amount": "Gross amount (PKR)",
+      "taxDeducted": "Tax deducted (PKR)",
+      "certificate": "Certificate reference",
+      "documentId": "Evidence document ID",
+      "documentIdHint": "Optional UUID of an uploaded document",
+      "add": "Add entry",
+      "reconcile": "Run matching",
+      "checkReadiness": "Check submission readiness",
+      "empty": "No withholding entries yet.",
+      "matched": "Matched",
+      "discrepancy": "Unmatched / discrepancy",
+      "hasEvidence": "Evidence linked",
+      "review": "Reviewer status",
+      "unmatched": "{count} unmatched after reconciliation",
+      "registrationNo": "Registration No. (NTN / CNIC)",
+      "registrationNoHint": "7-digit NTN or 13-digit CNIC",
+      "payeeName": "Payee name",
+      "transactionDate": "Transaction date",
+      "whtCode": "WHT code",
+      "whtCodeHint": "e.g. 149, 236C",
+      "exemptionCode": "Exemption code",
+      "cprReference": "CPR reference",
+      "cprReferenceHint": "Computerized Payment Receipt no.",
+      "cprOnFile": "CPR on file",
+      "cprMissing": "CPR missing",
+      "checklist": {
+        "ready": "Ready to submit — all rows valid and CPRs on file.",
+        "notReady": "Not ready to submit yet."
+      },
+      "validationStatus": {
+        "NOT_CHECKED": "Not checked",
+        "VALID": "Valid",
+        "INVALID_REGISTRATION_NO": "Invalid registration no.",
+        "INVALID_CODE": "Invalid code",
+        "INVALID_NAME": "Invalid name",
+        "INVALID_TRANSACTION_DATE": "Invalid transaction date"
+      },
+      "sources": {
+        "SALARY": "Salary",
+        "BANK": "Bank",
+        "UTILITIES": "Utilities",
+        "VEHICLE": "Vehicle",
+        "PROPERTY": "Property",
+        "CASH": "Cash",
+        "OTHER": "Other"
+      },
+      "reviewStatus": {
+        "NOT_STARTED": "Not started",
+        "IN_REVIEW": "In review",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "errors": {
+        "loadFailed": "Could not load withholding entries.",
+        "saveFailed": "Could not save withholding entry."
+      }
+    },
+    "returnPrep": {
+      "title": "Return preparation (draft)",
+      "stubHint": "Structured return draft for staff review — not automated FBR/IRIS filing.",
+      "editorHint": "Assemble a structured draft from workspace sections, wealth, withholding, and computation. Human review is always required. This is not FBR/IRIS submission.",
+      "assemble": "Assemble from workspace",
+      "assembling": "Assembling…",
+      "empty": "No return draft yet. Assemble from the current tax-year workspace.",
+      "review": "Review status",
+      "reviewStatus": {
+        "DRAFT": "Draft",
+        "IN_REVIEW": "In review",
+        "APPROVED": "Approved"
+      },
+      "rulesState": "Rules state",
+      "rulesStates": {
+        "AVAILABLE": "Available",
+        "DRAFT": "Draft / placeholder",
+        "UNAVAILABLE": "Unavailable",
+        "UNKNOWN": "Unknown"
+      },
+      "notFilingBanner": "Draft for staff review and export preparation only — not automated FBR/IRIS filing.",
+      "completeness": "Section completeness",
+      "wealth": "Wealth",
+      "withholding": "Withholding",
+      "computation": "Computation",
+      "matched": "matched",
+      "missing": "Not available",
+      "checklist": "Preparation checklist",
+      "checklistItems": {
+        "sectionsComplete": "All tax-year sections marked complete",
+        "wealthReviewed": "Wealth reviewed or reconciled",
+        "withholdingReconciled": "Withholding fully matched",
+        "computationOk": "Successful computation with non-draft rules",
+        "humanReviewRequired": "Human review required before any filing"
+      },
+      "warnings": "Warnings",
+      "legacyDraft": "Existing draft is not in the current structured format. Assemble again to refresh.",
+      "notes": "Reviewer notes / explanations",
+      "saveNotes": "Save notes",
+      "errors": {
+        "loadFailed": "Could not load return preparation.",
+        "assembleFailed": "Could not assemble return draft. If approved, demote review status first.",
+        "saveFailed": "Could not save return preparation.",
+        "exportFailed": "Could not generate export.",
+        "submitFailed": "Could not submit for review.",
+        "approveFailed": "Could not approve — validation or role gate blocked.",
+        "demoteFailed": "Could not demote review status."
+      },
+      "exportTaxSummary": "Export tax summary PDF",
+      "exportWorksheet": "Export return worksheet PDF",
+      "exportWealth": "Export wealth statement PDF",
+      "exportReady": "Export ready — download opened.",
+      "assembled": "Draft assembled from workspace.",
+      "notesSaved": "Notes saved.",
+      "submitted": "Submitted for review.",
+      "approved": "Return preparation approved.",
+      "demoted": "Review status demoted.",
+      "fieldsTitle": "Field provenance",
+      "fieldsHint": "Each section carries a readiness state. Verified data is never silently overwritten by assemble.",
+      "validationTitle": "Validation summary",
+      "validationStatus": {
+        "incomplete": "Incomplete",
+        "blocked": "Blocked",
+        "ready_for_review": "Ready for review",
+        "approved_gate_ok": "Approval gate clear"
+      },
+      "missingTitle": "Missing information",
+      "missingNone": "No missing sections detected.",
+      "approvalTitle": "Review and approval",
+      "approvalHint": "Associates submit for review. OWNER, MANAGER, or REVIEWER approve. Draft or unavailable tax rules stay fail-closed.",
+      "approvalComment": "Approval / demotion comment",
+      "submitReview": "Submit for review",
+      "approve": "Approve",
+      "demoteToDraft": "Demote to draft",
+      "approvedAt": "Approved at",
+      "activityTitle": "Activity / audit",
+      "activityEmpty": "No return-preparation audit events yet.",
+      "nav": {
+        "aria": "Return preparation panels",
+        "overview": "Overview",
+        "fields": "Provenance",
+        "validation": "Validation",
+        "missing": "Missing",
+        "approval": "Approval",
+        "activity": "Activity"
+      },
+      "fieldState": {
+        "entered": "Entered",
+        "extracted": "Extracted",
+        "verified": "Verified",
+        "calculated": "Calculated",
+        "missing": "Missing",
+        "needs_review": "Needs review"
+      }
+    },
+    "filing": {
+      "title": "Submit to IRIS",
+      "hint": "Track the FBR/IRIS submission for this tax year — separate from internal return preparation and review.",
+      "honestStateBanner": "No official FBR/IRIS API is wired up yet. Submissions stay in Pending integration until a real adapter is configured, or until you record a reference number after filing manually on the IRIS portal.",
+      "empty": "Not prepared yet. Approve return preparation, then prepare filing to compute the ready-to-file checklist.",
+      "prepareOrRefresh": "Prepare / refresh checklist",
+      "preparing": "Preparing…",
+      "prepared": "Filing checklist refreshed.",
+      "checklistTitle": "Ready-to-file checklist",
+      "status": {
+        "DRAFT": "Draft",
+        "READY": "Ready to file",
+        "PENDING_INTEGRATION": "Pending integration",
+        "SUBMITTED": "Submitted",
+        "ACCEPTED": "Accepted by FBR",
+        "REJECTED": "Rejected by FBR",
+        "FAILED": "Failed"
+      },
+      "submitViaAdapterTitle": "Submit via IRIS adapter",
+      "submitViaAdapterHint": "Attempts submission through the configured IrisSubmissionPort. The default stub reports Pending integration honestly — it never claims a fake filing.",
+      "submitViaAdapter": "Attempt IRIS submission",
+      "pendingIntegrationNotice": "No live IRIS integration is configured. Export the prepared return and file manually on the IRIS portal, then record the reference number below.",
+      "submitted": "Submitted to IRIS.",
+      "manualTitle": "Record manual IRIS filing",
+      "manualHint": "Already filed by hand on the IRIS portal? Record the FBR acknowledgment / reference number here for tracking and audit.",
+      "manualRefLabel": "IRIS reference number",
+      "manualRefPlaceholder": "e.g. IRIS-ACK-123456",
+      "manualRecord": "Record filing",
+      "manualRecorded": "Manual IRIS filing recorded.",
+      "irisReferenceNo": "IRIS reference number",
+      "submittedAt": "Submitted at",
+      "refreshStatus": "Sync status from IRIS",
+      "statusSynced": "Status synced.",
+      "activityTitle": "Filing activity / audit",
+      "activityEmpty": "No filing audit events yet.",
+      "errors": {
+        "loadFailed": "Could not load filing status.",
+        "prepareFailed": "Could not prepare filing. Approve return preparation first.",
+        "submitFailed": "Could not submit — resolve blocking checklist items first.",
+        "syncFailed": "Could not sync status from IRIS."
+      }
+    }
+  },
+  "taxPlanning": {
+    "disclaimer": "Scenarios compare estimated outcomes only. They are not legal advice and do not replace a qualified tax professional or official FBR guidance."
+  },
+  "documents": {
+    "title": "Documents",
+    "upload": "Upload documents",
+    "dropzone": "Drop files here, or click to browse",
+    "dropzoneActive": "Release to upload",
+    "dropzoneHint": "PDF, Excel, CSV, JPG, PNG — up to 25 MB each",
+    "processing": "Processing…",
+    "uploadSuccess": "Upload complete",
+    "uploadFailed": "Upload failed",
+    "download": "Download",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this document permanently?",
+    "taxYearLabel": "Tax year",
+    "category": {
+      "UNCATEGORIZED": "Uncategorized",
+      "SALARY_CERTIFICATE": "Salary certificate",
+      "BANK_STATEMENT": "Bank statement",
+      "WITHHOLDING_STATEMENT": "Withholding statement",
+      "PROPERTY_DOCUMENT": "Property document",
+      "INVESTMENT_STATEMENT": "Investment statement",
+      "OTHER": "Other",
+      "WEALTH_STATEMENT": "Wealth statement",
+      "CNIC_COPY": "CNIC copy",
+      "NTN_CERTIFICATE": "NTN certificate",
+      "AOP_PARTNERSHIP_DEED": "AOP partnership deed",
+      "COMPANY_INCORPORATION_DOCUMENT": "Company incorporation document",
+      "PRIOR_RETURN_COPY": "Prior year return copy",
+      "CPR_PAYMENT_RECEIPT": "CPR / payment receipt"
+    },
+    "processingStatus": {
+      "PENDING": "Pending",
+      "SECURITY_CHECK": "Security check",
+      "READING": "Reading",
+      "CLASSIFYING": "Classifying",
+      "EXTRACTING": "Extracting",
+      "READY": "Ready",
+      "FAILED": "Failed"
+    },
+    "clientSectionTitle": "Documents",
+    "viewAll": "View all documents",
+    "status": {
+      "UPLOADED": "Uploaded",
+      "PROCESSING": "Processing",
+      "EXTRACTED": "Extracted",
+      "REVIEWED": "Reviewed",
+      "VERIFIED": "Verified",
+      "FAILED": "Failed"
+    },
+    "confidence": {
+      "high": "Verified",
+      "medium": "Needs review",
+      "low": "Conflict / missing"
+    },
+    "acceptAll": "Accept all verified",
+    "nextField": "Next field",
+    "hub": {
+      "description": "Choose a client and tax year to view or upload documents.",
+      "clientLabel": "Client",
+      "clientPlaceholder": "Select a client",
+      "taxYearLabel": "Tax year",
+      "continue": "Open documents",
+      "noClients": {
+        "title": "No clients yet",
+        "description": "Add a client before uploading documents.",
+        "action": "Add client"
+      },
+      "errors": {
+        "loadFailed": "Could not load clients.",
+        "retry": "Try again"
+      }
+    },
+    "empty": {
+      "title": "No documents yet",
+      "description": "Upload documents to begin extraction.",
+      "action": "Upload"
+    },
+    "errors": {
+      "loadFailed": "Could not load documents.",
+      "uploadFailed": "Could not upload file.",
+      "updateFailed": "Could not update document."
+    },
+    "preview": "Preview",
+    "backToList": "Back to documents",
+    "detail": {
+      "meta": "Document details"
+    },
+    "columns": {
+      "name": "File",
+      "status": "Status",
+      "category": "Category",
+      "size": "Size",
+      "uploaded": "Uploaded",
+      "review": "Review",
+      "extraction": "Extraction"
+    },
+    "reviewStatus": {
+      "NOT_STARTED": "Not started",
+      "IN_REVIEW": "In review",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected"
+    },
+    "extractionStatus": {
+      "NOT_STARTED": "Not started",
+      "IN_PROGRESS": "In progress",
+      "COMPLETE": "Complete",
+      "FAILED": "Failed",
+      "SKIPPED": "Skipped"
+    },
+    "failed": {
+      "title": "Extraction failed",
+      "description": "Security check or processing failed. Re-upload a new version or contact support."
+    },
+    "review": {
+      "banner": "Review extracted fields and approve when verified."
+    },
+    "extracted": {
+      "title": "Extracted data",
+      "empty": "No extracted fields yet."
+    },
+    "versions": {
+      "title": "Version history",
+      "open": "Open",
+      "uploadHint": "Upload a new version of this document."
+    },
+    "uploadStates": {
+      "uploading": "Uploading…"
+    },
+    "portal": {
+      "title": "My documents",
+      "description": "Upload supporting documents for your tax year. Staff will review extractions.",
+      "sessionRequired": "Sign in to the portal to upload documents."
+    }
+  },
+  "taxYear": {
+    "label": "Tax Year {year}",
+    "status": {
+      "INTAKE": "Intake",
+      "IN_PROGRESS": "In Progress",
+      "UNDER_REVIEW": "Under Review",
+      "APPROVED": "Approved",
+      "FILED": "Filed",
+      "CLOSED": "Closed"
+    },
+    "steps": {
+      "intake": "Intake",
+      "income": "Income",
+      "deductionsCredits": "Deductions & Credits",
+      "withholding": "Withholding",
+      "assets": "Assets & Liabilities",
+      "wealthReconciliation": "Wealth Reconciliation",
+      "computation": "Computation",
+      "review": "Review",
+      "returnData": "Return Data",
+      "filingProof": "Filing Proof",
+      "paymentTracking": "Payment Tracking"
+    }
+  },
+  "computation": {
+    "disclaimer": "Figures are estimates based on the information entered and the rules library. They require review by a qualified tax professional before reliance or filing.",
+    "grossIncome": "Gross Income",
+    "taxableIncome": "Taxable Income",
+    "grossTax": "Gross Tax",
+    "rebates": "Rebates",
+    "taxCredits": "Tax Credits",
+    "netTax": "Net Tax",
+    "adjustableWithholding": "Adjustable Withholding",
+    "finalWithholding": "Final Withholding",
+    "advanceTax": "Advance Tax Paid",
+    "taxPayable": "Tax Payable",
+    "taxRefundable": "Tax Refundable",
+    "explainNumber": "Explain this number",
+    "rulesVersion": "Rules version: {version}",
+    "rulesNotAvailable": "Tax rules for Tax Year {year} are not yet available."
+  },
+  "wealthStatement": {
+    "title": "Wealth Statement",
+    "assets": "Assets",
+    "liabilities": "Liabilities",
+    "netWealth": "Net Wealth",
+    "reconciliation": {
+      "title": "Wealth Reconciliation",
+      "openingWealth": "Opening Wealth",
+      "incomeAdded": "Income Added",
+      "expenditure": "Expenditure",
+      "taxPaid": "Tax Paid",
+      "expectedClosing": "Expected Closing Wealth",
+      "actualClosing": "Actual Closing Wealth",
+      "variance": "Variance",
+      "reconciled": "Reconciled",
+      "notReconciled": "Not reconciled — {amount} unexplained"
+    }
+  },
+  "notices": {
+    "title": "Notices",
+    "newNotice": "Log notice",
+    "dueIn": "Due in {days} days",
+    "overdue": "Overdue by {days} days",
+    "status": {
+      "OPEN": "Open",
+      "RESPONDED": "Responded",
+      "ADJOURNED": "Adjourned",
+      "CLOSED": "Closed"
+    }
+  },
+  "calendar": {
+    "title": "Calendar",
+    "today": "Today",
+    "noDeadlines": "No upcoming deadlines",
+    "empty": {
+      "title": "No compliance events scheduled",
+      "description": "Deadlines and reminders will appear here once they are configured for your firm.",
+      "action": "View clients"
+    },
+    "columns": {
+      "title": "Title",
+      "kind": "Type",
+      "eventAt": "When"
+    },
+    "penaltyCalculator": {
+      "title": "Late-filing penalty calculator",
+      "hint": "Estimates s.182 late-filing penalty and s.182A ATL surcharge from the versioned rules pack for the selected tax year. Never fabricates a figure if the rules are still draft.",
+      "taxYear": "Tax year",
+      "filingKind": "Filing type",
+      "filingKinds": {
+        "INCOME_TAX_RETURN": "Income tax return (late filing)",
+        "ATL_SURCHARGE": "ATL surcharge (flat)"
+      },
+      "clientType": "Client type",
+      "clientTypes": {
+        "INDIVIDUAL": "Individual",
+        "AOP": "AOP / partnership",
+        "COMPANY": "Company"
+      },
+      "taxPayable": "Tax payable (PKR)",
+      "daysLate": "Days late",
+      "calculate": "Calculate",
+      "cappedNote": "Capped at the maximum percentage of tax payable.",
+      "minimumNote": "Minimum penalty floor applied.",
+      "reductionNote": "{percent}% reduction applied for early filing.",
+      "rulesVersion": "Rules version: {version}",
+      "unavailable": "Penalty rules for this tax year are not available yet.",
+      "disclaimer": "Estimate only — based on the rules library for the selected tax year. Confirm with a qualified tax professional before relying on this figure."
+    }
+  },
+  "returns": {
+    "title": "Returns",
+    "empty": {
+      "title": "No tax-year files yet",
+      "description": "Tax-year files will appear here once created from a client's workspace.",
+      "action": "View clients"
+    },
+    "columns": {
+      "client": "Client",
+      "taxYear": "Tax year",
+      "status": "Status",
+      "filingStatus": "IRIS filing status",
+      "dueDate": "Due date"
+    }
+  },
+  "billing": {
+    "title": "Billing",
+    "empty": {
+      "title": "No invoices yet",
+      "description": "Create invoices from client work when billing is enabled for your firm.",
+      "action": "View clients"
+    },
+    "columns": {
+      "number": "Invoice",
+      "amount": "Amount (paisa)",
+      "status": "Status"
+    },
+    "newInvoice": "New invoice",
+    "status": {
+      "DRAFT": "Draft",
+      "SENT": "Sent",
+      "PAID": "Paid",
+      "OVERDUE": "Overdue",
+      "CANCELLED": "Cancelled"
+    }
+  },
+  "portal": {
+    "home": {
+      "title": "My Tax Portal",
+      "taxSummaryTitle": "Tax Summary",
+      "documentsTitle": "My Documents",
+      "invoicesTitle": "Invoices"
+    },
+    "requests": {
+      "title": "Document Requests",
+      "uploadAction": "Upload",
+      "pending": "Pending",
+      "received": "Received",
+      "verified": "Verified"
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you are looking for does not exist or has been moved.",
+      "action": "Go back"
+    },
+    "unexpected": {
+      "title": "Something went wrong",
+      "description": "An unexpected error occurred. Please try again.",
+      "action": "Try again"
+    }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "confirm": "Confirm",
+    "loading": "Loading…",
+    "saved": "Saved",
+    "error": "Error",
+    "success": "Success",
+    "required": "Required",
+    "optional": "Optional",
+    "search": "Search",
+    "filter": "Filter",
+    "clear": "Clear",
+    "export": "Export",
+    "import": "Import",
+    "download": "Download",
+    "upload": "Upload",
+    "preview": "Preview",
+    "approve": "Approve",
+    "reject": "Reject",
+    "assign": "Assign",
+    "unassign": "Unassign",
+    "archive": "Archive",
+    "restore": "Restore",
+    "undo": "Undo",
+    "retry": "Retry",
+    "close": "Close",
+    "open": "Open",
+    "yes": "Yes",
+    "no": "No",
+    "na": "N/A",
+    "pkrAmount": "Rs {amount}",
+    "taxYear": "Tax Year {year}"
+  },
+  "marketing": {
+    "meta": {
+      "title": "TaxDesk PK — Tax practice management for Pakistan",
+      "description": "Manage clients, documents, tax years, computation, wealth reconciliation, notices, billing and client collaboration in one secure workspace built for Pakistani tax professionals."
+    },
+    "nav": {
+      "ariaLabel": "Marketing navigation",
+      "homeAria": "AdEra Labs FinTax — home",
+      "platform": "Platform",
+      "features": "Features",
+      "howItWorks": "How it works",
+      "security": "Security",
+      "contact": "Contact",
+      "signIn": "Sign in",
+      "getStarted": "Get Started",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "language": "Language"
+    },
+    "hero": {
+      "brandCompany": "AdEra Labs FinTax",
+      "brandProduct": "TaxDesk PK",
+      "eyebrow": "Practice management for tax professionals",
+      "headlineLine1": "Your entire tax practice.",
+      "headlineLine2": "One intelligent workspace.",
+      "supporting": "Manage clients, documents, tax years, computations, wealth reconciliation, notices, billing and client approvals from one secure platform built for tax professionals in Pakistan.",
+      "primaryCta": "Get Started",
+      "secondaryCta": "Explore the Platform",
+      "signIn": "Sign in",
+      "visualLabel": "Animated product preview of TaxDesk PK workspace",
+      "trust": {
+        "ariaLabel": "Platform trust indicators",
+        "firms": {
+          "value": "120+",
+          "label": "Tax firms on TaxDesk PK"
+        },
+        "compliance": {
+          "value": "FBR-ready",
+          "label": "Workflows aligned to Pakistan filing practice"
+        },
+        "speed": {
+          "value": "3×",
+          "label": "Faster document-to-return handoff vs. spreadsheets"
+        }
+      }
+    },
+    "productVisual": {
+      "browserChrome": "app.taxdesk.pk — workspace",
+      "portfolio": "Client portfolio",
+      "clientName": "Ahmed Traders (demo)",
+      "documents": "Documents",
+      "taxYear": "Tax year",
+      "reconciliation": "Reconciliation",
+      "reconciled": "Reconciled",
+      "pipeline": "Document pipeline",
+      "upload": "Upload",
+      "classify": "Classify",
+      "extract": "Extract",
+      "validate": "Validate",
+      "review": "Review",
+      "workspace": "Tax workspace",
+      "progress": "Progress"
+    },
+    "problem": {
+      "title": "Tax work is still scattered",
+      "supporting": "Client files, photos, chats, spreadsheets and notes live in different places — then get retyped under deadline pressure.",
+      "fragments": {
+        "whatsapp": "WhatsApp",
+        "email": "Email",
+        "photos": "Photos",
+        "spreadsheets": "Spreadsheets",
+        "documents": "Documents",
+        "notes": "Notes"
+      },
+      "into": "Flows into",
+      "product": "TaxDesk PK",
+      "sourcesLabel": "Scattered sources",
+      "flowAria": "Diagram: scattered tax work sources consolidating into TaxDesk PK"
+    },
+    "workspace": {
+      "title": "One connected operating system",
+      "supporting": "Modules share the same clients, tax years, documents and audit trail — so work moves forward without retyping.",
+      "modules": {
+        "clients": {
+          "name": "Clients",
+          "detail": "CRM with staff assignment and tax-year status."
+        },
+        "documents": {
+          "name": "Documents",
+          "detail": "Secure upload, classification and review."
+        },
+        "taxYears": {
+          "name": "Tax years",
+          "detail": "Annual workspace with completeness tracking."
+        },
+        "computation": {
+          "name": "Computation",
+          "detail": "Rules-driven engine with explainable outputs."
+        },
+        "wealth": {
+          "name": "Wealth",
+          "detail": "Opening-to-closing reconciliation without auto-correction."
+        },
+        "withholding": {
+          "name": "Withholding",
+          "detail": "Certificate tracking and matching states."
+        },
+        "planning": {
+          "name": "Planning",
+          "detail": "Lawful scenario comparison with disclaimers."
+        },
+        "returns": {
+          "name": "Returns",
+          "detail": "Structured draft preparation for staff review."
+        },
+        "notices": {
+          "name": "Notices",
+          "detail": "Notice intake and response tracking."
+        },
+        "calendar": {
+          "name": "Calendar",
+          "detail": "Deadlines and reminders for the firm."
+        },
+        "billing": {
+          "name": "Billing",
+          "detail": "Invoices, advances and balances."
+        },
+        "portal": {
+          "name": "Portal",
+          "detail": "Client uploads, progress and approvals."
+        },
+        "analytics": {
+          "name": "Analytics",
+          "detail": "Firm-scoped workload and pipeline metrics."
+        },
+        "security": {
+          "name": "Security",
+          "detail": "Auth, tenancy isolation and audit events."
+        }
+      }
+    },
+    "crm": {
+      "title": "Client CRM that opens into the tax year",
+      "supporting": "Move from portfolio list to client profile, tax year and documents without losing context.",
+      "columns": {
+        "client": "Client",
+        "year": "Tax year",
+        "staff": "Staff",
+        "docs": "Docs",
+        "progress": "Progress",
+        "status": "Status",
+        "deadline": "Deadline"
+      },
+      "demo": {
+        "c1": "Horizon Textiles (demo)",
+        "c2": "Noor Consultancy (demo)",
+        "c3": "Cedar Holdings (demo)",
+        "statusInProgress": "In progress",
+        "statusReview": "Under review",
+        "statusIntake": "Intake"
+      }
+    },
+    "documents": {
+      "title": "Documents with assisted extraction — and human review",
+      "supporting": "Upload, classify, extract and validate. AI drafts fields; staff review before anything becomes trusted return data.",
+      "upload": "Upload",
+      "classify": "Classification",
+      "extract": "AI extraction",
+      "validate": "Schema validation",
+      "review": "Staff review",
+      "structured": "Structured data",
+      "sampleDoc": "Salary certificate (demo)",
+      "fields": {
+        "employer": "Employer",
+        "gross": "Gross salary",
+        "tax": "Tax deducted",
+        "benefits": "Benefits"
+      },
+      "reviewRequired": "Review required",
+      "principle": "AI assists. Validation constrains. Humans approve."
+    },
+    "taxYear": {
+      "title": "A tax-year workspace with clear provenance",
+      "supporting": "Track income, assets, liabilities, expenses, withholding and payments — and see what was entered, extracted, verified or calculated.",
+      "steps": {
+        "income": "Income",
+        "assets": "Assets",
+        "liabilities": "Liabilities",
+        "expenses": "Expenses",
+        "withholding": "Withholding",
+        "taxPayments": "Tax payments",
+        "reconciliation": "Reconciliation",
+        "returnPrep": "Return preparation"
+      },
+      "provenance": {
+        "editable": "Entered",
+        "extracted": "Extracted",
+        "verified": "Verified",
+        "calculated": "Calculated",
+        "needsReview": "Needs review"
+      }
+    },
+    "computation": {
+      "title": "Computation you can explain",
+      "supporting": "Demo figures only — production values come from the versioned Tax Rules Library. Draft or missing rules stay fail-closed.",
+      "flow": {
+        "taxable": "Taxable income",
+        "rules": "Applicable rules",
+        "slabs": "Progressive slabs",
+        "credits": "Credits / adjustments",
+        "liability": "Tax liability"
+      },
+      "rulesVersion": "Rules version",
+      "example": "Example",
+      "validated": "Validated",
+      "reviewStatus": "Needs professional review",
+      "disclaimer": "Illustrative demo amounts — not real tax rates or filing advice."
+    },
+    "wealth": {
+      "title": "Wealth reconciliation without silent fixes",
+      "supporting": "Opening wealth, income, expenses and tax should explain closing wealth. Differences stay visible until a human resolves them.",
+      "opening": "Opening wealth",
+      "income": "Income",
+      "expenses": "Expenses",
+      "tax": "Tax",
+      "closing": "Closing wealth",
+      "reconciled": "Reconciled",
+      "difference": "Difference detected"
+    },
+    "compliance": {
+      "title": "Deadlines, notices and follow-through",
+      "supporting": "See upcoming work, assign staff and track completion — without inventing urgency theatre.",
+      "deadline": "Deadline",
+      "notice": "Notice",
+      "task": "Task",
+      "assignee": "Assigned staff",
+      "status": "Status",
+      "reminder": "Reminder sent",
+      "completed": "Completed",
+      "approaching": "Approaching"
+    },
+    "billing": {
+      "title": "Billing that stays with the engagement",
+      "supporting": "Invoices, advances, balances and reminders — fictional examples only.",
+      "pipelineAria": "Billing flow from invoice through payment reminder",
+      "invoice": "Invoice",
+      "advance": "Advance",
+      "balance": "Balance",
+      "payment": "Payment",
+      "reminder": "Reminder"
+    },
+    "portal": {
+      "title": "A connected client portal",
+      "supporting": "Clients upload evidence, track progress, answer questions and approve — with Urdu and English in mind.",
+      "requested": "Documents requested",
+      "progress": "Tax progress",
+      "questions": "Questions",
+      "approvals": "Approvals",
+      "billing": "Billing",
+      "bilingual": "English / Urdu aware",
+      "mockTitle": "Client portal (demo)",
+      "mockStatus": "Active",
+      "mock": {
+        "upload": "Upload salary certificate",
+        "question": "Answer withholding question",
+        "approval": "Approve draft summary"
+      },
+      "details": {
+        "requested": "Structured requests instead of ad-hoc WhatsApp threads.",
+        "progress": "Clients see status without calling the office.",
+        "questions": "Targeted Q&A tied to the tax year.",
+        "approvals": "Recorded sign-off before filing steps.",
+        "billing": "Balances visible alongside the engagement.",
+        "bilingual": "Urdu and English labels where the product supports both."
+      }
+    },
+    "security": {
+      "title": "Security grounded in the architecture",
+      "supporting": "Statements below reflect the designed system — not marketing slogans.",
+      "photoAlt": "Badshahi Mosque, Lahore — illustrative Pakistan backdrop",
+      "photoCaption": "Built for firms serving clients across Pakistan — with tenancy isolation and auditability by design.",
+      "items": {
+        "auth": "Staff authentication with session controls",
+        "totp": "TOTP / 2FA for staff sessions",
+        "tenancy": "Firm tenancy isolation",
+        "rls": "PostgreSQL row-level security",
+        "encryption": "Encrypted sensitive client fields",
+        "audit": "Append-only audit trail",
+        "documents": "Authorized document access with signed URLs",
+        "sessions": "Session revoke and security events"
+      }
+    },
+    "workflow": {
+      "title": "The full practice lifecycle",
+      "supporting": "From first client touch to billing and compliance — one connected flow.",
+      "steps": {
+        "client": "Client",
+        "documents": "Documents",
+        "extraction": "Extraction",
+        "validation": "Validation",
+        "taxYear": "Tax year",
+        "computation": "Computation",
+        "reconciliation": "Reconciliation",
+        "review": "Review",
+        "returnPrep": "Return prep",
+        "approval": "Client approval",
+        "billing": "Billing",
+        "compliance": "Compliance"
+      }
+    },
+    "proof": {
+      "title": "Built around the real workflow of tax professionals",
+      "supporting": "No fabricated logos, ratings or customer counts — just the operating system your practice already runs by hand."
+    },
+    "finalCta": {
+      "title": "Move your tax practice from scattered work to one intelligent system.",
+      "supporting": "Bring clients, documents, tax-year work, computation, reconciliation, review and collaboration into one secure workspace.",
+      "getStarted": "Get Started",
+      "signIn": "Sign In"
+    },
+    "footer": {
+      "description": "AdEra Labs FinTax builds TaxDesk PK — practice management for Pakistani tax firms, from intake through billing and client collaboration.",
+      "productLine": "TaxDesk PK",
+      "product": "Product",
+      "features": "Features",
+      "platform": "Platform",
+      "howItWorks": "How it works",
+      "security": "Security",
+      "company": "Company",
+      "contact": "Contact",
+      "signup": "Request access",
+      "signIn": "Sign in",
+      "legal": "Legal",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "rights": "© {year} AdEra Labs FinTax. All rights reserved.",
+      "builtFor": "Built for tax professionals in Pakistan."
+    },
+    "pakistan": {
+      "title": "Practice software for firms across Pakistan",
+      "supporting": "From Islamabad to Karachi — one workspace for staff and clients, without inventing regional tax rules in marketing copy.",
+      "places": {
+        "islamabad": {
+          "caption": "Islamabad",
+          "alt": "View of Islamabad"
+        },
+        "lahore": {
+          "caption": "Lahore",
+          "alt": "Badshahi Mosque, Lahore"
+        },
+        "karachi": {
+          "caption": "Karachi",
+          "alt": "Karachi skyline"
+        }
+      }
+    },
+    "contact": {
+      "metaTitle": "Contact — TaxDesk PK",
+      "metaDescription": "Reach AdEra Labs FinTax about TaxDesk PK demos, partnerships, or product questions.",
+      "title": "Contact AdEra Labs FinTax",
+      "intro": "Questions about TaxDesk PK, demos, or firm onboarding? Send a message — we respond to product and access inquiries during business hours.",
+      "formAria": "Contact form",
+      "submit": "Send message",
+      "mailtoTo": "hello@aderalabs.example",
+      "mailtoSubject": "TaxDesk PK inquiry",
+      "fields": {
+        "name": "Your name",
+        "email": "Work email",
+        "firm": "Firm name",
+        "phone": "Phone",
+        "topic": "Topic",
+        "message": "Message"
+      },
+      "topics": {
+        "general": "General inquiry",
+        "demo": "Product demo",
+        "partnership": "Partnership",
+        "support": "Existing customer support",
+        "other": "Other"
+      },
+      "errors": {
+        "name": "Enter your name (at least 2 characters).",
+        "email": "Enter a valid email address.",
+        "firm": "Enter your firm name.",
+        "phone": "Enter a valid phone number.",
+        "topic": "Select a topic.",
+        "message": "Enter a message (at least 10 characters)."
+      },
+      "success": {
+        "title": "Request received",
+        "body": "Thanks — your message was validated. Reach us at the address below if you need to follow up before we respond."
+      }
+    },
+    "signup": {
+      "metaTitle": "Request firm access — TaxDesk PK",
+      "metaDescription": "Request TaxDesk PK workspace provisioning for your tax firm. AdEra Labs FinTax reviews and enables access — no self-service account creation.",
+      "title": "Request firm access",
+      "intro": "TaxDesk PK is provisioned by AdEra Labs FinTax for each firm. Submit your details and we will follow up with onboarding — this form does not create a live login.",
+      "formAria": "Firm access request form",
+      "submit": "Submit request",
+      "hasAccess": "Already have credentials?",
+      "signInLink": "Sign in",
+      "fields": {
+        "firmName": "Firm name",
+        "contactName": "Primary contact",
+        "email": "Work email",
+        "phone": "Phone",
+        "city": "City",
+        "firmSize": "Firm size",
+        "notes": "Notes (optional)"
+      },
+      "firmSizes": {
+        "solo": "Solo practitioner",
+        "small": "2–5 staff",
+        "medium": "6–20 staff",
+        "large": "21+ staff"
+      },
+      "errors": {
+        "firmName": "Enter your firm name.",
+        "contactName": "Enter a contact name.",
+        "email": "Enter a valid email address.",
+        "phone": "Enter a valid phone number.",
+        "city": "Enter your city.",
+        "firmSize": "Select firm size."
+      },
+      "success": {
+        "title": "Request received",
+        "body": "Thank you. AdEra Labs FinTax will review your request and contact you about provisioning a TaxDesk PK workspace. No account has been created yet."
+      }
+    }
+  },
+  "legal": {
+    "backHome": "Back to home",
+    "reviewBanner": "Legal review status: pending counsel review. This page restates factual product and security requirements from TaxDesk PK engineering specs. It is not a substitute for a firm-specific counsel-approved policy.",
+    "privacy": {
+      "title": "Privacy Policy",
+      "metaDescription": "How TaxDesk PK handles firm and client data, based on product security requirements.",
+      "lastUpdated": "Last updated: 2 October 2026",
+      "intro1": "TaxDesk PK is professional tax practice software for firms in Pakistan. This Privacy Policy describes how the product is designed to handle firm and client information according to current repository requirements.",
+      "intro2": "Deploying firms remain controllers of their client data. Operators must configure retention, contacts, and any jurisdiction-specific notices for their practice.",
+      "sections": {
+        "scope": {
+          "title": "Scope",
+          "body": "This policy covers staff workspaces, the client portal, document processing, tax-year workflows, analytics, and administrative tooling shipped in TaxDesk PK."
+        },
+        "tenancy": {
+          "title": "Firm and client isolation",
+          "body": "Access is designed around multi-tenant isolation:",
+          "b1": "Application queries are scoped by firm identifier.",
+          "b2": "PostgreSQL row-level security (RLS) isolates firm and client rows.",
+          "b3": "Portal users are scoped to their client; unauthorized cross-firm access is denied without revealing other tenants."
+        },
+        "sensitive": {
+          "title": "Sensitive fields",
+          "body": "The product treats national identifiers and financial credentials as sensitive:",
+          "b1": "CNIC/NTN, full bank account numbers, IBAN, and stored IRIS credentials are designed for encryption at rest with per-firm envelope keys.",
+          "b2": "CNIC values are masked in the UI by default; revealing a full value is an audited action.",
+          "b3": "Account numbers default to last-four display; secrets are not shown again after entry.",
+          "b4": "AI extraction schemas require storing only CNIC last-four from AI output — never a fabricated full CNIC."
+        },
+        "ai": {
+          "title": "AI processing and consent",
+          "body": "Document assistance may use external AI only under product guardrails:",
+          "b1": "Per-client AI consent is stored; per-client AI-off blocks external AI and falls back to manual or local flows.",
+          "b2": "Before external AI calls, CNIC, full account numbers, and postal addresses are masked in outbound payloads and re-attached locally after extraction.",
+          "b3": "AI call logs record metadata such as timestamp, firm, document, model, tokens, and cost — not raw document content.",
+          "b4": "Spreadsheet mapping sends headers plus a small sample of rows, not the full file.",
+          "b5": "Passwords for protected PDFs are used transiently in the browser and are not persisted."
+        },
+        "retention": {
+          "title": "Retention and deletion",
+          "body": "Retention follows firm-configurable policy and owner-controlled deletion:",
+          "b1": "Files are retained per configured retention; temporary processing files are deleted after use.",
+          "b2": "Client archive retains data but removes the client from active lists.",
+          "b3": "Permanent client deletion requires Owner permission, typed confirmation, and an audit log entry.",
+          "b4": "Firm owners may request full export and deletion; deletion is logged and treated as irreversible in product requirements."
+        },
+        "security": {
+          "title": "Security controls that protect privacy",
+          "body": "Privacy depends on the security controls specified for TaxDesk PK:",
+          "b1": "Staff authentication uses password plus mandatory TOTP; session tokens use HttpOnly Secure SameSite cookies, not browser localStorage.",
+          "b2": "Uploads use magic-byte validation, malware scanning, size limits, encrypted object storage, and short-lived signed URLs.",
+          "b3": "An append-only audit log records sensitive views, document access, AI calls, role changes, and related events.",
+          "b4": "API surfaces require authentication on protected routes, input validation, rate limiting, and CSP headers."
+        },
+        "contact": {
+          "title": "Contact",
+          "body": "For privacy requests about a specific firm’s data, contact that firm’s Owner or administrator. Platform operators should publish a support contact for their deployment. Counsel review is required before treating this page as a binding legal policy."
+        }
+      }
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "metaDescription": "Terms for using TaxDesk PK, based on product responsibilities and tax-safety requirements.",
+      "lastUpdated": "Last updated: 2 October 2026",
+      "intro1": "These Terms describe how TaxDesk PK is intended to be used. They restate product responsibilities from engineering and tax-safety requirements. They are pending legal review and may be replaced by firm- or operator-specific terms.",
+      "intro2": "By accessing a TaxDesk PK deployment you agree to use the software only for lawful tax practice operations and to keep credentials and client data confidential.",
+      "sections": {
+        "acceptance": {
+          "title": "Acceptance",
+          "body": "Use of staff, portal, or administrative features constitutes acceptance of these product terms for that deployment until superseding counsel-approved terms are published."
+        },
+        "service": {
+          "title": "The service",
+          "body": "TaxDesk PK provides firm workspaces for client CRM, document hub, tax-year files, computation, wealth reconciliation, return preparation, exports, billing, portal collaboration, analytics, and administration.",
+          "b1": "Features depend on firm configuration, role permissions, and enabled integrations.",
+          "b2": "Draft or placeholder tax rule packs keep computation and approval fail-closed until published rules are approved.",
+          "b3": "Availability, backups, and recovery objectives are operational responsibilities of the deploying operator."
+        },
+        "taxSafety": {
+          "title": "Tax calculations and professional responsibility",
+          "body": "TaxDesk PK is a practice tool. It does not replace a qualified tax professional or official FBR guidance.",
+          "b1": "Computed figures are estimates that require qualified review before reliance or filing.",
+          "b2": "The tax engine is deterministic and versioned; large language models must not produce final tax figures.",
+          "b3": "AI extraction produces draft data until staff confirm; humans approve return preparation and filing actions.",
+          "b4": "The consulting firm and responsible professionals remain legally accountable for compliance and advice delivered to clients."
+        },
+        "accounts": {
+          "title": "Accounts and access",
+          "body": "Firms control user invitations, roles, sessions, and portal access.",
+          "b1": "Staff must protect passwords and TOTP devices; sessions may be revoked by administrators.",
+          "b2": "Portal OTP flows must not be used to probe whether a contact is registered outside legitimate client access.",
+          "b3": "Sharing credentials or bypassing firm authorization controls is prohibited."
+        },
+        "acceptableUse": {
+          "title": "Acceptable use",
+          "body": "You may not misuse the platform to harm clients, other firms, or system integrity.",
+          "b1": "Do not attempt cross-firm access, disable security controls, or exfiltrate data outside authorized workflows.",
+          "b2": "Do not upload malware or use document processing to evade lawful scanning and validation.",
+          "b3": "Do not use planning or computation features to facilitate tax evasion; product guardrails exist to discourage evasion patterns."
+        },
+        "liability": {
+          "title": "Limitation of reliance",
+          "body": "Until counsel publishes deployment-specific liability terms, users acknowledge that TaxDesk PK outputs are decision-support only. Filing decisions, statutory interpretations, and client advice remain the responsibility of the firm and its licensed professionals."
+        },
+        "changes": {
+          "title": "Changes",
+          "body": "Product requirements may evolve. Material changes to published Terms should be versioned and communicated by the operator. This page will remain marked pending legal review until counsel signs off."
+        },
+        "contact": {
+          "title": "Contact",
+          "body": "Questions about these Terms for a given deployment should go to the firm Owner or the platform operator. Formal legal notices require counsel-approved contact details for that deployment."
+        }
+      }
+    }
+  }
+}

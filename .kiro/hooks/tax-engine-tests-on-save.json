@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Tax Engine Tests on Save",
+      "trigger": "PostFileSave",
+      "description": "Runs tax engine unit tests and golden cases whenever a file in packages/tax-engine or packages/rules is saved. Blocks if tests fail.",
+      "matcher": "packages[\\\\/](tax-engine|rules)[\\\\/].*\\.(ts|json)$",
+      "action": {
+        "type": "command",
+        "command": "cd \"$(dirname \"$0\")/../..\" && pnpm --filter @taxdesk/tax-engine test:golden 2>&1 && pnpm --filter @taxdesk/tax-engine test 2>&1",
+        "timeout": 60
+      }
+    }
+  ]
+}

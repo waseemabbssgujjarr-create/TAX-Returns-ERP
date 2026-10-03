@@ -1,0 +1,245 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "20"
+  PNPM_VERSION: "9.12.0"
+  # Postgres superuser — only used to bootstrap roles and run role-assertion queries
+  POSTGRES_SUPERUSER_URL: "postgresql://taxdesk:taxdesk_test@localhost:5432/taxdesk_test"
+  # Runtime role — what the application connects as
+  DATABASE_URL: "postgresql://taxdesk_app:taxdesk_dev@localhost:5432/taxdesk_test"
+  # Migrations role — owns tables; used only for prisma migrate and CI assertions
+  DATABASE_MIGRATIONS_URL: "postgresql://taxdesk_migrations:taxdesk_migrations_dev@localhost:5432/taxdesk_test"
+
+jobs:
+  # ── Lint & Type-check ────────────────────────────────────────────────────────
+  lint:
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm format:check
+
+  # ── Unit Tests ───────────────────────────────────────────────────────────────
+  test:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: taxdesk
+          POSTGRES_PASSWORD: taxdesk_test
+          POSTGRES_DB: taxdesk_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    env:
+      DATABASE_URL: "postgresql://taxdesk_app:taxdesk_dev@localhost:5432/taxdesk_test"
+      DATABASE_MIGRATIONS_URL: "postgresql://taxdesk_migrations:taxdesk_migrations_dev@localhost:5432/taxdesk_test"
+      REDIS_URL: "redis://localhost:6379"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # ── Step 1: Bootstrap DB roles (superuser creates taxdesk_migrations + taxdesk_app)
+      - name: Bootstrap database roles
+        run: |
+          psql "${{ env.POSTGRES_SUPERUSER_URL }}" \
+            -f infra/postgres/init.sql
+        env:
+          PGPASSWORD: taxdesk_test
+
+      # ── Step 2: Run Prisma migrations as the migrations role (table owner)
+      - name: Run database migrations
+        run: pnpm prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ env.DATABASE_MIGRATIONS_URL }}
+
+      # ── Step 3: Apply post-migration role restrictions
+      - name: Apply role restrictions
+        run: |
+          psql "${{ env.POSTGRES_SUPERUSER_URL }}" \
+            -f infra/postgres/migrations/001_role_restrictions.sql
+        env:
+          PGPASSWORD: taxdesk_test
+
+      # ── Step 4: Assert security invariants (must all pass before tests run)
+      - name: Assert database role security invariants
+        run: |
+          psql "${{ env.POSTGRES_SUPERUSER_URL }}" \
+            -f infra/postgres/ci-assert-roles.sql
+        env:
+          PGPASSWORD: taxdesk_test
+
+      # ── Step 5: Run unit and integration tests using the runtime role
+      - name: Run tests
+        run: pnpm test
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+
+  # ── RLS Integration Tests (required gate — must pass before any merge) ───────
+  rls-integration:
+    name: RLS Integration Tests
+    runs-on: ubuntu-latest
+    needs: [test]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: taxdesk
+          POSTGRES_PASSWORD: taxdesk_test
+          POSTGRES_DB: taxdesk_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    env:
+      DATABASE_URL: "postgresql://taxdesk_app:taxdesk_dev@localhost:5432/taxdesk_test"
+      DATABASE_MIGRATIONS_URL: "postgresql://taxdesk_migrations:taxdesk_migrations_dev@localhost:5432/taxdesk_test"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Bootstrap + migrate + restrict
+        run: |
+          psql "postgresql://taxdesk:taxdesk_test@localhost:5432/taxdesk_test" \
+            -f infra/postgres/init.sql
+          DATABASE_URL=${{ env.DATABASE_MIGRATIONS_URL }} pnpm prisma migrate deploy
+          psql "postgresql://taxdesk:taxdesk_test@localhost:5432/taxdesk_test" \
+            -f infra/postgres/migrations/001_role_restrictions.sql
+        env:
+          PGPASSWORD: taxdesk_test
+
+      - name: Run RLS integration tests
+        run: pnpm --filter @taxdesk/worker test:rls
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+
+      - name: Run FirmDirectory sync tests
+        run: pnpm --filter @taxdesk/worker test:firm-directory
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+
+  # ── Tax Engine Golden Cases ───────────────────────────────────────────────────
+  tax-engine-golden:
+    name: Tax Engine Golden Cases
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - name: Run golden test cases
+        run: pnpm --filter @taxdesk/tax-engine test:golden
+
+  # ── i18n Key Parity Check ───────────────────────────────────────────────────
+  i18n-check:
+    name: i18n Key Parity (en ↔ ur)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @taxdesk/i18n check:parity
+
+  # ── Security Scan ───────────────────────────────────────────────────────────
+  security:
+    name: Dependency Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=high
+      - name: Check for secrets in code
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD

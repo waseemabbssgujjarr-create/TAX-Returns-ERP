@@ -1,0 +1,811 @@
+// TaxDesk PK — Prisma Schema
+// Single source of truth for the database model.
+// Run: pnpm prisma migrate deploy  (via DATABASE_MIGRATIONS_URL)
+//
+// Conventions:
+//   - All monetary amounts stored as BigInt (paisa, 1 PKR = 100 paisa)
+//   - Sensitive fields (CNIC, NTN, account numbers) stored encrypted —
+//     encrypt/decrypt in the application layer, Prisma sees opaque Bytes
+//   - Every tenant-scoped table has a firmId for RLS enforcement
+//   - createdAt / updatedAt on every table via @default(now()) and @updatedAt
+//   - Runtime connects as taxdesk_app (no DDL, no BYPASSRLS, not table owner)
+//   - Migrations connect as taxdesk_migrations (table owner)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  // Runtime URL — uses taxdesk_app (no DDL, no BYPASSRLS, not table owner)
+  url       = env("DATABASE_URL")
+  // Direct URL — uses taxdesk_migrations (owner role) for Prisma migrate, Studio, shadow DB
+  directUrl = env("DATABASE_MIGRATIONS_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tenancy
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Firm {
+  id                 String   @id @default(uuid())
+  name               String
+  slug               String   @unique
+  logoUrl            String?
+  timezone           String   @default("Asia/Karachi")
+  locale             String   @default("en")
+  isActive           Boolean  @default(true)
+  // Per-firm session idle timeout (minutes); 0 = use system default (30 min)
+  idleTimeoutMinutes Int      @default(0)
+  // Per-firm AES-256 data encryption key, wrapped by KeyManagementService.
+  // Never stored plain. NULL until first sensitive field is encrypted.
+  encryptedDataKey   String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  users            User[]
+  clients          Client[]
+  clientNotes      ClientNote[]
+  auditLogs        AuditLog[]
+  refreshTokens    RefreshToken[]
+  otpCodes         OtpCode[]
+  notices          Notice[]
+  complianceEvents ComplianceEvent[]
+  invoices         Invoice[]
+  payments         Payment[]
+  exportArtifacts  ExportArtifact[]
+  irisFilings      IrisFiling[]
+
+  @@map("firms")
+}
+
+/// Bootstrap/discovery table — the ONLY table queried before authentication.
+/// Contains no sensitive fields. Synced from firms via DB trigger (SECURITY DEFINER).
+/// Application code never writes here; taxdesk_app has SELECT-only.
+model FirmDirectory {
+  firmId   String  @id @map("firm_id")
+  slug     String  @unique
+  isActive Boolean @map("is_active")
+
+  @@map("firm_directory")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Users & Auth
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  OWNER
+  MANAGER
+  ASSOCIATE
+  REVIEWER
+  CLIENT
+}
+
+model User {
+  id                     String    @id @default(uuid())
+  firmId                 String    @map("firm_id")
+  email                  String
+  passwordHash           String    @map("password_hash")
+  name                   String
+  role                   UserRole  @default(ASSOCIATE)
+  // Encrypted TOTP secret (AES-256-GCM blob with version|IV|authTag|ciphertext)
+  totpSecret             String?   @map("totp_secret")
+  totpEnabled            Boolean   @default(false) @map("totp_enabled")
+  // Pending TOTP secret during setup wizard (cleared on setup complete)
+  totpSetupPendingSecret String?   @map("totp_setup_pending_secret")
+  // Timestamp when TOTP was last successfully used
+  totpVerifiedAt         DateTime? @map("totp_verified_at")
+  phoneNumber            String?   @map("phone_number")
+  isActive               Boolean   @default(true) @map("is_active")
+  lastLoginAt            DateTime? @map("last_login_at")
+  // Updated on every successfully authenticated API request (best-effort)
+  lastActivityAt         DateTime? @map("last_activity_at")
+  // Access tokens issued before this timestamp are rejected
+  passwordChangedAt      DateTime? @map("password_changed_at")
+  failedLoginCount       Int       @default(0) @map("failed_login_count")
+  lockedUntil            DateTime? @map("locked_until")
+  createdAt              DateTime  @default(now()) @map("created_at")
+  updatedAt              DateTime  @updatedAt @map("updated_at")
+
+  firm          Firm           @relation(fields: [firmId], references: [id])
+  clientAccess       ClientAccess[]
+  clientNotes        ClientNote[]
+  auditLogs          AuditLog[]
+  refreshTokens      RefreshToken[]
+  recoveryCodes      RecoveryCode[]
+  documentsUploaded  Document[]     @relation("DocumentUploadedBy")
+  noticesAssigned    Notice[]       @relation("NoticeAssignee")
+  taxPlanScenarios   TaxPlanScenario[] @relation("TaxPlanCreatedBy")
+
+  @@unique([firmId, email])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid())
+  firmId    String    @map("firm_id")
+  userId    String    @map("user_id")
+  // SHA-256 hash of the opaque token — raw value never stored
+  tokenHash String    @unique @map("token_hash")
+  // JWT family ID for replay detection / family invalidation
+  jwtFamily String    @map("jwt_family")
+  userAgent String?   @map("user_agent")
+  ipAddress String?   @map("ip_address")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  firm Firm @relation(fields: [firmId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([firmId])
+  @@index([jwtFamily])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+model RecoveryCode {
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  firmId    String    @map("firm_id")
+  // bcrypt hash (cost 10) of the 10-character hex code
+  codeHash  String    @map("code_hash")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("recovery_codes")
+}
+
+model OtpCode {
+  id          String    @id @default(uuid())
+  firmId      String    @map("firm_id")
+  // HMAC-SHA256(OTP_CONTACT_SECRET, normalised contact) — deterministic lookup key
+  contactHmac String    @map("contact_hmac")
+  channel     String
+  // bcrypt hash (cost 10) of the 6-digit OTP
+  otpHash     String    @map("otp_hash")
+  expiresAt   DateTime  @map("expires_at")
+  usedAt      DateTime? @map("used_at")
+  attempts    Int       @default(0)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  firm Firm @relation(fields: [firmId], references: [id], onDelete: Cascade)
+
+  @@index([firmId, contactHmac])
+  @@index([expiresAt])
+  @@map("otp_codes")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Clients
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum ClientType {
+  SALARIED_INDIVIDUAL
+  BUSINESS_INDIVIDUAL
+  AOP_PARTNERSHIP
+  PRIVATE_LIMITED
+  PROPERTY_OWNER
+  OVERSEAS_PAKISTANI
+  FREELANCER_IT_EXPORTER
+  NON_PROFIT
+}
+
+enum FilerStatus {
+  FILER
+  NON_FILER
+  UNKNOWN
+}
+
+model Client {
+  id             String      @id @default(uuid())
+  firmId         String      @map("firm_id")
+  type           ClientType
+  displayName    String      @map("display_name")
+  // CNIC / NTN stored as encrypted bytes; decrypt in app layer
+  cnicEncrypted  Bytes?      @map("cnic_encrypted")
+  ntnEncrypted   Bytes?      @map("ntn_encrypted")
+  // Deterministic HMAC for duplicate detection within firm (never reversible)
+  cnicLookupHmac String?     @map("cnic_lookup_hmac")
+  ntnLookupHmac  String?      @map("ntn_lookup_hmac")
+  // Plaintext last-4 digits for search; masked display segments for list views
+  cnicLast4      String?      @map("cnic_last4")
+  ntnLast4       String?      @map("ntn_last4")
+  cnicMasked     String?      @map("cnic_masked")
+  ntnMasked      String?      @map("ntn_masked")
+  filerStatus    FilerStatus @default(UNKNOWN) @map("filer_status")
+  isArchived     Boolean     @default(false) @map("is_archived")
+  aiConsentGiven Boolean     @default(false) @map("ai_consent_given")
+  aiEnabled      Boolean     @default(true) @map("ai_enabled")
+  notes          String?
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+
+  firm         Firm           @relation(fields: [firmId], references: [id])
+  accessList   ClientAccess[]
+  taxYearFiles     TaxYearFile[]
+  clientNotes      ClientNote[]
+  documents        Document[]
+  notices          Notice[]
+  complianceEvents ComplianceEvent[]
+  invoices         Invoice[]
+  irisFilings      IrisFiling[]
+
+  @@unique([firmId, cnicLookupHmac])
+  @@unique([firmId, ntnLookupHmac])
+  @@index([firmId, displayName])
+  @@index([firmId, isArchived])
+  @@map("clients")
+}
+
+model ClientNote {
+  id        String   @id @default(uuid())
+  firmId    String   @map("firm_id")
+  clientId  String   @map("client_id")
+  authorId  String   @map("author_id")
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  firm   Firm   @relation(fields: [firmId], references: [id])
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  author User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([clientId, createdAt(sort: Desc)])
+  @@map("client_notes")
+}
+
+model ClientAccess {
+  id        String   @id @default(uuid())
+  clientId  String   @map("client_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([clientId, userId])
+  @@map("client_access")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tax Year Workspace
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum TaxYearStatus {
+  INTAKE
+  IN_PROGRESS
+  UNDER_REVIEW
+  APPROVED
+  FILED
+  CLOSED
+}
+
+model TaxYearFile {
+  id           String        @id @default(uuid())
+  clientId     String        @map("client_id")
+  taxYear      Int           @map("tax_year")
+  status       TaxYearStatus @default(INTAKE)
+  assigneeId   String?       @map("assignee_id")
+  dueDate      DateTime?     @map("due_date")
+  rulesVersion String?       @map("rules_version")
+  sections     Json          @default("{}") @map("sections")
+  filedAt      DateTime?     @map("filed_at")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  client               Client                    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  documents            Document[]
+  computationSnapshots TaxComputationSnapshot[]
+  wealthStatement      WealthStatement?
+  withholdingEntries   WithholdingEntry[]
+  returnPreparation    ReturnPreparation?
+  irisFiling           IrisFiling?
+  exportArtifacts      ExportArtifact[]
+  taxPlanScenarios     TaxPlanScenario[]
+  notices              Notice[]
+
+  @@unique([clientId, taxYear])
+  @@map("tax_year_files")
+}
+
+enum TaxComputationStatus {
+  SUCCESS
+  VALIDATION_FAILED
+  RULES_UNAVAILABLE
+  ENGINE_ERROR
+}
+
+model TaxComputationSnapshot {
+  id               String               @id @default(uuid())
+  taxYearFileId    String               @map("tax_year_file_id")
+  firmId           String               @map("firm_id")
+  status           TaxComputationStatus
+  rulesVersion     String?              @map("rules_version")
+  resultJson       Json?                @map("result_json")
+  warnings         Json                 @default("[]")
+  validationErrors Json                 @default("[]") @map("validation_errors")
+  createdById      String?              @map("created_by_id")
+  createdAt        DateTime             @default(now()) @map("created_at")
+
+  taxYearFile TaxYearFile @relation(fields: [taxYearFileId], references: [id], onDelete: Cascade)
+
+  @@index([taxYearFileId, createdAt(sort: Desc)])
+  @@index([firmId])
+  @@map("tax_computation_snapshots")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Documents
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum DocumentStatus {
+  UPLOADED
+  PROCESSING
+  EXTRACTED
+  REVIEWED
+  VERIFIED
+  FAILED
+}
+
+enum DocumentCategory {
+  UNCATEGORIZED
+  SALARY_CERTIFICATE
+  BANK_STATEMENT
+  WITHHOLDING_STATEMENT
+  PROPERTY_DOCUMENT
+  INVESTMENT_STATEMENT
+  WEALTH_STATEMENT
+  CNIC_COPY
+  NTN_CERTIFICATE
+  AOP_PARTNERSHIP_DEED
+  COMPANY_INCORPORATION_DOCUMENT
+  PRIOR_RETURN_COPY
+  CPR_PAYMENT_RECEIPT
+  OTHER
+}
+
+enum DocumentProcessingStatus {
+  PENDING
+  SECURITY_CHECK
+  READING
+  CLASSIFYING
+  EXTRACTING
+  READY
+  FAILED
+}
+
+enum DocumentExtractionStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETE
+  FAILED
+  SKIPPED
+}
+
+enum DocumentReviewStatus {
+  NOT_STARTED
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
+model Document {
+  id                String                   @id @default(uuid())
+  taxYearFileId     String                   @map("tax_year_file_id")
+  firmId            String                   @map("firm_id")
+  clientId          String                   @map("client_id")
+  originalName      String                   @map("original_name")
+  storageKey        String                   @unique @map("storage_key")
+  mimeType          String                   @map("mime_type")
+  sizeBytes         Int                      @map("size_bytes")
+  documentType      String?                  @map("document_type")
+  category          DocumentCategory         @default(UNCATEGORIZED) @map("category")
+  status            DocumentStatus           @default(UPLOADED)
+  processingStatus  DocumentProcessingStatus @default(PENDING) @map("processing_status")
+  extractionStatus  DocumentExtractionStatus @default(NOT_STARTED) @map("extraction_status")
+  reviewStatus      DocumentReviewStatus     @default(NOT_STARTED) @map("review_status")
+  version           Int                      @default(1)
+  previousVersionId String?                  @map("previous_version_id")
+  uploadedById      String?                  @map("uploaded_by_id")
+  extractedFields   Json?                    @map("extracted_fields")
+  confidence        Float?
+  verifiedById      String?                  @map("verified_by_id")
+  verifiedAt        DateTime?                @map("verified_at")
+  aiCallId          String?                  @map("ai_call_id")
+  createdAt         DateTime                 @default(now()) @map("created_at")
+  updatedAt         DateTime                 @updatedAt @map("updated_at")
+
+  taxYearFile     TaxYearFile  @relation(fields: [taxYearFileId], references: [id], onDelete: Cascade)
+  client          Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  uploadedBy      User?        @relation("DocumentUploadedBy", fields: [uploadedById], references: [id], onDelete: SetNull)
+  previousVersion Document?    @relation("DocumentVersionChain", fields: [previousVersionId], references: [id], onDelete: SetNull)
+  nextVersions    Document[]   @relation("DocumentVersionChain")
+
+  @@index([firmId, clientId, createdAt(sort: Desc)])
+  @@index([taxYearFileId])
+  @@map("documents")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 7 — Wealth statement & reconciliation
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum WealthStatementStatus {
+  DRAFT
+  RECONCILED
+  DISCREPANCY
+}
+
+model WealthStatement {
+  id              String                @id @default(uuid())
+  taxYearFileId   String                @unique @map("tax_year_file_id")
+  firmId          String                @map("firm_id")
+  openingWealth   BigInt                @map("opening_wealth_paisa")
+  closingWealth   BigInt                @map("closing_wealth_paisa")
+  incomeTotal     BigInt                @map("income_total_paisa")
+  expenseTotal    BigInt                @map("expense_total_paisa")
+  taxTotal        BigInt                @map("tax_total_paisa")
+  discrepancy     BigInt                @map("discrepancy_paisa")
+  status          WealthStatementStatus @default(DRAFT)
+  explanation     String?
+  reviewStatus    String                @default("NOT_STARTED") @map("review_status")
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+
+  taxYearFile TaxYearFile @relation(fields: [taxYearFileId], references: [id], onDelete: Cascade)
+
+  @@index([firmId])
+  @@map("wealth_statements")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 8 — Withholding & return preparation
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum WithholdingSource {
+  SALARY
+  BANK
+  UTILITIES
+  VEHICLE
+  PROPERTY
+  CASH
+  OTHER
+}
+
+model WithholdingEntry {
+  id              String            @id @default(uuid())
+  taxYearFileId   String            @map("tax_year_file_id")
+  firmId          String            @map("firm_id")
+  source          WithholdingSource
+  amountPaisa     BigInt            @map("amount_paisa")
+  taxDeductedPaisa BigInt           @default(0) @map("tax_deducted_paisa")
+  certificateRef  String?           @map("certificate_ref")
+  documentId      String?           @map("document_id")
+  matched         Boolean           @default(false)
+  reviewStatus    String            @default("NOT_STARTED") @map("review_status")
+  // IRIS WHT-statement gate fields (mirrors IRIS Data-tab columns + row validation)
+  registrationNo   String? @map("registration_no")
+  payeeName        String? @map("payee_name")
+  transactionDate  DateTime? @map("transaction_date")
+  whtCode          String? @map("wht_code")
+  exemptionCode    String? @map("exemption_code")
+  cprReference     String? @map("cpr_reference")
+  validationStatus String  @default("NOT_CHECKED") @map("validation_status")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+
+  taxYearFile TaxYearFile @relation(fields: [taxYearFileId], references: [id], onDelete: Cascade)
+
+  @@index([taxYearFileId])
+  @@index([firmId])
+  @@map("withholding_entries")
+}
+
+enum ReturnPrepReviewStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+}
+
+model ReturnPreparation {
+  id                  String                 @id @default(uuid())
+  taxYearFileId       String                 @unique @map("tax_year_file_id")
+  firmId              String                 @map("firm_id")
+  structuredJson      Json                   @default("{}") @map("structured_json")
+  reviewStatus        ReturnPrepReviewStatus @default(DRAFT) @map("review_status")
+  assignedReviewerId  String?                @map("assigned_reviewer_id")
+  submittedAt         DateTime?              @map("submitted_at")
+  submittedById       String?                @map("submitted_by_id")
+  approvedAt          DateTime?              @map("approved_at")
+  approvedById        String?                @map("approved_by_id")
+  approvalComment     String?                @map("approval_comment") @db.VarChar(2000)
+  createdAt           DateTime               @default(now()) @map("created_at")
+  updatedAt           DateTime               @updatedAt @map("updated_at")
+
+  taxYearFile TaxYearFile @relation(fields: [taxYearFileId], references: [id], onDelete: Cascade)
+
+  @@index([firmId])
+  @@index([firmId, reviewStatus])
+  @@map("return_preparations")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// IRIS filing (submission tracking) — honest states only.
+// A row is created once a return preparation exists; it never claims a
+// successful FBR/IRIS submission unless a real IrisSubmissionPort adapter
+// confirms it. The default StubIrisAdapter always resolves to
+// PENDING_INTEGRATION so the UI never shows a fake "submitted" state.
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum IrisFilingStatus {
+  DRAFT
+  READY
+  PENDING_INTEGRATION
+  SUBMITTED
+  ACCEPTED
+  REJECTED
+  FAILED
+}
+
+/// How the submission reached IRIS. MANUAL_PORTAL = staff files manually on the
+/// IRIS web portal using exported artifacts (today's reality). API = a future
+/// official API or RPA-backed adapter performed the submission.
+enum IrisFilingChannel {
+  MANUAL_PORTAL
+  API
+}
+
+model IrisFiling {
+  id              String            @id @default(uuid())
+  taxYearFileId   String            @unique @map("tax_year_file_id")
+  firmId          String            @map("firm_id")
+  clientId        String            @map("client_id")
+  status          IrisFilingStatus  @default(DRAFT)
+  channel         IrisFilingChannel @default(MANUAL_PORTAL)
+  // FBR/IRIS acknowledgment or tracking number — entered manually today,
+  // populated by a real adapter's submitReturn/fetchStatus response later.
+  irisReferenceNo String?           @map("iris_reference_no")
+  // Raw adapter response payload (opaque — never assumed to be truthful UI state).
+  responseJson    Json?             @map("response_json")
+  errorMessage    String?           @map("error_message")
+  attemptCount    Int               @default(0) @map("attempt_count")
+  submittedAt     DateTime?         @map("submitted_at")
+  submittedById   String?           @map("submitted_by_id")
+  lastSyncedAt    DateTime?         @map("last_synced_at")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+
+  taxYearFile TaxYearFile @relation(fields: [taxYearFileId], references: [id], onDelete: Cascade)
+  firm        Firm        @relation(fields: [firmId], references: [id], onDelete: Cascade)
+  client      Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([firmId, status])
+  @@index([clientId])
+  @@map("iris_filings")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 9 — Tax planning scenarios (lawful comparison only)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model TaxPlanScenario {
+  id            String   @id @default(uuid())
+  taxYearFileId String   @map("tax_year_file_id")
+  firmId        String   @map("firm_id")
+  name          String
+  assumptions   Json     @default("[]")
+  warnings      Json     @default("[]")
+  rulesVersion  String?  @map("rules_version")
+  outcomeJson   Json?    @map("outcome_json")
+  createdById   String?  @map("created_by_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  taxYearFile TaxYearFile @relation(fields: [taxYearFileId], references: [id], onDelete: Cascade)
+  createdBy   User?       @relation("TaxPlanCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([taxYearFileId, createdAt(sort: Desc)])
+  @@index([firmId])
+  @@map("tax_plan_scenarios")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Phase 10 — Notices, compliance calendar, billing
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum NoticeStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+model Notice {
+  id            String       @id @default(uuid())
+  firmId        String       @map("firm_id")
+  clientId      String       @map("client_id")
+  taxYearFileId String?      @map("tax_year_file_id")
+  title         String
+  description   String?
+  deadline      DateTime?    @map("deadline")
+  assigneeId    String?      @map("assignee_id")
+  status        NoticeStatus @default(OPEN)
+  documentIds   Json         @default("[]") @map("document_ids")
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  firm        Firm         @relation(fields: [firmId], references: [id], onDelete: Restrict)
+  client      Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  taxYearFile TaxYearFile? @relation(fields: [taxYearFileId], references: [id], onDelete: SetNull)
+  assignee    User?        @relation("NoticeAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+
+  @@index([firmId, status])
+  @@index([clientId])
+  @@map("notices")
+}
+
+enum ComplianceEventKind {
+  DEADLINE
+  REMINDER
+  INFO_REQUEST
+  FILING
+}
+
+model ComplianceEvent {
+  id             String              @id @default(uuid())
+  firmId         String              @map("firm_id")
+  clientId       String?             @map("client_id")
+  taxYearFileId  String?             @map("tax_year_file_id")
+  kind           ComplianceEventKind
+  title          String
+  eventAt        DateTime            @map("event_at")
+  reminderSentAt DateTime?           @map("reminder_sent_at")
+  metadata       Json                @default("{}")
+  createdAt      DateTime            @default(now()) @map("created_at")
+
+  firm   Firm    @relation(fields: [firmId], references: [id], onDelete: Restrict)
+  client Client? @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([firmId, eventAt])
+  @@index([eventAt, reminderSentAt])
+  @@map("compliance_events")
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PARTIALLY_PAID
+  PAID
+  VOID
+}
+
+model Invoice {
+  id              String        @id @default(uuid())
+  firmId          String        @map("firm_id")
+  clientId        String        @map("client_id")
+  invoiceNumber   String        @map("invoice_number")
+  amountPaisa     BigInt        @map("amount_paisa")
+  balancePaisa    BigInt        @map("balance_paisa")
+  status          InvoiceStatus @default(DRAFT)
+  visibleToClient Boolean       @default(false) @map("visible_to_client")
+  dueDate         DateTime?     @map("due_date")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  firm     Firm      @relation(fields: [firmId], references: [id], onDelete: Restrict)
+  client   Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  payments Payment[]
+
+  @@unique([firmId, invoiceNumber])
+  @@index([firmId, clientId])
+  @@map("invoices")
+}
+
+model Payment {
+  id          String   @id @default(uuid())
+  firmId      String   @map("firm_id")
+  invoiceId   String   @map("invoice_id")
+  amountPaisa BigInt   @map("amount_paisa")
+  paidAt      DateTime @map("paid_at")
+  reference   String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  firm    Firm    @relation(fields: [firmId], references: [id], onDelete: Restrict)
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+  @@index([firmId])
+  @@map("payments")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Audit Log (append-only — no updates or deletes by taxdesk_app)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  firmId       String   @map("firm_id")
+  userId       String?  @map("user_id")
+  action       String
+  resourceType String?  @map("resource_type")
+  resourceId   String?  @map("resource_id")
+  ipAddress    String?  @map("ip_address")
+  userAgent    String?  @map("user_agent")
+  before       Json?
+  after        Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  // IC-3: firmId RESTRICT (retain history); userId SET NULL (preserve events on user delete)
+  firm Firm  @relation(fields: [firmId], references: [id], onDelete: Restrict)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AI Call Log (for cost tracking and privacy audit)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AiCallLog {
+  id           String   @id @default(uuid())
+  firmId       String   @map("firm_id")
+  documentId   String?  @map("document_id")
+  model        String
+  operation    String
+  inputTokens  Int      @map("input_tokens")
+  outputTokens Int      @map("output_tokens")
+  costPaisaEst BigInt   @map("cost_paisa_est")
+  status       String
+  errorMessage String?  @map("error_message")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("ai_call_logs")
+}
+
+
+// -----------------------------------------------------------------------------
+// Phase — Export artifacts (PDF / worksheet / CSV)
+// -----------------------------------------------------------------------------
+
+enum ExportArtifactStatus {
+  PENDING
+  READY
+  FAILED
+}
+
+enum ExportArtifactType {
+  TAX_SUMMARY_PDF
+  RETURN_WORKSHEET
+  WEALTH_STATEMENT
+  AUDIT_LOG_CSV
+}
+
+model ExportArtifact {
+  id              String               @id @default(uuid())
+  firmId          String               @map("firm_id")
+  clientId        String?              @map("client_id")
+  taxYearFileId   String?              @map("tax_year_file_id")
+  exportType      ExportArtifactType   @map("export_type")
+  status          ExportArtifactStatus @default(PENDING)
+  storageKey      String?              @map("storage_key")
+  mimeType        String?              @map("mime_type")
+  locale          String               @default("en")
+  rulesVersion    String?              @map("rules_version")
+  rulesState      String?              @map("rules_state")
+  errorMessage    String?              @map("error_message")
+  requestedById   String               @map("requested_by_id")
+  createdAt       DateTime             @default(now()) @map("created_at")
+  completedAt     DateTime?            @map("completed_at")
+
+  firm        Firm         @relation(fields: [firmId], references: [id], onDelete: Cascade)
+  taxYearFile TaxYearFile? @relation(fields: [taxYearFileId], references: [id], onDelete: SetNull)
+
+  @@index([firmId, createdAt(sort: Desc)])
+  @@index([taxYearFileId])
+  @@map("export_artifacts")
+}
+

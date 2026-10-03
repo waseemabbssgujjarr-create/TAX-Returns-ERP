@@ -1,0 +1,30 @@
+/\*\*
+
+- TY2025 Rule Status
+-
+- **Production ready: NO**
+-
+- Declared bundle version: `0.1.0-DRAFT`
+-
+- Every file under `packages/rules/data/2025/` remains DRAFT/PLACEHOLDER until a
+- qualified tax professional reviews and replaces them. The engine and loader
+- fail closed — they will not invent or silently promote these values.
+-
+- ## Remaining DRAFT / PLACEHOLDER files
+- - `index.json` — version `0.1.0-DRAFT`, reviewedBy PENDING
+- - `income-tax.json` — illustrative slabs, PLACEHOLDER source
+- - `withholding.json` — DRAFT
+- - `deductions.json` — DRAFT
+- - `credits.json` — DRAFT
+- - `deadlines.json` — DRAFT
+- - `golden-cases.json` — stubs with `verified: false`
+-
+- ## How to insert reviewed rules (no application code changes)
+- 1.  Replace the JSON files above with reviewed content.
+- 2.  Use pure semver versions (`1.0.0`), real `reviewedBy` / `reviewedOn`, and
+- cite the official Finance Act / FBR notification in `sourceFinanceAct`.
+- 3.  Remove all DRAFT / PLACEHOLDER / PENDING markers.
+- 4.  Mark golden cases `verified: true` (≥25 cases).
+- 5.  Confirm `loadRules(2025)` succeeds and `compute()` no longer returns `RULES_DRAFT`.
+-
+- Machine-readable mirror: `TY2025_RULE_STATUS` exported from `@taxdesk/rules`. \*/

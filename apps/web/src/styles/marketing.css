@@ -1,0 +1,175 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   TaxDesk PK / AdEra Labs FinTax — Marketing surfaces
+   Dotted lattice + Urdu typography tuning on landing.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.marketing-shell {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--color-surface);
+  --marketing-dot: color-mix(in oklab, var(--color-primary) 16%, transparent);
+  --marketing-dot-soft: color-mix(in oklab, var(--color-border) 70%, transparent);
+}
+
+/* Fixed ambient layer — visible in header/footer gaps */
+.marketing-shell::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.55;
+  background-color: var(--color-surface);
+  background-image:
+    radial-gradient(circle at 1px 1px, var(--marketing-dot) 1px, transparent 0),
+    radial-gradient(circle at 13px 13px, var(--marketing-dot-soft) 0.75px, transparent 0),
+    radial-gradient(ellipse 80% 50% at 10% -10%, color-mix(in oklab, var(--color-primary) 16%, transparent), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, color-mix(in oklab, var(--color-primary) 10%, transparent), transparent 50%);
+  background-size:
+    22px 22px,
+    22px 22px,
+    auto,
+    auto;
+  background-attachment: fixed;
+}
+
+[data-theme='dark'] .marketing-shell::before {
+  opacity: 0.42;
+  --marketing-dot: color-mix(in oklab, var(--color-primary) 22%, transparent);
+  --marketing-dot-soft: color-mix(in oklab, var(--color-primary) 10%, transparent);
+}
+
+/* Dotted texture on every landing section (desktop + mobile) */
+.marketing-shell > main > section,
+.marketing-shell > main > div > section {
+  background-image: radial-gradient(circle at 1px 1px, var(--marketing-dot) 1px, transparent 0);
+  background-size: 22px 22px;
+  background-attachment: fixed;
+}
+
+.marketing-shell > main > section.bg-surface,
+.marketing-shell > main > div > section.bg-surface {
+  background-color: color-mix(in oklab, var(--color-surface) 94%, transparent);
+}
+
+.marketing-shell > main > section.bg-surface-subtle,
+.marketing-shell > main > div > section.bg-surface-subtle {
+  background-color: color-mix(in oklab, var(--color-surface-subtle) 94%, transparent);
+}
+
+.marketing-shell > header {
+  background-image: radial-gradient(circle at 1px 1px, var(--marketing-dot) 1px, transparent 0);
+  background-size: 22px 22px;
+  background-attachment: fixed;
+}
+
+.marketing-shell > footer {
+  background-image: radial-gradient(circle at 1px 1px, var(--marketing-dot) 1px, transparent 0);
+  background-size: 22px 22px;
+  background-attachment: fixed;
+}
+
+.hero-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 45% at 50% -10%, var(--color-primary-subtle) 0%, transparent 70%),
+    radial-gradient(35% 35% at 90% 10%, var(--color-primary-subtle) 0%, transparent 65%),
+    radial-gradient(40% 30% at 0% 60%, color-mix(in oklab, var(--color-primary) 12%, transparent), transparent 70%);
+}
+
+.hero-grid-glow {
+  z-index: 0;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-primary) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-primary) 8%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 75%);
+}
+
+[data-theme='dark'] .hero-grid-glow {
+  opacity: 0.22;
+}
+
+[data-theme='dark'] .hero-ambient {
+  opacity: 0.6;
+}
+
+.marketing-photo-veil {
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--color-foreground) 65%, transparent) 0%,
+    color-mix(in oklab, var(--color-foreground) 22%, transparent) 45%,
+    transparent 100%
+  );
+}
+
+.mobile-drawer {
+  width: min(20rem, calc(100vw - 1.5rem));
+  max-height: min(36rem, calc(100dvh - 5.5rem));
+}
+
+/* ── Urdu landing readability ─────────────────────────────────────────────── */
+html[lang='ur'] .marketing-shell h1 {
+  line-height: 1.9 !important;
+  letter-spacing: 0;
+}
+
+html[lang='ur'] .marketing-shell h2 {
+  line-height: 1.8 !important;
+}
+
+html[lang='ur'] .marketing-shell .text-xs {
+  font-size: 0.875rem;
+  line-height: 1.9;
+}
+
+html[lang='ur'] .marketing-shell .text-sm {
+  font-size: 0.9375rem;
+  line-height: 2;
+}
+
+html[lang='ur'] .marketing-shell .text-base {
+  line-height: 2.1;
+}
+
+html[lang='ur'] .marketing-shell .text-lg {
+  line-height: 2.05;
+}
+
+html[lang='ur'] .marketing-shell .marketing-hero-title {
+  font-size: clamp(1.75rem, 5.5vw, 2.65rem);
+  line-height: 1.9;
+}
+
+html[lang='ur'] .marketing-shell .marketing-section-title {
+  font-size: clamp(1.45rem, 4.2vw, 2rem);
+  line-height: 1.8;
+}
+
+html[lang='ur'] .marketing-shell .marketing-section-support {
+  font-size: clamp(1.0625rem, 2.5vw, 1.1875rem);
+  line-height: 2.15;
+}
+
+html[lang='ur'] .marketing-shell .marketing-product-visual {
+  font-size: 0.875rem;
+  line-height: 1.95;
+}
+
+html[lang='ur'] .marketing-shell header nav a,
+html[lang='ur'] .marketing-shell header button {
+  font-size: 0.9375rem;
+  line-height: 1.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-ambient,
+  .marketing-shell::before {
+    transition: none;
+  }
+}

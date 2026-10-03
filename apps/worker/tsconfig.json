@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "outDir": "dist",
+    "rootDir": "src",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "@taxdesk/schemas": ["../../packages/schemas/src/index.ts"],
+      "@taxdesk/schemas/*": ["../../packages/schemas/src/*"],
+      "@taxdesk/tax-engine": ["../../packages/tax-engine/src/index.ts"],
+      "@taxdesk/tax-engine/*": ["../../packages/tax-engine/src/*"],
+      "@taxdesk/rules": ["../../packages/rules/src/index.ts"],
+      "@taxdesk/rules/*": ["../../packages/rules/src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/*.integration.test.ts", "**/inv4-eslint.test.ts", "**/__fixtures__/**"]
+}

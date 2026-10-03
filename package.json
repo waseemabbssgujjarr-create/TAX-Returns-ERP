@@ -1,0 +1,57 @@
+{
+  "name": "taxdesk-pk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TaxDesk PK — ERP for tax consultants in Pakistan",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.12.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm --parallel -r dev",
+    "dev:local": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-local.ps1",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:e2e": "pnpm --filter @taxdesk/web test:e2e",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md,css}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md,css}\" --ignore-path .gitignore",
+    "clean": "pnpm -r clean && rimraf node_modules",
+    "prepare": "husky",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "db:assert-roles": "psql \"$DATABASE_MIGRATIONS_URL\" -f infra/postgres/ci-assert-roles.sql",
+    "db:apply-role-restrictions": "psql \"$DATABASE_MIGRATIONS_URL\" -f infra/postgres/migrations/001_role_restrictions.sql",
+    "db:seed:demo": "pnpm --filter @taxdesk/worker seed:demo"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "8.8.0",
+    "@typescript-eslint/parser": "8.8.0",
+    "eslint": "9.12.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-import": "2.31.0",
+    "husky": "9.1.6",
+    "lint-staged": "15.2.10",
+    "prettier": "3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "prisma": "5.20.0",
+    "rimraf": "6.0.1",
+    "tsx": "4.19.1",
+    "typescript": "5.6.3"
+  },
+  "dependencies": {
+    "@prisma/client": "5.20.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
+  }
+}

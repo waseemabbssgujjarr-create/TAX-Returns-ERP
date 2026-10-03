@@ -1,0 +1,68 @@
+{
+  "_warning": "DRAFT — These golden cases are STUBS. Each case must be computed manually and verified by a qualified tax professional against the Finance Act 2025 before being marked reviewed. The engine must produce exactly the expectedTaxPayablePkr for each case.",
+  "_requirement": "At least 25 verified golden cases must exist before Tax Year 2025 rules ship to production.",
+  "verifiedBy": "PENDING",
+  "verifiedOn": null,
+  "cases": [
+    {
+      "id": "GC-2025-001",
+      "description": "Salaried individual, annual gross salary Rs 600,000 — nil slab, no withholding",
+      "verified": false,
+      "verifiedBy": null,
+      "inputs": {
+        "taxYear": 2025,
+        "clientType": "INDIVIDUAL",
+        "filerStatus": "FILER",
+        "residencyStatus": "RESIDENT",
+        "income": [
+          {
+            "head": "SALARY",
+            "grossSalary": 60000000,
+            "allowances": {},
+            "perquisites": 0,
+            "bonus": 0,
+            "providentFund": 0,
+            "taxDeducted": 0,
+            "evidenceIds": []
+          }
+        ],
+        "deductions": [],
+        "credits": [],
+        "withholding": []
+      },
+      "expectedTaxPayablePkr": 0,
+      "expectedGrossTaxPkr": 0,
+      "notes": "Below nil-rate threshold — PLACEHOLDER, verify exact threshold for TY2025"
+    },
+    {
+      "id": "GC-2025-002",
+      "description": "Salaried individual, annual gross salary Rs 1,200,000",
+      "verified": false,
+      "verifiedBy": null,
+      "inputs": {
+        "taxYear": 2025,
+        "clientType": "INDIVIDUAL",
+        "filerStatus": "FILER",
+        "residencyStatus": "RESIDENT",
+        "income": [
+          {
+            "head": "SALARY",
+            "grossSalary": 120000000,
+            "allowances": {},
+            "perquisites": 0,
+            "bonus": 0,
+            "providentFund": 0,
+            "taxDeducted": 0,
+            "evidenceIds": []
+          }
+        ],
+        "deductions": [],
+        "credits": [],
+        "withholding": []
+      },
+      "expectedTaxPayablePkr": 30000,
+      "expectedGrossTaxPkr": 30000,
+      "notes": "Top of second slab (5% on Rs 600,001 to Rs 1,200,000) — PLACEHOLDER"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "_warning": "DRAFT PLACEHOLDER DATA — All figures are ILLUSTRATIVE, reflecting the general structure of Income Tax Ordinance 2001 s.182/s.182A as publicly reported. Must be verified against the Finance Act 2025 and current FBR notifications by a qualified tax professional before use in production.",
+  "id": "penalties_2025",
+  "effectiveFrom": "2024-07-01",
+  "effectiveTo": "2025-06-30",
+  "sourceReference": "Income Tax Ordinance 2001, Sections 182 / 182A — PLACEHOLDER, verify against Finance Act 2025",
+  "reviewedBy": "PENDING",
+  "reviewedOn": "2025-01-01",
+  "version": "0.1.0-DRAFT",
+  "lateFilingPenalty": {
+    "id": "late_filing_penalty_2025",
+    "perDayPkr": 1000,
+    "percentOfTaxPayablePerDay": 0.001,
+    "useGreaterOf": true,
+    "capPercentOfTaxPayable": 0.5,
+    "minimumPkr": {
+      "individualSalaried": 10000,
+      "other": 50000
+    },
+    "reductionTiers": [
+      { "withinMonths": 1, "reductionRate": 0.75 },
+      { "withinMonths": 2, "reductionRate": 0.5 },
+      { "withinMonths": 3, "reductionRate": 0.25 }
+    ],
+    "section": "182 (PLACEHOLDER — verify)"
+  },
+  "atlSurcharge": {
+    "id": "atl_surcharge_2025",
+    "amountPkr": {
+      "individual": 25000,
+      "aop": 50000,
+      "company": 100000
+    },
+    "section": "182A (PLACEHOLDER — verify)"
+  }
+}

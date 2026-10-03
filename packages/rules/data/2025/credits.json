@@ -1,0 +1,39 @@
+{
+  "_warning": "DRAFT PLACEHOLDER DATA — credit rates and limits are ILLUSTRATIVE. Must be verified by a qualified tax professional.",
+  "id": "credits_2025",
+  "effectiveFrom": "2024-07-01",
+  "effectiveTo": "2025-06-30",
+  "sourceReference": "Finance Act 2025 / Income Tax Ordinance 2001 — PLACEHOLDER",
+  "reviewedBy": "PENDING",
+  "reviewedOn": "2025-01-01",
+  "version": "0.1.0-DRAFT",
+  "credits": [
+    {
+      "id": "approved_pension_fund",
+      "labelKey": "credits.approvedPensionFund",
+      "creditRate": 0.2,
+      "maxCreditPkr": null,
+      "eligibilityConditions": [
+        "Contribution to an approved pension fund under Voluntary Pension System Rules 2005",
+        "Maximum qualifying contribution is the lower of 20% of taxable income or PKR 150,000 (PLACEHOLDER — verify)"
+      ],
+      "requiredEvidence": [
+        "Certificate from the approved pension fund manager",
+        "Contribution statement for the tax year"
+      ],
+      "section": "63"
+    },
+    {
+      "id": "approved_investment",
+      "labelKey": "credits.approvedInvestment",
+      "creditRate": 0.2,
+      "maxCreditPkr": null,
+      "eligibilityConditions": [
+        "Investment in shares of a listed company or approved scheme",
+        "Held for a minimum period as specified in the Ordinance (PLACEHOLDER — verify)"
+      ],
+      "requiredEvidence": ["CDC / broker statement showing acquisition", "Proof of listing on PSX or approval"],
+      "section": "62"
+    }
+  ]
+}

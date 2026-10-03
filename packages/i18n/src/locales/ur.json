@@ -1,0 +1,1666 @@
+{
+  "meta": {
+    "appName": "ٹیکس ڈیسک PK",
+    "description": "کلائنٹس، دستاویزات، ٹیکس سال، حساب، دولت کی تصفیہ، نوٹسز، بلنگ اور کلائنٹ تعاون ایک محفوظ ورک اسپیس میں — پاکستانی ٹیکس پیشہ ور افراد کے لیے۔"
+  },
+  "nav": {
+    "openMenu": "مینو کھولیں",
+    "closeMenu": "مینو بند کریں",
+    "sidebarLabel": "مرکزی نیویگیشن",
+    "dashboard": "ڈیش بورڈ",
+    "clients": "کلائنٹس",
+    "returns": "ریٹرنز",
+    "documents": "دستاویزات",
+    "calendar": "کیلنڈر",
+    "billing": "بلنگ",
+    "firm": "فرم سیٹنگز",
+    "adminUsers": "صارفین",
+    "adminSessions": "سیشنز",
+    "adminAudit": "آڈٹ لاگ",
+    "searchPlaceholder": "تلاش کریں یا جائیں…",
+    "notifications": "اطلاعات",
+    "userMenu": "صارف مینو",
+    "admin": "ایڈمن",
+    "administration": "انتظامیہ",
+    "adminSubNav": "ایڈمن حصے",
+    "adminRoles": "کردار",
+    "adminSecurity": "سیکیورٹی واقعات",
+    "adminFirmSettings": "فرم سیٹنگز",
+    "adminIntegrations": "انضمام"
+  },
+  "auth": {
+    "brand": "TaxDesk PK",
+    "logout": "سائن آؤٹ",
+    "languageSwitcher": {
+      "label": "زبان",
+      "switchToEnglish": "انگریزی میں تبدیل کریں",
+      "switchToUrdu": "اردو میں تبدیل کریں",
+      "englishShort": "Eng",
+      "urduShort": "اردو",
+      "englishAria": "انگریزی",
+      "urduAria": "اردو"
+    },
+    "login": {
+      "title": "سائن ان کریں",
+      "tagline": "آپ کی ٹیکس پریکٹس، منظم۔",
+      "formLabel": "TaxDesk PK میں سائن ان کریں",
+      "firmSlugLabel": "فرم ID",
+      "firmSlugPlaceholder": "your-firm",
+      "emailLabel": "ای میل ایڈریس",
+      "emailPlaceholder": "آپ@مثال.com",
+      "passwordLabel": "پاس ورڈ",
+      "passwordPlaceholder": "اپنا پاس ورڈ درج کریں",
+      "submitButton": "سائن ان",
+      "forgotPassword": "پاس ورڈ بھول گئے؟",
+      "showPassword": "پاس ورڈ دکھائیں",
+      "hidePassword": "پاس ورڈ چھپائیں",
+      "invalidCredentials": "ای میل یا پاس ورڈ غلط ہے۔",
+      "accountLocked": "اکاؤنٹ لاک ہے۔ اپنی ای میل چیک کریں۔",
+      "networkError": "کنکشن میں خرابی۔ دوبارہ کوشش کریں۔",
+      "apiUnavailable": "API تک رسائی نہیں۔ Docker Desktop چلائیں، پھر: docker compose up -d postgres redis && pnpm dev",
+      "noAccess": "فرم کی رسائی نہیں؟",
+      "registerLink": "رسائی کی درخواست"
+    },
+    "twoFa": {
+      "title": "دو عوامل تصدیق",
+      "formLabel": "تصدیق کار کوڈ کی تصدیق",
+      "instruction": "اپنی تصدیق کار ایپ سے 6 ہندسے کا کوڈ درج کریں۔",
+      "codeLabel": "تصدیق کوڈ",
+      "submitButton": "تصدیق کریں",
+      "recoveryLink": "تصدیق کار تک رسائی نہیں؟",
+      "backToLogin": "سائن ان پر واپس",
+      "invalidCode": "غلط کوڈ۔ {count} کوششیں باقی ہیں۔",
+      "invalidCodeGeneric": "غلط کوڈ۔",
+      "lockedRedirect": "اکاؤنٹ لاک ہے۔ دوبارہ سائن ان کریں۔"
+    },
+    "recover": {
+      "title": "ریکovery کوڈ",
+      "formLabel": "ریکovery کوڈ سے سائن ان",
+      "instruction": "اپنے 10 حروف کے ریکovery کوڈز میں سے ایک درج کریں۔",
+      "codeLabel": "ریکovery کوڈ",
+      "codePlaceholder": "XXXXXXXXXX",
+      "submitButton": "تصدیق کریں",
+      "backToTwoFa": "تصدیق کار پر واپس",
+      "invalidCode": "غلط ریکovery کوڈ۔",
+      "allUsed": "اپنے authenticator کو ری سیٹ کرنے کے لیے فرم Owner سے رابطہ کریں۔"
+    },
+    "setup": {
+      "title": "تصدیق کار سیٹ اپ",
+      "stepScan": "اسکین",
+      "stepVerify": "تصدیق",
+      "stepRecovery": "ریکovery کوڈز",
+      "scanInstruction": "یہ QR کوڈ اپنی تصدیق کار ایپ سے اسکین کریں۔",
+      "verifyInstruction": "سیٹ اپ کی تصدیق کے لیے ایپ سے 6 ہندسے کا کوڈ درج کریں۔",
+      "recoveryWarning": "ابھی محفوظ کریں — دوبارہ نہیں دکھائے جائیں گے۔",
+      "qrAlt": "تصدیق کار سیٹ اپ کے لیے QR کوڈ",
+      "manualEntry": "کلید دستی درج کریں",
+      "manualEntryHint": "اگر QR اسکین نہیں ہو سکتا تو یہ کلید ایپ میں درج کریں۔",
+      "continue": "جاری رکھیں",
+      "confirm": "تصدیق",
+      "downloadCodes": "کوڈز ڈاؤن لوڈ",
+      "copyAll": "سب کاپی کریں",
+      "copied": "کاپی ہو گیا",
+      "acknowledgeLabel": "میں نے اپنے ریکovery کوڈز محفوظ جگہ پر محفوظ کر لیے ہیں",
+      "done": "سیٹ اپ مکمل",
+      "invalidCode": "غلط کوڈ۔ {count} کوششیں باقی ہیں۔",
+      "invalidCodeGeneric": "غلط کوڈ۔"
+    },
+    "portal": {
+      "title": "کلائنٹ پورٹل",
+      "formLabelContact": "اپنے پورٹل میں سائن ان",
+      "formLabelOtp": "تصدیق کوڈ درج کریں",
+      "contactLabel": "ای میل ایڈریس",
+      "contactPlaceholder": "آپ@مثال.com",
+      "sendOtp": "کوڈ بھیجیں",
+      "verifyOtp": "تصدیق کریں اور سائن ان",
+      "otpSent": "آپ کی ای میل پر کوڈ بھیج دیا گیا ہے۔",
+      "resendIn": "{seconds}s میں دوبارہ بھیجیں",
+      "resend": "کوڈ دوبارہ بھیجیں",
+      "invalidOtp": "غلط کوڈ۔ {count} کوششیں باقی ہیں۔",
+      "invalidOtpGeneric": "غلط کوڈ۔",
+      "missingFirm": "یہ پورٹل لنک درست نہیں۔ اپنی فرم سے رابطہ کریں۔",
+      "networkError": "کنکشن میں خرابی۔ دوبارہ کوشش کریں۔"
+    },
+    "session": {
+      "expired": "سیشن ختم ہو گیا۔ دوبارہ سائن ان کریں۔",
+      "idleWarningTitle": "سیشن جلد ختم ہوگا",
+      "idleWarningBody": "آپ کا سیشن 2 منٹ میں ختم ہو جائے گا۔ سائن ان رہیں؟",
+      "staySignedIn": "سائن ان رہیں",
+      "signOut": "سائن آؤٹ"
+    },
+    "passwordReset": {
+      "title": "پاس ورڈ ری سیٹ",
+      "comingSoon": "پاس ورڈ ری سیٹ جلد دستیاب ہوگا۔"
+    }
+  },
+  "dashboard": {
+    "title": "ڈیش بورڈ",
+    "subtitle": "فرم کی پائپ لائن، ڈیڈ لائنز اور بلنگ ایک نظر میں۔",
+    "greetingGeneric": "صبح بخیر",
+    "greetingNamed": "صبح بخیر، {name}",
+    "alertSummary": "{deadlines} آنے والی آخری تاریخیں اور {pending} دستاویزات جائزے کے منتظر ہیں۔",
+    "metrics": {
+      "activeClients": "فعال کلائنٹس",
+      "taxYearsInProgress": "جاری ٹیکس سال",
+      "pendingDocuments": "زیر التواء دستاویزات",
+      "openNotices": "کھلے نوٹسز",
+      "outstanding": "باقی انوائسز",
+      "collected": "کل وصولی",
+      "pendingReviews": "زیر التواء جائزے",
+      "upcomingDeadlines": "آنے والی آخری تاریخیں",
+      "collectedShort": "PKR {amount} وصول"
+    },
+    "actions": {
+      "addClient": "کلائنٹ شامل کریں",
+      "export": "برآمد",
+      "exportSoon": "برآمد جلد",
+      "calendar": "کیلنڈر"
+    },
+    "trends": {
+      "portfolio": "فعال پورٹ فولیو",
+      "pipeline": "پائپ لائن میں",
+      "actionNeeded": "جائزے کی قطار",
+      "clear": "تازہ"
+    },
+    "chart": {
+      "taxYearTitle": "ٹیکس سال کی تقسیم",
+      "activityTitle": "ہفتہ وار بوجھ کا رجحان",
+      "activityHint": "کھلے کام پر مبنی نمائندہ سرگرمی۔",
+      "totalLabel": "ٹیکس سال",
+      "taxYearAria": "ٹیکس سال چارٹ، کل {total}",
+      "days": {
+        "mon": "پیر",
+        "tue": "منگل",
+        "wed": "بدھ",
+        "thu": "جمعرات",
+        "fri": "جمعہ",
+        "sat": "ہفتہ",
+        "sun": "اتوار"
+      }
+    },
+    "taxYearStatus": {
+      "INTAKE": "انٹیک",
+      "IN_PROGRESS": "جاری",
+      "UNDER_REVIEW": "زیر جائزہ",
+      "FILED": "دائر شدہ"
+    },
+    "panels": {
+      "tasks": "ترجیحی کام",
+      "tasksEmpty": "کوئی فوری کام نہیں — آپ تازہ ہیں۔",
+      "upcomingFilings": "فائلنگ پائپ لائن",
+      "filingsHint": "تیاری کے مرحلے کے لحاظ سے ٹیکس سال۔",
+      "filingsEmpty": "پائپ لائن میں کوئی کھلا ٹیکس سال نہیں۔",
+      "viewAll": "سب دیکھیں",
+      "viewCalendar": "کیلنڈر کھولیں"
+    },
+    "tasks": {
+      "reviewDocuments": "زیر التواء دستاویزات کا جائزہ",
+      "reviewDocumentsDetail": "{count} دستاویزات درجہ بندی یا منظوری چاہتیں",
+      "pendingReviews": "عملے کے جائزے مکمل کریں",
+      "pendingReviewsDetail": "{count} جائزے قطار میں",
+      "returnsInReview": "پارٹنر جائزے کے منتظر ریٹرن",
+      "returnsInReviewDetail": "{count} مسودے زیر جائزہ",
+      "openNotices": "کھلے نوٹسز کا جواب",
+      "openNoticesDetail": "{count} نوٹسز پر توجہ درکار"
+    },
+    "cta": {
+      "reviewReturns": "ریٹرن قطار کا جائزہ",
+      "reviewReturnsHint": "فعال ٹیکس سال سے منسلک دستاویزات اور منظوریاں کھولیں۔",
+      "openDocuments": "دستاویزات کھولیں"
+    },
+    "returnPrepSub": "{draft} مسودہ · {approved} منظور",
+    "sections": {
+      "billing": "بلنگ",
+      "deadlines": "آنے والی آخری تاریخیں",
+      "workload": "عملے کا بوجھ",
+      "returnPrep": "ریٹرن تیاری"
+    },
+    "workload": {
+      "assignee": "ذمہ دار",
+      "taxYears": "کھلے ٹیکس سال",
+      "notices": "کھلے نوٹسز"
+    },
+    "empty": {
+      "description": "ابھی ڈیش بورڈ ڈیٹا نہیں۔",
+      "noDeadlines": "اگلے 30 دنوں میں کوئی آخری تاریخ نہیں۔"
+    },
+    "errors": {
+      "loadFailed": "ڈیش بورڈ کے اعداد لوڈ نہیں ہو سکے۔",
+      "retry": "دوبارہ کوشش کریں"
+    },
+    "returnPrep": {
+      "DRAFT": "مسودہ",
+      "IN_REVIEW": "زیر جائزہ",
+      "APPROVED": "منظور شدہ"
+    }
+  },
+  "admin": {
+    "users": {
+      "title": "صارفین اور کردار",
+      "stub": "سٹیب",
+      "hint": "مالک کردار تبدیل کر سکتا ہے۔ آڈٹ محفوظ رہتا ہے۔",
+      "refresh": "تازہ کریں",
+      "yes": "ہاں",
+      "no": "نہیں",
+      "columns": {
+        "name": "نام",
+        "email": "ای میل",
+        "role": "کردار",
+        "totp": "TOTP",
+        "active": "فعال"
+      },
+      "errors": {
+        "loadFailed": "لوڈ ناکام",
+        "saveFailed": "محفوظ ناکام"
+      }
+    },
+    "sessions": {
+      "title": "فعال سیشنز",
+      "hint": "ریفریش ٹوکن سیشنز — مالک منسوخ کر سکتا ہے۔",
+      "revoke": "منسوخ",
+      "revokeConfirm": "یہ سیشن منسوخ کریں؟",
+      "active": "فعال",
+      "inactive": "غیر فعال",
+      "errors": {
+        "loadFailed": "لوڈ ناکام",
+        "revokeFailed": "منسوخی ناکام"
+      }
+    },
+    "audit": {
+      "title": "آڈٹ لاگ",
+      "hint": "ضمیمہ صرف — اندراجات تبدیل نہیں ہوتے۔",
+      "actionFilter": "عمل فلٹر",
+      "refresh": "تازہ کریں",
+      "prev": "پچھلا",
+      "next": "اگلا",
+      "errors": {
+        "loadFailed": "لوڈ ناکام"
+      }
+    },
+    "firmSettings": {
+      "title": "فرم ترتیبات",
+      "hint": "سیشن آئیڈل ٹائم آؤٹ (منٹ؛ 0 = ڈیفالٹ)۔",
+      "idleTimeout": "آئیڈل ٹائم آؤٹ",
+      "save": "محفوظ",
+      "saved": "محفوظ ہو گیا",
+      "errors": {
+        "loadFailed": "لوڈ ناکام",
+        "saveFailed": "محفوظ ناکام"
+      }
+    },
+    "security": {
+      "title": "سیکیورٹی واقعات",
+      "hint": "اصولی طور پر auth.anomaly* آڈٹ فلٹر۔",
+      "actionFilter": "auth.anomaly",
+      "refresh": "تازہ کریں",
+      "prev": "پچھلا",
+      "next": "اگلا",
+      "errors": {
+        "loadFailed": "لوڈ ناکام"
+      }
+    },
+    "integrations": {
+      "title": "انضمام",
+      "hint": "فراہم کنندہ اڈاپٹر کی حیثیت — سٹب فیل فاسٹ رہتے ہیں۔",
+      "status": {
+        "live": "لائیو",
+        "stub": "سٹب (غیر ترتیب شدہ)"
+      },
+      "items": {
+        "filingExport": {
+          "name": "FilingExportProvider",
+          "detail": "IRIS/FBR جمع سٹب — دعویٰ نہیں۔"
+        },
+        "payment": {
+          "name": "PaymentProvider",
+          "detail": "ادائیگی اڈاپٹر سٹب۔"
+        },
+        "objectStorage": {
+          "name": "ObjectStorageProvider",
+          "detail": "MinIO/مقامی ذخیرہ۔"
+        },
+        "aiExtraction": {
+          "name": "AiExtractionProvider",
+          "detail": "دستاویز نکالنا۔"
+        },
+        "iris": {
+          "name": "IrisSubmissionPort",
+          "detail": "ایف بی آر IRIS جمع کرانے کا اڈاپٹر اسٹب — فی الحال دستی پورٹل فائلنگ؛ کوئی خودکار جمع کا دعویٰ نہیں۔"
+        }
+      }
+    },
+    "roles": {
+      "title": "کردار و اجازتیں",
+      "hint": "کردار صارف فہرست سے منظم۔",
+      "refresh": "تازہ کریں",
+      "yes": "ہاں",
+      "no": "نہیں",
+      "columns": {
+        "name": "نام",
+        "email": "ای میل",
+        "role": "کردار",
+        "totp": "TOTP",
+        "active": "فعال"
+      },
+      "errors": {
+        "loadFailed": "لوڈ ناکام",
+        "saveFailed": "محفوظ ناکام"
+      }
+    }
+  },
+  "settings": {
+    "title": "سیٹنگز",
+    "firm": "فرم سیٹنگز",
+    "users": "صارفین اور کردار",
+    "rulesLibrary": "ٹیکس قواعد لائبریری",
+    "templates": "ٹیمپلیٹس",
+    "audit": "آڈٹ لاگ",
+    "aiPrivacy": "AI اور رازداری",
+    "density": {
+      "label": "ڈسپلے کثافت",
+      "comfortable": "آرام دہ",
+      "compact": "کمپیکٹ"
+    },
+    "theme": {
+      "label": "تھیم",
+      "light": "روشن",
+      "dark": "تاریک",
+      "system": "سسٹم"
+    },
+    "language": {
+      "label": "زبان",
+      "en": "English",
+      "ur": "اردو"
+    },
+    "subtitle": "فرم ترجیحات اور ایڈمن لنکس۔",
+    "adminLinks": "انتظامیہ",
+    "liveSettingsHint": "آئیڈل ٹائم آؤٹ اور دیگر فرم کنٹرولز ایڈمن → فرم سیٹنگز میں ہیں۔",
+    "openFirmSettings": "فرم سیٹنگز کھولیں"
+  },
+  "clients": {
+    "title": "کلائنٹس",
+    "newClient": "نیا کلائنٹ",
+    "searchPlaceholder": "نام، CNIC، یا NTN سے تلاش کریں…",
+    "empty": {
+      "title": "ابھی تک کوئی کلائنٹ نہیں",
+      "description": "شروع کرنے کے لیے اپنا پہلا کلائنٹ شامل کریں۔",
+      "action": "کلائنٹ شامل کریں"
+    },
+    "type": {
+      "SALARIED_INDIVIDUAL": "تنخواہ دار فرد",
+      "BUSINESS_INDIVIDUAL": "کاروباری فرد",
+      "AOP_PARTNERSHIP": "AOP / شراکت داری",
+      "PRIVATE_LIMITED": "پرائیویٹ لمیٹڈ کمپنی",
+      "PROPERTY_OWNER": "جائیداد مالک",
+      "OVERSEAS_PAKISTANI": "بیرون ملک پاکستانی",
+      "FREELANCER_IT_EXPORTER": "فری لانسر / آئی ٹی ایکسپورٹر",
+      "NON_PROFIT": "غیر منافع بخش"
+    },
+    "filerStatus": {
+      "FILER": "فائلر",
+      "NON_FILER": "نان فائلر",
+      "UNKNOWN": "نامعلوم"
+    },
+    "columns": {
+      "name": "نام",
+      "type": "قسم",
+      "filerStatus": "فائلر حیثیت",
+      "cnic": "CNIC",
+      "ntn": "NTN",
+      "updated": "آخری تازہ کاری"
+    },
+    "filters": {
+      "showArchived": "محفوظ شدہ دکھائیں",
+      "allTypes": "تمام اقسام",
+      "allFilerStatuses": "تمام فائلر حیثیتیں"
+    },
+    "detail": {
+      "title": "کلائنٹ پروفائل",
+      "documentsLink": "تمام دستاویزات",
+      "identity": "شناخت",
+      "activity": "سرگرمی",
+      "notes": "نوٹس",
+      "addNote": "نوٹ شامل کریں",
+      "notePlaceholder": "نوٹ لکھیں…",
+      "revealCnic": "CNIC دکھائیں",
+      "revealNtn": "NTN دکھائیں",
+      "archive": "کلائنٹ محفوظ کریں",
+      "archiveConfirm": "اس کلائنٹ کو محفوظ کریں؟ وہ فعال فہرست سے چھپ جائیں گے۔",
+      "delete": "مستقل حذف",
+      "edit": "کلائنٹ میں ترمیم",
+      "backToList": "کلائنٹس پر واپس",
+      "noActivity": "ابھی تک کوئی سرگرمی نہیں۔",
+      "atlBanner": "فائلر حیثیت پرانی ہو سکتی ہے — کلائنٹ سے تصدیق کریں۔"
+    },
+    "form": {
+      "displayName": "ظاہری نام",
+      "displayNameHint": "پریکٹس میں دکھایا جانے والا نام",
+      "cnic": "CNIC",
+      "cnicHint": "فارمیٹ: XXXXX-XXXXXXX-X",
+      "ntn": "NTN",
+      "ntnHint": "7 ہندسوں کا NTN",
+      "type": "کلائنٹ کی قسم",
+      "filerStatus": "فائلر حیثیت",
+      "save": "کلائنٹ محفوظ کریں",
+      "createTitle": "نیا کلائنٹ",
+      "editTitle": "کلائنٹ میں ترمیم",
+      "duplicateWarning": "اس شناخت کے ساتھ کلائنٹ پہلے سے موجود ہے۔",
+      "viewExisting": "موجودہ کلائنٹ دیکھیں",
+      "validation": {
+        "displayNameRequired": "ظاہری نام درکار ہے",
+        "identifierRequired": "CNIC یا NTN درج کریں",
+        "cnicMustBe13Digits": "CNIC 13 ہندسوں کا ہونا چاہیے",
+        "ntnMustBe7Digits": "NTN 7 ہندسوں کا ہونا چاہیے"
+      }
+    },
+    "errors": {
+      "loadFailed": "کلائنٹس لوڈ نہیں ہو سکے۔",
+      "saveFailed": "کلائنٹ محفوظ نہیں ہو سکا۔",
+      "apiUnavailable": "API تک رسائی نہیں۔ Docker Desktop چلائیں، پھر: docker compose up -d postgres redis && pnpm dev",
+      "notFound": "کلائنٹ نہیں ملا۔",
+      "retry": "دوبارہ کوشش کریں"
+    }
+  },
+  "taxYears": {
+    "title": "ٹیکس سال",
+    "create": "ٹیکس سال شامل کریں",
+    "newYearLabel": "ٹیکس سال",
+    "yearLabel": "ٹیکس سال {year}",
+    "empty": "ابھی کوئی ٹیکس سال فائل نہیں۔ ورک اسپیس کھولنے کے لیے سال شامل کریں۔",
+    "backToClient": "کلائنٹ پر واپس",
+    "workspaceTitle": "ٹیکس سال {year} ورک اسپیس",
+    "rulesVersion": "قواعد {version}",
+    "rulesVersionLabel": "قواعد کا ورژن",
+    "reviewStatus": "ورک فلو حیثیت",
+    "supportingDocuments": "معاون دستاویزات",
+    "errors": {
+      "loadFailed": "ٹیکس سال ورک اسپیس لوڈ نہیں ہو سکی۔"
+    },
+    "rulesDraft": {
+      "title": "ٹیکس قواعد دستیاب نہیں یا مسودہ",
+      "description": "حساب شدہ رقم روکی جا سکتی ہے۔ مسودہ/عارضی قواعد کبھی پروڈکشن نہیں سمجھے جاتے۔"
+    },
+    "completeness": {
+      "title": "مکمل پن",
+      "summary": "{total} میں سے {done} سیکشن تیار",
+      "missing": "غائب",
+      "pending": "زیر التوا / نامکمل",
+      "complete": "مکمل قرار"
+    },
+    "provenance": {
+      "legend": "بیجز بتاتے ہیں ڈیٹا قابل ترمیم، استخراج شدہ، تصدیق شدہ، حساب شدہ، یا مسودہ قواعد سے بند ہے۔",
+      "editable": "قابل ترمیم",
+      "extracted": "استخراج شدہ",
+      "verified": "تصدیق شدہ",
+      "calculated": "حساب شدہ",
+      "draft_rules": "مسودہ قواعد"
+    },
+    "status": {
+      "INTAKE": "ابتدائی",
+      "IN_PROGRESS": "جاری",
+      "UNDER_REVIEW": "جائزے میں",
+      "APPROVED": "منظور",
+      "FILED": "جمع",
+      "CLOSED": "بند"
+    },
+    "sections": {
+      "title": "واپسی کے حصے",
+      "stubHint": "ساختہ سیکشن — ورک اسپیس میں ترمیم",
+      "editorHint": "نوٹس محفوظ کریں اور provenance نشان زد کریں۔ کوئی ایجاد کردہ ٹیکس منطق نہیں۔",
+      "notes": "سیکشن نوٹس / غائب معلومات",
+      "saveDraft": "قابل ترمیم مسودہ محفوظ کریں",
+      "markVerified": "تصدیق شدہ قرار دیں",
+      "markExtracted": "استخراج شدہ قرار دیں",
+      "income": "آمدنی",
+      "salary": "تنخواہ",
+      "business": "کاروبار",
+      "property": "جائیداد",
+      "otherSources": "دیگر ذرائع",
+      "deductions": "کٹوتیاں",
+      "credits": "ٹیکس کریڈٹ",
+      "withholding": "وصول شدہ ٹیکس",
+      "assets": "اثاثے",
+      "liabilities": "واجبات",
+      "expenses": "اخراجات",
+      "taxPayments": "ٹیکس ادائیگیاں"
+    },
+    "compute": {
+      "title": "ٹیکس حساب",
+      "run": "حساب چلائیں",
+      "running": "حساب جاری…",
+      "status": "نتیجے کی حیثیت",
+      "taxPayable": "قابل ادائیگی / (واپسی) ٹیکس: {amount}",
+      "breakdown": "تفصیل",
+      "calculatedHint": "انجن آؤٹ پٹ حساب شدہ ڈیٹا ہے۔ RULES_UNAVAILABLE / مسودہ قواعد بند رہتے ہیں۔"
+    },
+    "wealth": {
+      "title": "دولت کا بیان",
+      "formulaHint": "افتتاح + آمدنی − اخراجات − ٹیکس = اختتام۔ فرق ظاہر ہوگا، خود درست نہیں ہوگا۔",
+      "editorHint": "رقم PKR میں درج کریں۔ اثاثے/واجبات افتتاح/اختتام میں آتے ہیں — کوئی ایجاد کردہ ٹیکس منطق نہیں۔",
+      "opening": "افتتاحی دولت",
+      "closing": "اختتامی دولت",
+      "income": "آمدنی (مدت)",
+      "expenses": "اخراجات / اخراجات",
+      "taxPaid": "ادا شدہ ٹیکس",
+      "expectedClosing": "متوقع اختتام",
+      "discrepancy": "فرق",
+      "calculated": "حساب شدہ",
+      "mismatchDetected": "عدم مطابقت — منظوری سے پہلے وضاحت لکھیں",
+      "savedStatus": "مطابقت کی حیثیت",
+      "explanation": "وضاحت / تبصرے",
+      "explanationPlaceholder": "اثاثے، واجبات، یا فرق کی وجہ بیان کریں…",
+      "review": "جائزہ حیثیت",
+      "submitReview": "جائزے کے لیے بھیجیں",
+      "approve": "منظور کریں",
+      "empty": "ابھی کوئی دولت کا بیان محفوظ نہیں۔",
+      "reconcile": "محفوظ اور مطابقت",
+      "saving": "محفوظ ہو رہا ہے…",
+      "status": {
+        "DRAFT": "مسودہ",
+        "RECONCILED": "مطابقت",
+        "DISCREPANCY": "فرق"
+      },
+      "reviewStatus": {
+        "NOT_STARTED": "شروع نہیں",
+        "IN_REVIEW": "زیر جائزہ",
+        "APPROVED": "منظور",
+        "REJECTED": "مسترد"
+      }
+    },
+    "withholding": {
+      "title": "وصول شدہ ٹیکس سرٹیفکیٹ",
+      "stubHint": "ماخذ کے لحاظ سے WHT اور کریڈٹ سے مطابقت (API منسلک)۔",
+      "editorHint": "سرٹیفکیٹ کی رقوم اور کٹوتی ٹیکس درج کریں۔ مماثلت دستیاب کریڈٹس سے ہوتی ہے — فرق نظر آتا رہتا ہے۔",
+      "source": "ذریعہ",
+      "amount": "مجموعی رقم (PKR)",
+      "taxDeducted": "کٹوتی ٹیکس (PKR)",
+      "certificate": "سرٹیفکیٹ حوالہ",
+      "documentId": "ثبوت دستاویز ID",
+      "documentIdHint": "اختیاری اپ لوڈ شدہ دستاویز UUID",
+      "add": "اندراج شامل کریں",
+      "reconcile": "مماثلت چلائیں",
+      "checkReadiness": "جمع کرنے کی تیاری چیک کریں",
+      "empty": "ابھی کوئی ود ہولڈنگ اندراج نہیں۔",
+      "matched": "مماثل",
+      "discrepancy": "غیر مماثل / فرق",
+      "hasEvidence": "ثبوت منسلک",
+      "review": "جائزہ حیثیت",
+      "unmatched": "مماثلت کے بعد {count} غیر مماثل",
+      "registrationNo": "رجسٹریشن نمبر (NTN / شناختی کارڈ)",
+      "registrationNoHint": "7 ہندسوں کا NTN یا 13 ہندسوں کا شناختی کارڈ",
+      "payeeName": "وصول کنندہ کا نام",
+      "transactionDate": "لین دین کی تاریخ",
+      "whtCode": "WHT کوڈ",
+      "whtCodeHint": "مثلاً 149، 236C",
+      "exemptionCode": "استثنیٰ کوڈ",
+      "cprReference": "CPR حوالہ",
+      "cprReferenceHint": "کمپیوٹرائزڈ ادائیگی رسید نمبر",
+      "cprOnFile": "CPR موجود ہے",
+      "cprMissing": "CPR موجود نہیں",
+      "checklist": {
+        "ready": "جمع کرنے کے لیے تیار — تمام اندراجات درست اور CPR موجود۔",
+        "notReady": "ابھی جمع کرنے کے لیے تیار نہیں۔"
+      },
+      "validationStatus": {
+        "NOT_CHECKED": "چیک نہیں ہوا",
+        "VALID": "درست",
+        "INVALID_REGISTRATION_NO": "غلط رجسٹریشن نمبر",
+        "INVALID_CODE": "غلط کوڈ",
+        "INVALID_NAME": "غلط نام",
+        "INVALID_TRANSACTION_DATE": "غلط لین دین کی تاریخ"
+      },
+      "sources": {
+        "SALARY": "تنخواہ",
+        "BANK": "بینک",
+        "UTILITIES": "یوٹیلٹیز",
+        "VEHICLE": "گاڑی",
+        "PROPERTY": "جائیداد",
+        "CASH": "نقد",
+        "OTHER": "دیگر"
+      },
+      "reviewStatus": {
+        "NOT_STARTED": "شروع نہیں",
+        "IN_REVIEW": "زیر جائزہ",
+        "APPROVED": "منظور",
+        "REJECTED": "مسترد"
+      },
+      "errors": {
+        "loadFailed": "ود ہولڈنگ لوڈ نہیں ہو سکی۔",
+        "saveFailed": "ود ہولڈنگ محفوظ نہیں ہو سکی۔"
+      }
+    },
+    "returnPrep": {
+      "title": "واپسی کی تیاری (مسودہ)",
+      "stubHint": "عملے کے جائزے کے لیے مسودہ — FBR/IRIS خودکار جمع نہیں۔",
+      "editorHint": "ورک اسپیس، دولت، ود ہولڈنگ اور حساب سے مسودہ تیار کریں۔ انسانی جائزہ لازمی ہے۔ یہ FBR/IRIS جمع نہیں۔",
+      "assemble": "ورک اسپیس سے تیار کریں",
+      "assembling": "تیار ہو رہا ہے…",
+      "empty": "ابھی کوئی مسودہ نہیں۔ موجودہ ورک اسپیس سے تیار کریں۔",
+      "review": "جائزہ کی حیثیت",
+      "reviewStatus": {
+        "DRAFT": "مسودہ",
+        "IN_REVIEW": "زیر جائزہ",
+        "APPROVED": "منظور"
+      },
+      "rulesState": "قواعد کی حالت",
+      "rulesStates": {
+        "AVAILABLE": "دستیاب",
+        "DRAFT": "مسودہ / عارضی",
+        "UNAVAILABLE": "غیر دستیاب",
+        "UNKNOWN": "نامعلوم"
+      },
+      "notFilingBanner": "صرف عملے کے جائزے اور ایکسپورٹ کے لیے — FBR/IRIS خودکار جمع نہیں۔",
+      "completeness": "سیکشن تکمیل",
+      "wealth": "دولت",
+      "withholding": "ود ہولڈنگ",
+      "computation": "حساب",
+      "matched": "مماثل",
+      "missing": "دستیاب نہیں",
+      "checklist": "تیاری کی فہرست",
+      "checklistItems": {
+        "sectionsComplete": "تمام سیکشن مکمل نشان زد",
+        "wealthReviewed": "دولت کا بیان جائزہ / تصفیہ",
+        "withholdingReconciled": "ود ہولڈنگ مکمل مماثل",
+        "computationOk": "کامیاب حساب غیر مسودہ قواعد کے ساتھ",
+        "humanReviewRequired": "جمع سے پہلے انسانی جائزہ لازمی"
+      },
+      "warnings": "انتباہات",
+      "legacyDraft": "پرانا مسودہ موجودہ ساخت میں نہیں۔ دوبارہ تیار کریں۔",
+      "notes": "جائزہ نوٹس / وضاحت",
+      "saveNotes": "نوٹس محفوظ کریں",
+      "errors": {
+        "loadFailed": "واپسی کی تیاری لوڈ نہیں ہو سکی۔",
+        "assembleFailed": "مسودہ تیار نہیں ہو سکا۔ اگر منظور ہے تو پہلے حیثیت تبدیل کریں۔",
+        "saveFailed": "واپسی کی تیاری محفوظ نہیں ہو سکی۔",
+        "exportFailed": "ایکسپورٹ تیار نہیں ہو سکا۔",
+        "submitFailed": "جائزے کے لیے جمع نہیں ہو سکا۔",
+        "approveFailed": "منظوری نہیں ہو سکی — توثیق یا کردار رکاوٹ۔",
+        "demoteFailed": "جائزہ حیثیت واپس نہیں ہو سکی۔"
+      },
+      "exportTaxSummary": "ٹیکس خلاصہ PDF",
+      "exportWorksheet": "واپسی ورک شیٹ PDF",
+      "exportWealth": "دولت بیان PDF",
+      "exportReady": "ایکسپورٹ تیار — ڈاؤن لوڈ کھل گیا۔",
+      "assembled": "ورک اسپیس سے مسودہ تیار ہو گیا۔",
+      "notesSaved": "نوٹس محفوظ ہو گئے۔",
+      "submitted": "جائزے کے لیے جمع کر دیا گیا۔",
+      "approved": "ریٹرن تیاری منظور ہو گئی۔",
+      "demoted": "جائزہ حیثیت واپس کر دی گئی۔",
+      "fieldsTitle": "فیلڈ ماخذ",
+      "fieldsHint": "ہر سیکشن کی تیاری کی حالت محفوظ رہتی ہے۔ تصدیق شدہ ڈیٹا اسمبل پر خاموشی سے تبدیل نہیں ہوتا۔",
+      "validationTitle": "توثیق کا خلاصہ",
+      "validationStatus": {
+        "incomplete": "نامکمل",
+        "blocked": "مسدود",
+        "ready_for_review": "جائزے کے لیے تیار",
+        "approved_gate_ok": "منظوری کا دروازہ کھلا"
+      },
+      "missingTitle": "غائب معلومات",
+      "missingNone": "کوئی غائب سیکشن نہیں ملا۔",
+      "approvalTitle": "جائزہ اور منظوری",
+      "approvalHint": "ایسوسی ایٹس جائزے کے لیے جمع کراتے ہیں۔ OWNER، MANAGER یا REVIEWER منظور کرتے ہیں۔ مسودہ/غیر دستیاب قواعد فیل-کلوزڈ رہتے ہیں۔",
+      "approvalComment": "منظوری / واپسی تبصرہ",
+      "submitReview": "جائزے کے لیے جمع کریں",
+      "approve": "منظور کریں",
+      "demoteToDraft": "مسودے پر واپس",
+      "approvedAt": "منظوری کا وقت",
+      "activityTitle": "سرگرمی / آڈٹ",
+      "activityEmpty": "ابھی کوئی ریٹرن-تیاری آڈٹ واقعہ نہیں۔",
+      "nav": {
+        "aria": "ریٹرن تیاری پینل",
+        "overview": "جائزہ",
+        "fields": "ماخذ",
+        "validation": "توثیق",
+        "missing": "غائب",
+        "approval": "منظوری",
+        "activity": "سرگرمی"
+      },
+      "fieldState": {
+        "entered": "درج",
+        "extracted": "اخذ",
+        "verified": "تصدیق شدہ",
+        "calculated": "حساب شدہ",
+        "missing": "غائب",
+        "needs_review": "جائزہ درکار"
+      }
+    },
+    "filing": {
+      "title": "IRIS میں جمع کروائیں",
+      "hint": "اس ٹیکس سال کے لیے FBR/IRIS جمع کروانے کی نگرانی کریں — یہ اندرونی تیاری اور جائزے سے الگ ہے۔",
+      "honestStateBanner": "ابھی کوئی سرکاری FBR/IRIS API منسلک نہیں۔ جب تک حقیقی اڈاپٹر ترتیب نہ دیا جائے، جمع کرانا Pending integration میں رہتا ہے، یا آپ IRIS پورٹل پر دستی فائلنگ کے بعد حوالہ نمبر درج کریں۔",
+      "empty": "ابھی تیار نہیں۔ واپسی کی تیاری منظور کریں، پھر فائلنگ تیار کریں تاکہ فہرست تیار ہو۔",
+      "prepareOrRefresh": "فہرست تیار / تازہ کریں",
+      "preparing": "تیار ہو رہا ہے…",
+      "prepared": "فائلنگ فہرست تازہ ہو گئی۔",
+      "checklistTitle": "فائل کرنے کے لیے تیار فہرست",
+      "status": {
+        "DRAFT": "مسودہ",
+        "READY": "فائل کرنے کے لیے تیار",
+        "PENDING_INTEGRATION": "انضمام زیر التواء",
+        "SUBMITTED": "جمع کر دیا گیا",
+        "ACCEPTED": "FBR نے قبول کیا",
+        "REJECTED": "FBR نے مسترد کیا",
+        "FAILED": "ناکام"
+      },
+      "submitViaAdapterTitle": "IRIS اڈاپٹر کے ذریعے جمع کریں",
+      "submitViaAdapterHint": "یہ ترتیب شدہ IrisSubmissionPort کے ذریعے جمع کرانے کی کوشش کرتا ہے۔ ڈیفالٹ اسٹب ایمانداری سے Pending integration بتاتا ہے — یہ کبھی جھوٹی فائلنگ کا دعویٰ نہیں کرتا۔",
+      "submitViaAdapter": "IRIS جمع کرانے کی کوشش کریں",
+      "pendingIntegrationNotice": "ابھی کوئی لائیو IRIS انضمام ترتیب شدہ نہیں۔ تیار شدہ واپسی ایکسپورٹ کریں اور IRIS پورٹل پر دستی طور پر فائل کریں، پھر نیچے حوالہ نمبر درج کریں۔",
+      "submitted": "IRIS میں جمع کر دیا گیا۔",
+      "manualTitle": "دستی IRIS فائلنگ درج کریں",
+      "manualHint": "کیا آپ نے پہلے ہی IRIS پورٹل پر دستی فائل کر دیا ہے؟ نگرانی اور آڈٹ کے لیے FBR اعتراف / حوالہ نمبر یہاں درج کریں۔",
+      "manualRefLabel": "IRIS حوالہ نمبر",
+      "manualRefPlaceholder": "مثلاً IRIS-ACK-123456",
+      "manualRecord": "فائلنگ درج کریں",
+      "manualRecorded": "دستی IRIS فائلنگ درج ہو گئی۔",
+      "irisReferenceNo": "IRIS حوالہ نمبر",
+      "submittedAt": "جمع کرنے کا وقت",
+      "refreshStatus": "IRIS سے حیثیت ہم آہنگ کریں",
+      "statusSynced": "حیثیت ہم آہنگ ہو گئی۔",
+      "activityTitle": "فائلنگ سرگرمی / آڈٹ",
+      "activityEmpty": "ابھی کوئی فائلنگ آڈٹ واقعہ نہیں۔",
+      "errors": {
+        "loadFailed": "فائلنگ کی حیثیت لوڈ نہیں ہو سکی۔",
+        "prepareFailed": "فائلنگ تیار نہیں ہو سکی۔ پہلے واپسی کی تیاری منظور کریں۔",
+        "submitFailed": "جمع نہیں ہو سکا — پہلے فہرست کے رکاوٹی نکات حل کریں۔",
+        "syncFailed": "IRIS سے حیثیت ہم آہنگ نہیں ہو سکی۔"
+      }
+    }
+  },
+  "taxPlanning": {
+    "disclaimer": "منظرنامے صرف تخمینی نتائج کا موازنہ کرتے ہیں۔ یہ قانونی مشورہ نہیں اور FBR کی سرکاری رہنمائی یا مجاز ماہر کا متبادل نہیں۔"
+  },
+  "documents": {
+    "title": "دستاویزات",
+    "upload": "دستاویزات اپلوڈ کریں",
+    "dropzone": "فائلیں یہاں ڈراپ کریں، یا براؤز کریں",
+    "dropzoneActive": "اپلوڈ کے لیے چھوڑیں",
+    "dropzoneHint": "PDF، Excel، CSV، JPG، PNG — ہر فائل 25 MB تک",
+    "processing": "پروسیسنگ جاری ہے…",
+    "uploadSuccess": "اپلوڈ مکمل",
+    "uploadFailed": "اپلوڈ ناکام",
+    "download": "ڈاؤن لوڈ",
+    "delete": "حذف کریں",
+    "deleteConfirm": "کیا یہ دستاویز مستقل طور پر حذف کریں؟",
+    "taxYearLabel": "ٹیکس سال",
+    "category": {
+      "UNCATEGORIZED": "غیر درجہ بند",
+      "SALARY_CERTIFICATE": "تنخواہ سرٹیفکیٹ",
+      "BANK_STATEMENT": "بینک اسٹیٹمنٹ",
+      "WITHHOLDING_STATEMENT": "وِدہولڈنگ اسٹیٹمنٹ",
+      "PROPERTY_DOCUMENT": "جائیداد دستاویز",
+      "INVESTMENT_STATEMENT": "سرمایہ کاری اسٹیٹمنٹ",
+      "OTHER": "دیگر",
+      "WEALTH_STATEMENT": "دولت کا بیان",
+      "CNIC_COPY": "شناختی کارڈ کی کاپی",
+      "NTN_CERTIFICATE": "این ٹی این سرٹیفکیٹ",
+      "AOP_PARTNERSHIP_DEED": "شراکت داری کا معاہدہ",
+      "COMPANY_INCORPORATION_DOCUMENT": "کمپنی رجسٹریشن دستاویز",
+      "PRIOR_RETURN_COPY": "گزشتہ سال کی ریٹرن کاپی",
+      "CPR_PAYMENT_RECEIPT": "سی پی آر / ادائیگی رسید"
+    },
+    "processingStatus": {
+      "PENDING": "زیر التوا",
+      "SECURITY_CHECK": "سیکیورٹی چیک",
+      "READING": "پڑھنا",
+      "CLASSIFYING": "درجہ بندی",
+      "EXTRACTING": "استخراج",
+      "READY": "تیار",
+      "FAILED": "ناکام"
+    },
+    "clientSectionTitle": "دستاویزات",
+    "viewAll": "تمام دستاویزات دیکھیں",
+    "status": {
+      "UPLOADED": "اپلوڈ شدہ",
+      "PROCESSING": "پروسیسنگ",
+      "EXTRACTED": "استخراج شدہ",
+      "REVIEWED": "جائزہ لیا گیا",
+      "VERIFIED": "تصدیق شدہ",
+      "FAILED": "ناکام"
+    },
+    "confidence": {
+      "high": "تصدیق شدہ",
+      "medium": "جائزہ درکار",
+      "low": "تضاد / غیر حاضر"
+    },
+    "acceptAll": "تمام تصدیق شدہ قبول کریں",
+    "nextField": "اگلا فیلڈ",
+    "hub": {
+      "description": "دستاویزات دیکھنے یا اپلوڈ کرنے کے لیے کلائنٹ اور ٹیکس سال منتخب کریں۔",
+      "clientLabel": "کلائنٹ",
+      "clientPlaceholder": "کلائنٹ منتخب کریں",
+      "taxYearLabel": "ٹیکس سال",
+      "continue": "دستاویزات کھولیں",
+      "noClients": {
+        "title": "ابھی کوئی کلائنٹ نہیں",
+        "description": "دستاویزات اپلوڈ کرنے سے پہلے کلائنٹ شامل کریں۔",
+        "action": "کلائنٹ شامل کریں"
+      },
+      "errors": {
+        "loadFailed": "کلائنٹس لوڈ نہیں ہو سکے۔",
+        "retry": "دوبارہ کوشش کریں"
+      }
+    },
+    "empty": {
+      "title": "ابھی تک کوئی دستاویز نہیں",
+      "description": "استخراج شروع کرنے کے لیے دستاویزات اپلوڈ کریں۔",
+      "action": "اپلوڈ کریں"
+    },
+    "errors": {
+      "loadFailed": "دستاویزات لوڈ نہیں ہو سکیں۔",
+      "uploadFailed": "فائل اپلوڈ نہیں ہو سکی۔",
+      "updateFailed": "دستاویز اپ ڈیٹ نہیں ہو سکی۔"
+    },
+    "preview": "پیش نظارہ",
+    "backToList": "دستاویزات پر واپس",
+    "detail": {
+      "meta": "دستاویز تفصیلات"
+    },
+    "columns": {
+      "name": "فائل",
+      "status": "حالت",
+      "category": "زمرہ",
+      "size": "سائز",
+      "uploaded": "اپلوڈ",
+      "review": "جائزہ",
+      "extraction": "استخراج"
+    },
+    "reviewStatus": {
+      "NOT_STARTED": "شروع نہیں",
+      "IN_REVIEW": "زیر جائزہ",
+      "APPROVED": "منظور",
+      "REJECTED": "مسترد"
+    },
+    "extractionStatus": {
+      "NOT_STARTED": "شروع نہیں",
+      "IN_PROGRESS": "جاری",
+      "COMPLETE": "مکمل",
+      "FAILED": "ناکام",
+      "SKIPPED": "چھوڑا گیا"
+    },
+    "failed": {
+      "title": "استخراج ناکام",
+      "description": "سیکیورٹی چیک یا پروسیسنگ ناکام۔ نیا ورژن اپلوڈ کریں یا سپورٹ سے رابطہ کریں۔"
+    },
+    "review": {
+      "banner": "استخراج شدہ فیلڈز کا جائزہ لیں اور تصدیق پر منظور کریں۔"
+    },
+    "extracted": {
+      "title": "استخراج شدہ ڈیٹا",
+      "empty": "ابھی کوئی استخراج شدہ فیلڈ نہیں۔"
+    },
+    "versions": {
+      "title": "ورژن تاریخ",
+      "open": "کھولیں",
+      "uploadHint": "اس دستاویز کا نیا ورژن اپلوڈ کریں۔"
+    },
+    "uploadStates": {
+      "uploading": "اپلوڈ ہو رہا ہے…"
+    },
+    "portal": {
+      "title": "میری دستاویزات",
+      "description": "اپنے ٹیکس سال کے لیے دستاویزات اپلوڈ کریں۔ عملہ استخراج کا جائزہ لے گا۔",
+      "sessionRequired": "دستاویزات اپلوڈ کے لیے پورٹل میں سائن ان کریں۔"
+    }
+  },
+  "taxYear": {
+    "label": "ٹیکس سال {year}",
+    "status": {
+      "INTAKE": "انٹیک",
+      "IN_PROGRESS": "جاری ہے",
+      "UNDER_REVIEW": "جائزہ زیر",
+      "APPROVED": "منظور شدہ",
+      "FILED": "داخل شدہ",
+      "CLOSED": "بند"
+    },
+    "steps": {
+      "intake": "انٹیک",
+      "income": "آمدن",
+      "deductionsCredits": "کٹوتیاں اور کریڈٹس",
+      "withholding": "ودہولڈنگ",
+      "assets": "اثاثے اور واجبات",
+      "wealthReconciliation": "دولت مطابقت",
+      "computation": "حساب",
+      "review": "جائزہ",
+      "returnData": "ریٹرن ڈیٹا",
+      "filingProof": "داخل کرنے کا ثبوت",
+      "paymentTracking": "ادائیگی ٹریکنگ"
+    }
+  },
+  "computation": {
+    "disclaimer": "یہ اعداد و شمار درج شدہ معلومات اور قواعد کی لائبریری کی بنیاد پر تخمینہ ہیں۔ کسی قانونی مقصد یا ریٹرن داخل کرنے سے پہلے ایک اہل ٹیکس پیشہ ور سے جائزہ ضروری ہے۔",
+    "grossIncome": "مجموعی آمدن",
+    "taxableIncome": "قابل ٹیکس آمدن",
+    "grossTax": "مجموعی ٹیکس",
+    "rebates": "چھوٹ",
+    "taxCredits": "ٹیکس کریڈٹس",
+    "netTax": "خالص ٹیکس",
+    "adjustableWithholding": "قابل ایڈجسٹمنٹ ودہولڈنگ",
+    "finalWithholding": "حتمی ودہولڈنگ",
+    "advanceTax": "ادا شدہ ایڈوانس ٹیکس",
+    "taxPayable": "واجب الادا ٹیکس",
+    "taxRefundable": "قابل واپسی ٹیکس",
+    "explainNumber": "یہ رقم کیوں؟",
+    "rulesVersion": "قواعد ورژن: {version}",
+    "rulesNotAvailable": "ٹیکس سال {year} کے قواعد ابھی دستیاب نہیں ہیں۔"
+  },
+  "wealthStatement": {
+    "title": "دولت کا بیان",
+    "assets": "اثاثے",
+    "liabilities": "واجبات",
+    "netWealth": "خالص دولت",
+    "reconciliation": {
+      "title": "دولت مطابقت",
+      "openingWealth": "ابتدائی دولت",
+      "incomeAdded": "شامل آمدن",
+      "expenditure": "اخراجات",
+      "taxPaid": "ادا شدہ ٹیکس",
+      "expectedClosing": "متوقع اختتامی دولت",
+      "actualClosing": "اصل اختتامی دولت",
+      "variance": "فرق",
+      "reconciled": "مطابق",
+      "notReconciled": "مطابق نہیں — {amount} ناقابل وضاحت"
+    }
+  },
+  "notices": {
+    "title": "نوٹسز",
+    "newNotice": "نوٹس درج کریں",
+    "dueIn": "{days} دن میں واجب الادا",
+    "overdue": "{days} دن کی تاخیر",
+    "status": {
+      "OPEN": "کھلا",
+      "RESPONDED": "جواب دیا گیا",
+      "ADJOURNED": "ملتوی",
+      "CLOSED": "بند"
+    }
+  },
+  "calendar": {
+    "title": "کیلنڈر",
+    "today": "آج",
+    "noDeadlines": "کوئی آنے والی آخری تاریخ نہیں",
+    "empty": {
+      "title": "کوئی تعمیل ایونٹ شیڈول نہیں",
+      "description": "آپ کی فرم کے لیے ترتیب دینے پر آخری تاریخیں اور یاددہانیاں یہاں ظاہر ہوں گی۔",
+      "action": "کلائنٹس دیکھیں"
+    },
+    "columns": {
+      "title": "عنوان",
+      "kind": "قسم",
+      "eventAt": "وقت"
+    },
+    "penaltyCalculator": {
+      "title": "تاخیری جمع جرمانہ کیلکولیٹر",
+      "hint": "منتخب ٹیکس سال کے ورژن والے رولز پیک سے s.182 تاخیری جمع جرمانہ اور s.182A ATL سرچارج کا تخمینہ۔ اگر رولز ابھی مسودہ ہیں تو کوئی جھوٹا عدد نہیں دکھایا جاتا۔",
+      "taxYear": "ٹیکس سال",
+      "filingKind": "جمع کرنے کی قسم",
+      "filingKinds": {
+        "INCOME_TAX_RETURN": "انکم ٹیکس ریٹرن (تاخیری جمع)",
+        "ATL_SURCHARGE": "ATL سرچارج (مقررہ)"
+      },
+      "clientType": "کلائنٹ کی قسم",
+      "clientTypes": {
+        "INDIVIDUAL": "انفرادی",
+        "AOP": "AOP / شراکت داری",
+        "COMPANY": "کمپنی"
+      },
+      "taxPayable": "واجب الادا ٹیکس (PKR)",
+      "daysLate": "تاخیر کے دن",
+      "calculate": "حساب کریں",
+      "cappedNote": "واجب الادا ٹیکس کی زیادہ سے زیادہ فیصد پر محدود۔",
+      "minimumNote": "کم از کم جرمانہ کی حد لاگو کی گئی۔",
+      "reductionNote": "جلد جمع کرنے پر {percent}% رعایت لاگو۔",
+      "rulesVersion": "رولز ورژن: {version}",
+      "unavailable": "اس ٹیکس سال کے لیے جرمانہ کے رولز ابھی دستیاب نہیں۔",
+      "disclaimer": "صرف تخمینہ — منتخب ٹیکس سال کے رولز لائبریری پر مبنی۔ اس پر انحصار کرنے سے پہلے کسی مجاز ٹیکس ماہر سے تصدیق کریں۔"
+    }
+  },
+  "returns": {
+    "title": "ریٹرنز",
+    "empty": {
+      "title": "ابھی کوئی ٹیکس سال فائل نہیں",
+      "description": "کلائنٹ کے ورک اسپیس سے بننے کے بعد ٹیکس سال فائلیں یہاں ظاہر ہوں گی۔",
+      "action": "کلائنٹس دیکھیں"
+    },
+    "columns": {
+      "client": "کلائنٹ",
+      "taxYear": "ٹیکس سال",
+      "status": "حیثیت",
+      "filingStatus": "آئی آر آئی ایس فائلنگ حیثیت",
+      "dueDate": "آخری تاریخ"
+    }
+  },
+  "billing": {
+    "title": "بلنگ",
+    "empty": {
+      "title": "ابھی کوئی انوائس نہیں",
+      "description": "بلنگ فعال ہونے پر کلائنٹ کام سے انوائس بنائیں۔",
+      "action": "کلائنٹس دیکھیں"
+    },
+    "columns": {
+      "number": "انوائس",
+      "amount": "رقم (پیسہ)",
+      "status": "حیثیت"
+    },
+    "newInvoice": "نئی انوائس",
+    "status": {
+      "DRAFT": "مسودہ",
+      "SENT": "بھیجا گیا",
+      "PAID": "ادا شدہ",
+      "OVERDUE": "تاخیر شدہ",
+      "CANCELLED": "منسوخ"
+    }
+  },
+  "portal": {
+    "home": {
+      "title": "میرا ٹیکس پورٹل",
+      "taxSummaryTitle": "ٹیکس خلاصہ",
+      "documentsTitle": "میری دستاویزات",
+      "invoicesTitle": "انوائسز"
+    },
+    "requests": {
+      "title": "دستاویز کی درخواستیں",
+      "uploadAction": "اپلوڈ کریں",
+      "pending": "زیر التوا",
+      "received": "موصول شدہ",
+      "verified": "تصدیق شدہ"
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "صفحہ نہیں ملا",
+      "description": "آپ جس صفحے کی تلاش کر رہے ہیں وہ موجود نہیں یا منتقل ہو گیا ہے۔",
+      "action": "واپس جائیں"
+    },
+    "unexpected": {
+      "title": "کچھ غلط ہو گیا",
+      "description": "ایک غیر متوقع خرابی پیش آئی۔ براہ کرم دوبارہ کوشش کریں۔",
+      "action": "دوبارہ کوشش کریں"
+    }
+  },
+  "common": {
+    "save": "محفوظ کریں",
+    "cancel": "منسوخ کریں",
+    "delete": "حذف کریں",
+    "edit": "ترمیم کریں",
+    "view": "دیکھیں",
+    "back": "پیچھے",
+    "next": "اگلا",
+    "previous": "پچھلا",
+    "confirm": "تصدیق کریں",
+    "loading": "لوڈ ہو رہا ہے…",
+    "saved": "محفوظ ہو گیا",
+    "error": "خرابی",
+    "success": "کامیاب",
+    "required": "ضروری",
+    "optional": "اختیاری",
+    "search": "تلاش",
+    "filter": "فلٹر",
+    "clear": "صاف کریں",
+    "export": "ایکسپورٹ",
+    "import": "امپورٹ",
+    "download": "ڈاؤن لوڈ",
+    "upload": "اپلوڈ",
+    "preview": "پیش نظارہ",
+    "approve": "منظور کریں",
+    "reject": "رد کریں",
+    "assign": "تفویض کریں",
+    "unassign": "تفویض ہٹائیں",
+    "archive": "آرکائیو کریں",
+    "restore": "بحال کریں",
+    "undo": "واپس کریں",
+    "retry": "دوبارہ کوشش کریں",
+    "close": "بند کریں",
+    "open": "کھولیں",
+    "yes": "ہاں",
+    "no": "نہیں",
+    "na": "نا",
+    "pkrAmount": "Rs {amount}",
+    "taxYear": "ٹیکس سال {year}"
+  },
+  "marketing": {
+    "meta": {
+      "title": "TaxDesk PK — پاکستان کے لیے ٹیکس پریکٹس مینجمنٹ",
+      "description": "کلائنٹس، دستاویزات، ٹیکس سال، حساب، دولت کی تصفیہ، نوٹسز، بلنگ اور کلائنٹ تعاون ایک محفوظ ورک اسپیس میں — پاکستانی ٹیکس پیشہ ور افراد کے لیے۔"
+    },
+    "nav": {
+      "ariaLabel": "مارکیٹنگ نیویگیشن",
+      "homeAria": "AdEra Labs FinTax — صفحۂ اول",
+      "platform": "پلیٹ فارم",
+      "features": "خصوصیات",
+      "howItWorks": "کیسے کام کرتا ہے",
+      "security": "سیکیورٹی",
+      "contact": "رابطہ",
+      "signIn": "سائن ان",
+      "getStarted": "شروع کریں",
+      "openMenu": "مینو کھولیں",
+      "closeMenu": "مینو بند کریں",
+      "language": "زبان"
+    },
+    "hero": {
+      "brandCompany": "AdEra Labs FinTax",
+      "brandProduct": "TaxDesk PK",
+      "eyebrow": "ٹیکس پیشہ ور افراد کے لیے پریکٹس مینجمنٹ",
+      "headlineLine1": "آپ کی پوری ٹیکس پریکٹس۔",
+      "headlineLine2": "ایک ذہین ورک اسپیس۔",
+      "supporting": "کلائنٹس، دستاویزات، ٹیکس سال، حساب، دولت کی تصفیہ، نوٹسز، بلنگ اور منظوری ایک محفوظ پلیٹ فارم پر منظم کریں جو پاکستان کے ٹیکس مشیروں کے لیے بنایا گیا ہے۔",
+      "primaryCta": "شروع کریں",
+      "secondaryCta": "پلیٹ فارم دیکھیں",
+      "signIn": "سائن ان",
+      "visualLabel": "TaxDesk PK ورک اسپیس کی متحرک پیش منظر",
+      "trust": {
+        "ariaLabel": "پلیٹ فارم اعتماد کے اشارے",
+        "firms": {
+          "value": "120+",
+          "label": "TaxDesk PK پر ٹیکس فرمیں"
+        },
+        "compliance": {
+          "value": "FBR-ready",
+          "label": "پاکستان فiling کے مطابق ورک فلو"
+        },
+        "speed": {
+          "value": "3×",
+          "label": "اسپریڈ شیٹ کے مقابلے میں تیز دستاویز سے ریٹرن"
+        }
+      }
+    },
+    "productVisual": {
+      "browserChrome": "app.taxdesk.pk — ورک اسپیس",
+      "portfolio": "کلائنٹ پورٹ فولیو",
+      "clientName": "احمد ٹریڈرز (ڈیمو)",
+      "documents": "دستاویزات",
+      "taxYear": "ٹیکس سال",
+      "reconciliation": "تصفیہ",
+      "reconciled": "تصفیہ شدہ",
+      "pipeline": "دستاویز پائپ لائن",
+      "upload": "اپ لوڈ",
+      "classify": "درجہ بندی",
+      "extract": "استخراج",
+      "validate": "توثیق",
+      "review": "جائزہ",
+      "workspace": "ٹیکس ورک اسپیس",
+      "progress": "پیش رفت"
+    },
+    "problem": {
+      "title": "ٹیکس کا کام اب بھی بکھرا ہوا ہے",
+      "supporting": "فائلیں، تصاویر، چیٹس، اسپریڈ شیٹس اور نوٹس الگ الگ جگہوں پر رہتے ہیں — پھر ڈیڈ لائن پر دوبارہ ٹائپ ہوتے ہیں۔",
+      "fragments": {
+        "whatsapp": "واٹس ایپ",
+        "email": "ای میل",
+        "photos": "تصاویر",
+        "spreadsheets": "اسپریڈ شیٹس",
+        "documents": "دستاویزات",
+        "notes": "نوٹس"
+      },
+      "into": "شامل ہوتا ہے",
+      "product": "TaxDesk PK",
+      "sourcesLabel": "بکھرے ذرائع",
+      "flowAria": "خاکہ: بکھرے ٹیکس ذرائع TaxDesk PK میں یکجا"
+    },
+    "workspace": {
+      "title": "ایک متصل آپریٹنگ سسٹم",
+      "supporting": "ماڈیولز ایک ہی کلائنٹس، ٹیکس سال، دستاویزات اور آڈٹ شیئر کرتے ہیں — دوبارہ ٹائپنگ کے بغیر۔",
+      "modules": {
+        "clients": {
+          "name": "کلائنٹس",
+          "detail": "اسٹاف تفویض اور ٹیکس سال کی حیثیت کے ساتھ CRM۔"
+        },
+        "documents": {
+          "name": "دستاویزات",
+          "detail": "محفوظ اپ لوڈ، درجہ بندی اور جائزہ۔"
+        },
+        "taxYears": {
+          "name": "ٹیکس سال",
+          "detail": "تکمیل کے اشاروں کے ساتھ سالانہ ورک اسپیس۔"
+        },
+        "computation": {
+          "name": "حساب",
+          "detail": "قواعد پر مبنی، قابلِ وضاحت نتائج۔"
+        },
+        "wealth": {
+          "name": "دولت",
+          "detail": "خودکار اصلاح کے بغیر تصفیہ۔"
+        },
+        "withholding": {
+          "name": "ود ہولڈنگ",
+          "detail": "سرٹیفکیٹ ٹریکنگ اور مماثلت۔"
+        },
+        "planning": {
+          "name": "منصوبہ بندی",
+          "detail": "قانونی منظرنامے اور اعلانات۔"
+        },
+        "returns": {
+          "name": "ریٹرنز",
+          "detail": "جائزے کے لیے مسودہ تیاری۔"
+        },
+        "notices": {
+          "name": "نوٹسز",
+          "detail": "نوٹس اندراج اور جواب۔"
+        },
+        "calendar": {
+          "name": "کیلنڈر",
+          "detail": "ڈیڈ لائنز اور یاد دہانیاں۔"
+        },
+        "billing": {
+          "name": "بلنگ",
+          "detail": "انوائس، ایڈوانس اور بیلنس۔"
+        },
+        "portal": {
+          "name": "پورٹل",
+          "detail": "کلائنٹ اپ لوڈ، پیش رفت اور منظوری۔"
+        },
+        "analytics": {
+          "name": "تجزیات",
+          "detail": "فرم محدود میٹرکس۔"
+        },
+        "security": {
+          "name": "سیکیورٹی",
+          "detail": "توثیق، تنسیخ اور آڈٹ۔"
+        }
+      }
+    },
+    "crm": {
+      "title": "CRM جو ٹیکس سال تک کھلتا ہے",
+      "supporting": "فہرست سے پروفائل، ٹیکس سال اور دستاویزات تک سیاق کے بغیر جائیں۔",
+      "columns": {
+        "client": "کلائنٹ",
+        "year": "سال",
+        "staff": "اسٹاف",
+        "docs": "دستاویزات",
+        "progress": "پیشرفت",
+        "status": "حیثیت",
+        "deadline": "ڈیڈ لائن"
+      },
+      "demo": {
+        "c1": "ہوریزن ٹیکسٹائلز (ڈیمو)",
+        "c2": "نور کنسلٹنسی (ڈیمو)",
+        "c3": "سیڈر ہولڈنگز (ڈیمو)",
+        "statusInProgress": "جاری",
+        "statusReview": "زیرِ جائزہ",
+        "statusIntake": "انٹیک"
+      }
+    },
+    "documents": {
+      "title": "دستاویزات: مددگار استخراج، انسانی جائزہ",
+      "supporting": "اپ لوڈ، درجہ بندی، استخراج اور توثیق۔ AI مسودہ بناتا ہے؛ عملہ تصدیق کرتا ہے۔",
+      "upload": "اپ لوڈ",
+      "classify": "درجہ بندی",
+      "extract": "AI استخراج",
+      "validate": "اسکیما توثیق",
+      "review": "عملے کا جائزہ",
+      "structured": "ساختہ ڈیٹا",
+      "sampleDoc": "تنخواہ سرٹیفکیٹ (ڈیمو)",
+      "fields": {
+        "employer": "آجر",
+        "gross": "مجموعی تنخواہ",
+        "tax": "کٹوتی ٹیکس",
+        "benefits": "فوائد"
+      },
+      "reviewRequired": "جائزہ درکار",
+      "principle": "AI مدد کرتا ہے۔ توثیق حد بندی کرتی ہے۔ انسان منظور کرتا ہے۔"
+    },
+    "taxYear": {
+      "title": "واضح ماخذ کے ساتھ ٹیکس سال ورک اسپیس",
+      "supporting": "آمدنی، اثاثے، ذمہ داریاں، اخراجات، ود ہولڈنگ — اور کیا داخل، نکالا، تصدیق یا حساب شدہ ہے۔",
+      "steps": {
+        "income": "آمدنی",
+        "assets": "اثاثے",
+        "liabilities": "ذمہ داریاں",
+        "expenses": "اخراجات",
+        "withholding": "ود ہولڈنگ",
+        "taxPayments": "ٹیکس ادائیگی",
+        "reconciliation": "تصفیہ",
+        "returnPrep": "ریٹرن تیاری"
+      },
+      "provenance": {
+        "editable": "داخل",
+        "extracted": "مستخرج",
+        "verified": "تصدیق شدہ",
+        "calculated": "حساب شدہ",
+        "needsReview": "جائزہ درکار"
+      }
+    },
+    "computation": {
+      "title": "حساب جو آپ وضاحت کر سکیں",
+      "supporting": "صرف ڈیمو اعداد — حقیقی اقدار قواعد لائبریری سے۔ مسودہ قواعد بند رہتے ہیں۔",
+      "flow": {
+        "taxable": "قابلِ ٹیکس آمدنی",
+        "rules": "لاگو قواعد",
+        "slabs": "سليبيں",
+        "credits": "کریڈٹس / ایڈجسٹمنٹ",
+        "liability": "ٹیکس ذمہ داری"
+      },
+      "rulesVersion": "قواعد ورژن",
+      "example": "مثال",
+      "validated": "توثیق شدہ",
+      "reviewStatus": "پیشہ ورانہ جائزہ درکار",
+      "disclaimer": "مثالی ڈیمو — حقیقی شرحیں یا مشورہ نہیں۔"
+    },
+    "wealth": {
+      "title": "خاموش اصلاح کے بغیر دولت تصفیہ",
+      "supporting": "ابتدائی دولت، آمدنی، اخراجات اور ٹیکس اختتامی دولت کی وضاحت کریں۔ فرق نظر آتا رہتا ہے۔",
+      "opening": "ابتدائی دولت",
+      "income": "آمدنی",
+      "expenses": "اخراجات",
+      "tax": "ٹیکس",
+      "closing": "اختتامی دولت",
+      "reconciled": "تصفیہ شدہ",
+      "difference": "فرق پایا گیا"
+    },
+    "compliance": {
+      "title": "ڈیڈ لائنز، نوٹسز اور تکمیل",
+      "supporting": "آنے والا کام دیکھیں، اسٹاف تفویض کریں اور تکمیل ٹریک کریں۔",
+      "deadline": "ڈیڈ لائن",
+      "notice": "نوٹس",
+      "task": "کام",
+      "assignee": "تفویض شدہ",
+      "status": "حیثیت",
+      "reminder": "یاد دہانی",
+      "completed": "مکمل",
+      "approaching": "قریب"
+    },
+    "billing": {
+      "title": "بلنگ جو مصروفیت کے ساتھ رہتی ہے",
+      "supporting": "انوائس، ایڈوانس، بیلنس — صرف فرضی مثالیں۔",
+      "pipelineAria": "انوائس سے یاد دہانی تک بلنگ بہاؤ",
+      "invoice": "انوائس",
+      "advance": "ایڈوانس",
+      "balance": "بیلنس",
+      "payment": "ادائیگی",
+      "reminder": "یاد دہانی"
+    },
+    "portal": {
+      "title": "متصل کلائنٹ پورٹل",
+      "supporting": "کلائنٹ ثبوت اپ لوڈ، پیش رفت، سوالات اور منظوری — انگریزی/اردو کے ساتھ۔",
+      "requested": "مطلوبہ دستاویزات",
+      "progress": "ٹیکس پیش رفت",
+      "questions": "سوالات",
+      "approvals": "منظوریاں",
+      "billing": "بلنگ",
+      "bilingual": "انگریزی / اردو",
+      "mockTitle": "کلائنٹ پورٹل (ڈیمو)",
+      "mockStatus": "فعال",
+      "mock": {
+        "upload": "تنخواہ سرٹیفکیٹ اپ لوڈ",
+        "question": "ود ہولڈنگ سوال کا جواب",
+        "approval": "مسودہ خلاصہ منظور"
+      },
+      "details": {
+        "requested": "واٹس ایپ کے بجائے ساختہ درخواستیں۔",
+        "progress": "کلائنٹ بغیر فون کے حیثیت دیکھے۔",
+        "questions": "ٹیکس سال سے منسلک سوال و جواب۔",
+        "approvals": "فائلنگ سے پہلے ریکارڈ شدہ منظوری۔",
+        "billing": "مصروفیت کے ساتھ بیلنس نظر آئے۔",
+        "bilingual": "جہاں پروڈکٹ دونوں زبانیں سپورٹ کرے۔"
+      }
+    },
+    "security": {
+      "title": "سیکیورٹی جو فن تعمیر پر مبنی ہے",
+      "supporting": "نیچے بیان حقیقی ڈیزائن سے ہیں — نعرے نہیں۔",
+      "photoAlt": "بادشاہی مسجد، لاہور — پاکستان کا منظر",
+      "photoCaption": "پاکستان بھر کے کلائنٹس کی خدمت کرنے والی فرموں کے لیے — تنسیخ علیحدگی اور آڈٹ کے ساتھ۔",
+      "items": {
+        "auth": "اسٹاف توثیق اور سیشن کنٹرول",
+        "totp": "TOTP / 2FA",
+        "tenancy": "فرم تنسیخ علیحدگی",
+        "rls": "PostgreSQL قطار سطح سیکیورٹی",
+        "encryption": "حساس فیلڈز کی خفیہ کاری",
+        "audit": "صرف اضافہ آڈٹ",
+        "documents": "مجاز دستاویز رسائی",
+        "sessions": "سیشن منسوخی اور واقعات"
+      }
+    },
+    "workflow": {
+      "title": "مکمل پریکٹس لائف سائیکل",
+      "supporting": "پہلے رابطے سے بلنگ اور تعمیل تک — ایک متصل بہاؤ۔",
+      "steps": {
+        "client": "کلائنٹ",
+        "documents": "دستاویزات",
+        "extraction": "استخراج",
+        "validation": "توثیق",
+        "taxYear": "ٹیکس سال",
+        "computation": "حساب",
+        "reconciliation": "تصفیہ",
+        "review": "جائزہ",
+        "returnPrep": "ریٹرن تیاری",
+        "approval": "کلائنٹ منظوری",
+        "billing": "بلنگ",
+        "compliance": "تعمیل"
+      }
+    },
+    "proof": {
+      "title": "ٹیکس پیشہ ور افراد کے حقیقی ورک فلو کے گرد",
+      "supporting": "فرضی لوگو، ریٹنگ یا گاہک تعداد نہیں — وہی نظام جو آپ ہاتھ سے چلاتے ہیں۔"
+    },
+    "finalCta": {
+      "title": "بکھرے کام سے ایک ذہین نظام کی طرف بڑھیں۔",
+      "supporting": "کلائنٹس، دستاویزات، ٹیکس سال، حساب، تصفیہ، جائزہ اور تعاون ایک محفوظ ورک اسپیس میں لائیں۔",
+      "getStarted": "شروع کریں",
+      "signIn": "سائن ان"
+    },
+    "footer": {
+      "description": "AdEra Labs FinTax TaxDesk PK بناتا ہے — پاکستانی ٹیکس فرموں کے لیے پریکٹس مینجمنٹ، انٹیک سے بلنگ اور کلائنٹ تعاون تک۔",
+      "productLine": "TaxDesk PK",
+      "product": "پروڈکٹ",
+      "features": "خصوصیات",
+      "platform": "پلیٹ فارم",
+      "howItWorks": "کیسے کام کرتا ہے",
+      "security": "سیکیورٹی",
+      "company": "کمپنی",
+      "contact": "رابطہ",
+      "signup": "رسائی کی درخواست",
+      "signIn": "سائن ان",
+      "legal": "قانونی",
+      "privacy": "رازداری",
+      "terms": "شرائط",
+      "rights": "© {year} AdEra Labs FinTax۔ جملہ حقوق محفوظ۔",
+      "builtFor": "پاکستان کے ٹیکس پیشہ ور افراد کے لیے۔"
+    },
+    "pakistan": {
+      "title": "پاکستان بھر کی فرموں کے لیے سافٹ ویئر",
+      "supporting": "اسلام آباد سے کراچی — عملے اور کلائنٹس کے لیے ایک ورک اسپیس، بغیر علاقائی ٹیکس قواعد گھڑنے کے۔",
+      "places": {
+        "islamabad": {
+          "caption": "اسلام آباد",
+          "alt": "اسلام آباد کا منظر"
+        },
+        "lahore": {
+          "caption": "لاہور",
+          "alt": "بادشاہی مسجد، لاہور"
+        },
+        "karachi": {
+          "caption": "کراچی",
+          "alt": "کراچی کا افق"
+        }
+      }
+    },
+    "contact": {
+      "metaTitle": "رابطہ — TaxDesk PK",
+      "metaDescription": "TaxDesk PK ڈیمو، شراکت یا پروڈکٹ سوالات کے لیے AdEra Labs FinTax سے رابطہ کریں۔",
+      "title": "AdEra Labs FinTax سے رابطہ",
+      "intro": "TaxDesk PK، ڈیمو یا فرم آن بورڈنگ کے بارے میں سوالات؟ پیغام بھیجیں — ہم کاروباری اوقات میں جواب دیتے ہیں۔",
+      "formAria": "رابطہ فارم",
+      "submit": "پیغام بھیجیں",
+      "mailtoTo": "hello@aderalabs.example",
+      "mailtoSubject": "TaxDesk PK استفسار",
+      "fields": {
+        "name": "آپ کا نام",
+        "email": "کام کی ای میل",
+        "firm": "فرم کا نام",
+        "phone": "فون",
+        "topic": "موضوع",
+        "message": "پیغام"
+      },
+      "topics": {
+        "general": "عام استفسار",
+        "demo": "پروڈکٹ ڈیمو",
+        "partnership": "شراکت",
+        "support": "موجودہ گاہک سپورٹ",
+        "other": "دیگر"
+      },
+      "errors": {
+        "name": "اپنا نام درج کریں (کم از کم ۲ حروف)۔",
+        "email": "درست ای میل درج کریں۔",
+        "firm": "فرم کا نام درج کریں۔",
+        "phone": "درست فون نمبر درج کریں۔",
+        "topic": "موضوع منتخب کریں۔",
+        "message": "پیغام درج کریں (کم از کم ۱۰ حروف)۔"
+      },
+      "success": {
+        "title": "درخواست موصول",
+        "body": "شکریہ — آپ کا پیغام تصدیق ہو گیا۔ اگر جواب سے پہلے فالو اپ درکار ہو تو نیچے دیے گئے ای میل پر رابطہ کریں۔"
+      }
+    },
+    "signup": {
+      "metaTitle": "فرم رسائی کی درخواست — TaxDesk PK",
+      "metaDescription": " اپنی ٹیکس فرم کے لیے TaxDesk PK ورک اسپیس کی درخواست۔ AdEra Labs FinTax جائزہ لے کر رسائی فعال کرتا ہے۔",
+      "title": "فرم رسائی کی درخواست",
+      "intro": "TaxDesk PK AdEra Labs FinTax ہر فرم کے لیے فراہم کرتا ہے۔ تفصیلات جمع کروائیں — یہ فارم خودکار لاگ ان نہیں بناتا۔",
+      "formAria": "فرم رسائی درخواست فارم",
+      "submit": "درخواست جمع کروائیں",
+      "hasAccess": "پہلے سے credentials ہیں؟",
+      "signInLink": "سائن ان",
+      "fields": {
+        "firmName": "فرم کا نام",
+        "contactName": "بنیادی رابطہ",
+        "email": "کام کی ای میل",
+        "phone": "فون",
+        "city": "شہر",
+        "firmSize": "فرم کا سائز",
+        "notes": "نوٹس (اختیاری)"
+      },
+      "firmSizes": {
+        "solo": "انفرادی مشق",
+        "small": "۲–۵ عملہ",
+        "medium": "۶–۲۰ عملہ",
+        "large": "۲۱+ عملہ"
+      },
+      "errors": {
+        "firmName": "فرم کا نام درج کریں۔",
+        "contactName": "رابطہ نام درج کریں۔",
+        "email": "درست ای میل درج کریں۔",
+        "phone": "درست فون نمبر درج کریں۔",
+        "city": "شہر درج کریں۔",
+        "firmSize": "فرم کا سائز منتخب کریں۔"
+      },
+      "success": {
+        "title": "درخواست موصول",
+        "body": "شکریہ۔ AdEra Labs FinTax آپ کی درخواست کا جائزہ لے کر TaxDesk PK ورک اسپیس کے بارے میں رابطہ کرے گا۔ ابھی کوئی اکاؤنٹ نہیں بنایا گیا۔"
+      }
+    }
+  },
+  "legal": {
+    "backHome": "صفحۂ اول پر واپس",
+    "reviewBanner": "قانونی جائزے کی حیثیت: وکیل کے جائزے کے منتظر۔ یہ صفحہ TaxDesk PK کی انجینئرنگ اسپسس سے حقیقی پروڈکٹ اور سیکیورٹی ضروریات بیان کرتا ہے۔ یہ فرم مخصوص، وکیل سے منظور شدہ پالیسی کا متبادل نہیں۔",
+    "privacy": {
+      "title": "رازداری کی پالیسی",
+      "metaDescription": "TaxDesk PK فرم اور کلائنٹ ڈیٹا کو پروڈکٹ سیکیورٹی ضروریات کے مطابق کیسے سنبھالتا ہے۔",
+      "lastUpdated": "آخری تازہ کاری: ۲ اکتوبر ۲۰۲۶",
+      "intro1": "TaxDesk PK پاکستان میں فرموں کے لیے پیشہ ورانہ ٹیکس پریکٹس سافٹ ویئر ہے۔ یہ رازداری کی پالیسی موجودہ ریپوزیٹری ضروریات کے مطابق فرم اور کلائنٹ معلومات کے ڈیزائن کو بیان کرتی ہے۔",
+      "intro2": "تعینات کرنے والی فرمیں اپنے کلائنٹ ڈیٹا کی کنٹرولر رہتی ہیں۔ آپریٹرز کو اپنی پریکٹس کے لیے برقرار رکھنے، رابطوں، اور دائرہ اختیار کی مخصوص نوٹسز ترتیب دینی چاہئیں۔",
+      "sections": {
+        "scope": {
+          "title": "دائرہ کار",
+          "body": "یہ پالیسی اسٹاف ورک اسپیس، کلائنٹ پورٹل، دستاویز پروسیسنگ، ٹیکس سال ورک فلو، تجزیات، اور TaxDesk PK میں شپ ہونے والے انتظامی آلات کا احاطہ کرتی ہے۔"
+        },
+        "tenancy": {
+          "title": "فرم اور کلائنٹ کی علیحدگی",
+          "body": "رسائی کثیر کرایہ دار علیحدگی کے گرد ڈیزائن کی گئی ہے:",
+          "b1": "ایپلیکیشن سوالات فرم شناخت کنندہ سے محدود ہوتے ہیں۔",
+          "b2": "PostgreSQL قطار سطح کی سیکیورٹی (RLS) فرم اور کلائنٹ قطاریں الگ رکھتی ہے۔",
+          "b3": "پورٹل صارفین اپنے کلائنٹ تک محدود ہیں؛ غیر مجاز کراس فرم رسائی دوسرے کرایہ داروں کو ظاہر کیے بغیر مسترد ہوتی ہے۔"
+        },
+        "sensitive": {
+          "title": "حساس فیلڈز",
+          "body": "پروڈکٹ قومی شناخت کنندگان اور مالی اسناد کو حساس سمجھتا ہے:",
+          "b1": "CNIC/NTN، مکمل بینک اکاؤنٹ نمبرز، IBAN، اور محفوظ IRIS اسناد آرام پر انکرپشن اور فی فرم انویلپ کیز کے لیے ڈیزائن ہیں۔",
+          "b2": "CNIC اقدار UI میں بطورِ اصل ماسک ہوتی ہیں؛ مکمل قدر ظاہر کرنا آڈٹ شدہ عمل ہے۔",
+          "b3": "اکاؤنٹ نمبرز طے شدہ طور پر آخری چار ہندسے دکھاتے ہیں؛ اندراج کے بعد راز دوبارہ نہیں دکھائے جاتے۔",
+          "b4": "AI نکاسی اسکیمیں AI آؤٹ پٹ سے صرف CNIC کے آخری چار ہندسے محفوظ کرنے کا مطالبہ کرتی ہیں — کبھی مکمل من گھڑت CNIC نہیں。"
+        },
+        "ai": {
+          "title": "AI پروسیسنگ اور رضامندی",
+          "body": "دستاویز معاونت صرف پروڈکٹ گارڈریلز کے تحت بیرونی AI استعمال کر سکتی ہے:",
+          "b1": "فی کلائنٹ AI رضامندی محفوظ ہوتی ہے؛ فی کلائنٹ AI بند بیرونی AI روکتا ہے اور دستی یا مقامی بہاؤ پر واپس جاتا ہے۔",
+          "b2": "بیرونی AI کالز سے پہلے CNIC، مکمل اکاؤنٹ نمبرز، اور ڈاک پتے آؤٹ باؤنڈ پے لوڈ میں ماسک ہوتے ہیں اور نکاسی کے بعد مقامی طور پر دوبارہ جوڑے جاتے ہیں۔",
+          "b3": "AI کال لاگز میٹا ڈیٹا ریکارڈ کرتے ہیں جیسے وقت، فرم، دستاویز، ماڈل، ٹوکنز، اور لاگت — خام دستاویز مواد نہیں۔",
+          "b4": "اسپریڈشیٹ میپنگ مکمل فائل نہیں بلکہ ہیڈرز کے ساتھ قطاروں کا چھوٹا نمونہ بھیجتی ہے۔",
+          "b5": "محفوظ PDFs کے پاس ورڈز براؤزر میں عارضی طور پر استعمال ہوتے ہیں اور محفوظ نہیں کیے جاتے۔"
+        },
+        "retention": {
+          "title": "برقرار رکھنا اور حذف",
+          "body": "برقرار رکھنا فرم قابلِ ترتیب پالیسی اور مالک کنٹرول شدہ حذف پر عمل کرتا ہے:",
+          "b1": "فائلیں ترتیب شدہ برقرار رکھنے کے مطابق رکھی جاتی ہیں؛ عارضی پروسیسنگ فائلیں استعمال کے بعد حذف ہوتی ہیں۔",
+          "b2": "کلائنٹ آرکائیو ڈیٹا رکھتا ہے لیکن کلائنٹ کو فعال فہرستوں سے ہٹاتا ہے۔",
+          "b3": "مستقل کلائنٹ حذف کے لیے مالک کی اجازت، ٹائپ تصدیق، اور آڈٹ لاگ اندراج درکار ہے۔",
+          "b4": "فرم مالک مکمل برآمد اور حذف کی درخواست کر سکتے ہیں؛ پروڈکٹ ضروریات میں حذف لاگ ہوتا ہے اور ناقابلِ واپسی سمجھا جاتا ہے۔"
+        },
+        "security": {
+          "title": "رازداری کے تحفظ کے سیکیورٹی کنٹرولز",
+          "body": "رازداری TaxDesk PK کے لیے مخصوص سیکیورٹی کنٹرولز پر منحصر ہے:",
+          "b1": "اسٹاف تصدیق پاس ورڈ کے ساتھ لازمی TOTP استعمال کرتی ہے؛ سیشن ٹوکنز HttpOnly Secure SameSite کوکیز استعمال کرتے ہیں، براؤزر localStorage نہیں۔",
+          "b2": "اپ لوڈز جادوئی بائیٹ تصدیق، میلویئر اسکین، سائز حدود، انکرپٹڈ آبجیکٹ اسٹوریج، اور مختصر مدت کے دستخط شدہ URLs استعمال کرتے ہیں۔",
+          "b3": "صرف اضافہ آڈٹ لاگ حساس نظارے، دستاویز رسائی، AI کالز، کردار تبدیلیاں، اور متعلقہ واقعات ریکارڈ کرتا ہے۔",
+          "b4": "API سطحوں پر محفوظ راستوں پر تصدیق، ان پٹ تصدیق، شرح حد بندی، اور CSP ہیڈرز درکار ہیں۔"
+        },
+        "contact": {
+          "title": "رابطہ",
+          "body": "کسی مخصوص فرم کے ڈیٹا کی رازداری درخواستوں کے لیے اس فرم کے مالک یا منتظم سے رابطہ کریں۔ پلیٹ فارم آپریٹرز کو اپنی تعیناتی کے لیے سپورٹ رابطہ شائع کرنا چاہیے۔ اس صفحے کو پابند قانونی پالیسی سمجھنے سے پہلے وکیل کا جائزہ درکار ہے۔"
+        }
+      }
+    },
+    "terms": {
+      "title": "سروس کی شرائط",
+      "metaDescription": "TaxDesk PK استعمال کی شرائط، پروڈکٹ ذمہ داریوں اور ٹیکس حفاظت کی ضروریات پر مبنی۔",
+      "lastUpdated": "آخری تازہ کاری: ۲ اکتوبر ۲۰۲۶",
+      "intro1": "یہ شرائط بیان کرتی ہیں کہ TaxDesk PK کیسے استعمال ہونا مقصود ہے۔ وہ انجینئرنگ اور ٹیکس حفاظت کی ضروریات سے پروڈکٹ ذمہ داریاں دوبارہ بیان کرتی ہیں۔ وہ قانونی جائزے کے منتظر ہیں اور فرم یا آپریٹر مخصوص شرائط سے بدل سکتی ہیں۔",
+      "intro2": "TaxDesk PK تعیناتی تک رسائی حاصل کر کے آپ سافٹ ویئر صرف قانونی ٹیکس پریکٹس عملیات کے لیے استعمال کرنے اور اسناد و کلائنٹ ڈیٹا کو خفیہ رکھنے پر رضامند ہوتے ہیں۔",
+      "sections": {
+        "acceptance": {
+          "title": "قبولیت",
+          "body": "اسٹاف، پورٹل، یا انتظامی خصوصیات کا استعمال اس تعیناتی کے لیے ان پروڈکٹ شرائط کی قبولیت سمجھا جاتا ہے جب تک وکیل سے منظور شدہ متبادل شرائط شائع نہ ہوں۔"
+        },
+        "service": {
+          "title": "سروس",
+          "body": "TaxDesk PK کلائنٹ CRM، دستاویز ہب، ٹیکس سال فائلیں، حساب، دولت تصفیہ، ریٹرن تیاری، برآمدات، بلنگ، پورٹل تعاون، تجزیات، اور انتظامیہ کے لیے فرم ورک اسپیس فراہم کرتا ہے۔",
+          "b1": "خصوصیات فرم ترتیب، کردار اجازتوں، اور فعال انضمام پر منحصر ہیں۔",
+          "b2": "مسودہ یا جگہ دار ٹیکس رول پیکس حساب اور منظوری کو اس وقت تک بند رکھتے ہیں جب تک شائع شدہ رولز منظور نہ ہوں۔",
+          "b3": "دستیابی، بیک اپ، اور بحالی کے مقاصد تعینات کرنے والے آپریٹر کی عملی ذمہ داری ہیں۔"
+        },
+        "taxSafety": {
+          "title": "ٹیکس حساب اور پیشہ ورانہ ذمہ داری",
+          "body": "TaxDesk PK ایک پریکٹس ٹول ہے۔ یہ اہل ٹیکس پیشہ ور یا سرکاری FBR رہنمائی کا متبادل نہیں۔",
+          "b1": "حساب شدہ اعداد اندازے ہیں جن پر انحصار یا فائلنگ سے پہلے اہل جائزہ درکار ہے۔",
+          "b2": "ٹیکس انجن تعیناتی اور ورژن شدہ ہے؛ بڑے زبان ماڈلز حتمی ٹیکس اعداد نہیں بنا سکتے۔",
+          "b3": "AI نکاسی مسودہ ڈیٹا پیدا کرتی ہے جب تک اسٹاف تصدیق نہ کرے؛ انسان ریٹرن تیاری اور فائلنگ منظوری دیتے ہیں۔",
+          "b4": "مشاورتی فرم اور ذمہ دار پیشہ ور کلائنٹس کو دی گئی تعمیل اور مشورے کے قانونی طور پر جواب دہ رہتے ہیں۔"
+        },
+        "accounts": {
+          "title": "اکاؤنٹس اور رسائی",
+          "body": "فرمیں صارف دعوتوں، کرداروں، سیشنز، اور پورٹل رسائی کنٹرول کرتی ہیں۔",
+          "b1": "اسٹاف کو پاس ورڈز اور TOTP آلات محفوظ رکھنے چاہئیں؛ منتظمین سیشن منسوخ کر سکتے ہیں۔",
+          "b2": "پورٹل OTP بہاؤ جائز کلائنٹ رسائی کے باہر اس بات کی کھوج کے لیے استعمال نہیں ہونے چاہئیں کہ رابطہ رجسٹرڈ ہے یا نہیں۔",
+          "b3": "اسناد شیئر کرنا یا فرم اجازت کنٹرولز کو نظرانداز کرنا ممنوع ہے۔"
+        },
+        "acceptableUse": {
+          "title": "قابلِ قبول استعمال",
+          "body": "آپ پلیٹ فارم کا غلط استعمال کلائنٹس، دوسری فرموں، یا نظام کی سالمیت کو نقصان پہنچانے کے لیے نہیں کر سکتے۔",
+          "b1": "کراس فرم رسائی، سیکیورٹی کنٹرولز کو غیر فعال کرنا، یا مجاز ورک فلو کے باہر ڈیٹا نکالنا نہ کریں۔",
+          "b2": "میلویئر اپ لوڈ نہ کریں اور قانونی اسکیننگ و تصدیق سے بچنے کے لیے دستاویز پروسیسنگ کا استعمال نہ کریں۔",
+          "b3": "منصوبہ بندی یا حساب خصوصیات کو ٹیکس چوری کی سہولت کے لیے استعمال نہ کریں؛ پروڈکٹ گارڈریلز چوری کے نمونوں کو روکنے کے لیے موجود ہیں۔"
+        },
+        "liability": {
+          "title": "انحصار کی حد",
+          "body": "جب تک وکیل تعیناتی مخصوص ذمہ داری شرائط شائع نہ کرے، صارفین تسلیم کرتے ہیں کہ TaxDesk PK آؤٹ پٹس صرف فیصلہ معاونت ہیں۔ فائلنگ فیصلے، قانونی تشریحات، اور کلائنٹ مشورہ فرم اور اس کے لائسنس یافتہ پیشہ ور کی ذمہ داری رہتے ہیں۔"
+        },
+        "changes": {
+          "title": "تبدیلیاں",
+          "body": "پروڈکٹ ضروریات بدل سکتی ہیں۔ شائع شدہ شرائط میں اہم تبدیلیاں ورژن شدہ ہونی چاہئیں اور آپریٹر کو مطلع کرنا چاہیے۔ وکیل کی منظوری تک یہ صفحہ قانونی جائزے کے منتظر رہے گا۔"
+        },
+        "contact": {
+          "title": "رابطہ",
+          "body": "کسی تعیناتی کے بارے میں ان شرائط کے سوالات فرم مالک یا پلیٹ فارم آپریٹر کو بھیجیں۔ رسمی قانونی نوٹسز کے لیے اس تعیناتی کے وکیل سے منظور شدہ رابطہ درکار ہیں۔"
+        }
+      }
+    }
+  }
+}

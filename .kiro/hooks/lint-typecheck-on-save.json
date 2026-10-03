@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Lint & Typecheck on Save",
+      "trigger": "PostFileSave",
+      "description": "Runs ESLint (with auto-fix) and TypeScript type-check on any saved .ts or .tsx file across the monorepo.",
+      "matcher": "\\.(ts|tsx)$",
+      "action": {
+        "type": "command",
+        "command": "pnpm eslint --fix \"$KIRO_FILE\" 2>&1 && pnpm tsc --noEmit -p \"$(dirname \"$KIRO_FILE\")/tsconfig.json\" 2>&1 || true",
+        "timeout": 30
+      }
+    }
+  ]
+}

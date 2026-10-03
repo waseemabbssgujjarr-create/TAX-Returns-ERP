@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "i18n Key Parity Check",
+      "trigger": "PostFileSave",
+      "description": "Checks that en.json and ur.json have identical key trees whenever either locale file is saved. Fails with a list of missing/extra keys.",
+      "matcher": "packages[\\\\/]i18n[\\\\/]src[\\\\/]locales[\\\\/].*\\.json$",
+      "action": {
+        "type": "command",
+        "command": "node \"packages/i18n/src/check-parity.mjs\" 2>&1",
+        "timeout": 15
+      }
+    }
+  ]
+}

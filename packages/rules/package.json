@@ -1,0 +1,33 @@
+{
+  "name": "@taxdesk/rules",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Versioned tax rule data for TaxDesk PK — one directory per tax year",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "require": "./dist/index.js",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"src/**/*.ts\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "22.7.5",
+    "rimraf": "6.0.1",
+    "typescript": "5.6.3",
+    "vitest": "2.1.2"
+  }
+}

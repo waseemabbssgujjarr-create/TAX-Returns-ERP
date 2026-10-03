@@ -1,0 +1,66 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.turbo/
+
+# Environment files — NEVER commit real secrets
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.staging
+
+# Keep the example file
+!.env.example
+!.env.e2e.example
+
+# Local filesystem object storage (STORAGE_DRIVER=local)
+.local-storage/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Testing
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Storybook
+storybook-static/
+
+# Prisma
+prisma/migrations/dev.db
+prisma/*.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Certificates / keys — should never be in repo
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx

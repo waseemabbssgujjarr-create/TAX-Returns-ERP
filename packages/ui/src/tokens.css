@@ -1,0 +1,204 @@
+/**
+ * TaxDesk PK — Design Tokens
+ * Defined as CSS custom properties.
+ * Import this file once in apps/web/src/styles/globals.css.
+ *
+ * Never use raw values in components — always reference a token.
+ * Themes override the same token names; no component changes needed.
+ */
+
+/* ── Light Theme (default) ────────────────────────────────────────────────── */
+:root,
+[data-theme='light'] {
+  /* Primary — deep teal/green */
+  --color-primary: #0d6b5e;
+  --color-primary-hover: #0a5249;
+  --color-primary-active: #083e38;
+  --color-primary-subtle: #e6f4f2;
+
+  /* Surface */
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f8fafb;
+  --color-surface-hover: #f1f5f4;
+  /* Staff app canvas — muted gray-green behind elevated panels */
+  --color-canvas: #eef3f2;
+
+  /* Foreground */
+  --color-foreground: #111827;
+  --color-muted-foreground: #6b7280;
+
+  /* Border */
+  --color-border: #e5e7eb;
+  --color-border-strong: #d1d5db;
+
+  /* Semantic */
+  --color-success: #15803d;
+  --color-success-subtle: #dcfce7;
+  --color-warning: #b45309;
+  --color-warning-subtle: #fef9c3;
+  --color-error: #dc2626;
+  --color-error-subtle: #fee2e2;
+  --color-info: #1d4ed8;
+  --color-info-subtle: #dbeafe;
+
+  /* Confidence badges */
+  --color-confidence-high: #15803d;
+  --color-confidence-medium: #b45309;
+  --color-confidence-low: #dc2626;
+}
+
+/* ── Dark Theme ───────────────────────────────────────────────────────────── */
+[data-theme='dark'] {
+  /* Institutional teal — matches light theme depth, avoids neon mint on CTAs */
+  --color-primary: #0d6b5e;
+  --color-primary-hover: #0f8575;
+  --color-primary-active: #0a5249;
+  --color-primary-subtle: #0c3530;
+
+  --color-surface: #111827;
+  --color-surface-subtle: #0f172a;
+  --color-surface-hover: #1f2937;
+  --color-canvas: #0a100e;
+
+  --color-foreground: #f9fafb;
+  --color-muted-foreground: #9ca3af;
+
+  --color-border: #1f2937;
+  --color-border-strong: #374151;
+
+  --color-success: #4ade80;
+  --color-success-subtle: #052e16;
+  --color-warning: #fbbf24;
+  --color-warning-subtle: #1c1100;
+  --color-error: #f87171;
+  --color-error-subtle: #2d0707;
+  --color-info: #60a5fa;
+  --color-info-subtle: #0a1628;
+
+  --color-confidence-high: #4ade80;
+  --color-confidence-medium: #fbbf24;
+  --color-confidence-low: #f87171;
+}
+
+/* ── High Contrast Theme ──────────────────────────────────────────────────── */
+[data-theme='high-contrast'],
+@media (prefers-contrast: more) {
+  :root {
+    --color-primary: #004d43;
+    --color-primary-hover: #003530;
+    --color-foreground: #000000;
+    --color-muted-foreground: #333333;
+    --color-border: #000000;
+    --color-surface: #ffffff;
+    --color-error: #900000;
+    --color-success: #004d00;
+  }
+}
+
+/* ── System color scheme — auto dark ─────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-primary: #0d6b5e;
+    --color-primary-hover: #0f8575;
+    --color-primary-active: #0a5249;
+    --color-primary-subtle: #0c3530;
+    --color-surface: #111827;
+    --color-surface-subtle: #0f172a;
+    --color-surface-hover: #1f2937;
+    --color-canvas: #0a100e;
+    --color-foreground: #f9fafb;
+    --color-muted-foreground: #9ca3af;
+    --color-border: #1f2937;
+    --color-border-strong: #374151;
+    --color-success: #4ade80;
+    --color-success-subtle: #052e16;
+    --color-warning: #fbbf24;
+    --color-warning-subtle: #1c1100;
+    --color-error: #f87171;
+    --color-error-subtle: #2d0707;
+    --color-info: #60a5fa;
+    --color-info-subtle: #0a1628;
+  }
+}
+
+/* ── Theme transition ─────────────────────────────────────────────────────── */
+/* Smooth 200ms color change when switching themes */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+  }
+}
+
+/* ── Border radius ────────────────────────────────────────────────────────── */
+:root {
+  --radius-sm: 0.5rem; /* 8px */
+  --radius-md: 0.75rem; /* 12px */
+  --radius-lg: 1rem; /* 16px */
+  --radius-full: 9999px;
+}
+
+/* ── Shadows ──────────────────────────────────────────────────────────────── */
+:root {
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* ── Typography ───────────────────────────────────────────────────────────── */
+:root {
+  --font-inter: 'Inter', system-ui, sans-serif;
+  --font-urdu: var(--font-noori), var(--font-gulzar), serif;
+
+  --text-xs: clamp(0.7rem, 1.5vw, 0.75rem);
+  --text-sm: clamp(0.8rem, 1.8vw, 0.875rem);
+  --text-base: clamp(0.95rem, 2vw, 1rem);
+  --text-lg: clamp(1rem, 2.5vw, 1.125rem);
+  --text-xl: clamp(1.1rem, 3vw, 1.25rem);
+  --text-2xl: clamp(1.2rem, 4vw, 1.5rem);
+  --text-3xl: clamp(1.4rem, 5vw, 1.875rem);
+}
+
+/* ── Z-index scale ────────────────────────────────────────────────────────── */
+:root {
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+}
+
+/* ── Motion tokens ────────────────────────────────────────────────────────── */
+:root {
+  --duration-instant: 100ms;
+  --duration-fast: 175ms;
+  --duration-base: 275ms;
+  --duration-slow: 450ms;
+
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-inout: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Density: comfortable vs compact ─────────────────────────────────────── */
+[data-density='compact'] {
+  --spacing-form-y: 0.375rem; /* tighter vertical padding in inputs */
+  --spacing-form-x: 0.625rem;
+  --spacing-card: 0.75rem;
+}
+
+[data-density='comfortable'],
+:root {
+  --spacing-form-y: 0.625rem;
+  --spacing-form-x: 0.875rem;
+  --spacing-card: 1.25rem;
+}

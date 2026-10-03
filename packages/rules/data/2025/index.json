@@ -1,0 +1,17 @@
+{
+  "taxYear": 2025,
+  "version": "0.1.0-DRAFT",
+  "publishedOn": "2025-01-01",
+  "reviewedBy": "PENDING — must be reviewed and signed off by a qualified tax professional before use in production",
+  "sourceFinanceAct": "Finance Act 2025 (to be verified against official FBR notification)",
+  "files": {
+    "incomeTax": "income-tax.json",
+    "withholding": "withholding.json",
+    "deductions": "deductions.json",
+    "credits": "credits.json",
+    "deadlines": "deadlines.json",
+    "goldenCases": "golden-cases.json",
+    "penalties": "penalties.json"
+  },
+  "_warning": "DRAFT DATA — All values below are PLACEHOLDERS. They must be replaced with values from the current Finance Act and verified by a qualified tax professional. Using unverified rules in production is a legal and compliance risk."
+}

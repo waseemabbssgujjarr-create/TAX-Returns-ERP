@@ -1,0 +1,26 @@
+/**
+ * Staff app shell — scoped via [data-app-shell="staff"] on the layout root.
+ * Marketing and auth layouts are unaffected.
+ */
+
+[data-app-shell='staff'] {
+  background-color: var(--color-canvas);
+}
+
+[data-app-shell='staff'] #main-content {
+  background-color: var(--color-canvas);
+}
+
+/* Sidebar nav links — override global underlined anchor styles */
+[data-app-shell='staff'] .staff-sidebar-link {
+  text-decoration: none;
+}
+
+[data-app-shell='staff'] .staff-sidebar-link:hover,
+[data-app-shell='staff'] .staff-sidebar-link:focus-visible {
+  text-decoration: none;
+}
+
+[data-app-shell='staff'] .staff-sidebar-link[aria-current='page'] {
+  text-decoration: none;
+}

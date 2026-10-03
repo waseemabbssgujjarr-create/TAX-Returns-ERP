@@ -1,0 +1,29 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ES2020",
+    "lib": ["dom", "dom.iterable", "ES2020"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "preserve",
+    "allowJs": true,
+    "noEmit": true,
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "@/*": ["./src/*"],
+      "@taxdesk/ui": ["../../packages/ui/src/index.ts"],
+      "@taxdesk/ui/*": ["../../packages/ui/src/*"],
+      "@taxdesk/schemas": ["../../packages/schemas/src/index.ts"],
+      "@taxdesk/schemas/*": ["../../packages/schemas/src/*"],
+      "@taxdesk/tax-engine": ["../../packages/tax-engine/src/index.ts"],
+      "@taxdesk/tax-engine/*": ["../../packages/tax-engine/src/*"],
+      "@taxdesk/rules": ["../../packages/rules/src/index.ts"],
+      "@taxdesk/rules/*": ["../../packages/rules/src/*"],
+      "@taxdesk/i18n": ["../../packages/i18n/src/index.ts"],
+      "@taxdesk/i18n/*": ["../../packages/i18n/src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "e2e"]
+}

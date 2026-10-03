@@ -1,0 +1,261 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   TaxDesk PK — Global Styles
+   Design tokens defined in packages/ui/src/tokens.css are imported here.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@import '../../../../packages/ui/src/tokens.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Theme Script (prevent flash of wrong theme) ──────────────────────────── */
+/* Inline script in <head> reads localStorage and applies data-theme immediately */
+
+/* ── Base layer overrides ─────────────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    /* Use logical border properties everywhere */
+    border-color: var(--color-border);
+  }
+
+  html {
+    /* Smooth scrolling — disabled under reduced motion */
+    scroll-behavior: smooth;
+    /* Tab size for code blocks */
+    tab-size: 2;
+    /* Prevent text size inflation on mobile */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-surface-subtle);
+    color: var(--color-foreground);
+    font-family: var(--font-inter), var(--font-urdu), system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Safe area insets for phones with notch/home bar */
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Urdu — readable Nastaleeq scale (see also marketing.css on landing) */
+  html[lang='ur'] {
+    --text-xs: clamp(0.8125rem, 2vw, 0.875rem);
+    --text-sm: clamp(0.9375rem, 2.2vw, 1rem);
+    --text-base: clamp(1.0625rem, 2.4vw, 1.125rem);
+    --text-lg: clamp(1.125rem, 2.6vw, 1.25rem);
+    --text-xl: clamp(1.2rem, 3vw, 1.35rem);
+    --text-2xl: clamp(1.35rem, 3.5vw, 1.65rem);
+    --text-3xl: clamp(1.55rem, 4.5vw, 2rem);
+  }
+
+  html[lang='ur'] body {
+    font-family: var(--font-noori), var(--font-gulzar), var(--font-inter), system-ui, sans-serif;
+    font-size: var(--text-base);
+    line-height: 2.1;
+  }
+
+  html[lang='ur'] h1,
+  html[lang='ur'] h2,
+  html[lang='ur'] h3,
+  html[lang='ur'] h4,
+  html[lang='ur'] p,
+  html[lang='ur'] li,
+  html[lang='ur'] label,
+  html[lang='ur'] button,
+  html[lang='ur'] input,
+  html[lang='ur'] textarea,
+  html[lang='ur'] select,
+  html[lang='ur'] nav,
+  html[lang='ur'] th,
+  html[lang='ur'] td,
+  html[lang='ur'] a,
+  html[lang='ur'] span {
+    font-family: inherit;
+  }
+
+  html[lang='ur'] h1 {
+    line-height: 1.85;
+    font-size: clamp(1.65rem, 5vw, 2.35rem);
+  }
+
+  html[lang='ur'] h2 {
+    line-height: 1.75;
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+  }
+
+  html[lang='ur'] h3 {
+    line-height: 1.7;
+  }
+
+  html[lang='ur'] h4 {
+    line-height: 1.65;
+  }
+
+  /* Minimum 16px body text on mobile — prevents iOS input zoom */
+  @media (max-width: 639px) {
+    body {
+      font-size: 1rem;
+    }
+
+    html[lang='ur'] body {
+      font-size: 1.0625rem;
+      line-height: 2.15;
+    }
+  }
+
+  /* Focus ring — consistent across all interactive elements */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Remove default focus styles for mouse users (handled by :focus-visible) */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Heading scale — fluid via clamp() */
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  h3 {
+    font-size: clamp(1.1rem, 2.5vw, 1.25rem);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* Links */
+  a {
+    color: var(--color-primary);
+    text-decoration-line: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  /* PKR amounts — tabular numerals for alignment in tables */
+  .amount,
+  [data-amount] {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ── Utility layer additions ──────────────────────────────────────────────── */
+@layer utilities {
+  /* Safe-area padding utilities */
+  .pb-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .ps-safe-start {
+    padding-inline-start: env(safe-area-inset-left);
+  }
+  .pe-safe-end {
+    padding-inline-end: env(safe-area-inset-right);
+  }
+
+  /* Screen-reader only — standard sr-only + make it re-appear on focus */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .focus\:not-sr-only:focus {
+    position: fixed;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
+  /* Shimmer skeleton animation */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--color-surface-subtle) 25%,
+      var(--color-surface) 50%,
+      var(--color-surface-subtle) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton {
+      animation: none;
+      background: var(--color-surface-subtle);
+    }
+  }
+
+  @keyframes otp-shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-4px);
+    }
+    75% {
+      transform: translateX(4px);
+    }
+  }
+
+  .animate-otp-shake {
+    animation: otp-shake 100ms ease-in-out 2;
+  }
+}
