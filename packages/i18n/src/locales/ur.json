@@ -28,8 +28,7 @@
     "adminSecurity": "سیکیورٹی واقعات",
     "adminFirmSettings": "فرم سیٹنگز",
     "adminIntegrations": "انضمام",
-    "adminStorage": "سٹوریج",
-    "storage": "سٹوریج"
+    "adminStorage": "سٹوریج"
   },
   "auth": {
     "brand": "TaxDesk PK",
