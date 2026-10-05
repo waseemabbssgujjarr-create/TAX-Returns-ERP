@@ -255,6 +255,7 @@ export class ExportGeneratorService {
           body,
           contentType: mimeType,
           contentLength: body.length,
+          firmId: job.firmId,
         })
 
         await this.prismaRls.withRlsContext(async (tx) =>

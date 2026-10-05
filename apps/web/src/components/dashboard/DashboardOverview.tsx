@@ -1,52 +1,27 @@
 'use client'
 
-
-
 import type { AnalyticsOverview } from '@taxdesk/schemas'
-
 import { Button, cn } from '@taxdesk/ui'
-
 import {
-
   AlertCircle,
-
   CalendarClock,
-
   ClipboardList,
-
   FileStack,
-
   FileWarning,
-
   Receipt,
-
   TrendingUp,
-
   Users,
-
 } from 'lucide-react'
-
 import { useTranslations } from 'next-intl'
-
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-
-
 import { DashboardActivityChart } from '@/components/dashboard/DashboardActivityChart'
-
 import { DashboardStatCard, TrendBadge } from '@/components/dashboard/DashboardStatCard'
-
 import { DashboardTaxYearChart } from '@/components/dashboard/DashboardTaxYearChart'
-
 import { StaffPanel } from '@/components/staff/StaffPanel'
-
 import { Link } from '@/i18n/navigation'
-
 import { fetchAnalyticsOverview } from '@/lib/api/analytics'
-
 import { useAuthStore } from '@/stores/authStore'
-
-
 
 function formatPkr(paisa: string): string {
 

@@ -14,6 +14,7 @@
     "calendar": "Calendar",
     "billing": "Billing",
     "firm": "Firm Settings",
+    "storage": "Storage",
     "adminUsers": "Users",
     "adminSessions": "Sessions",
     "adminAudit": "Audit log",
@@ -26,7 +27,8 @@
     "adminRoles": "Roles",
     "adminSecurity": "Security events",
     "adminFirmSettings": "Firm settings",
-    "adminIntegrations": "Integrations"
+    "adminIntegrations": "Integrations",
+    "adminStorage": "Storage"
   },
   "auth": {
     "brand": "TaxDesk PK",
@@ -350,6 +352,49 @@
   },
   "settings": {
     "title": "Settings",
+    "subNav": {
+      "aria": "Settings sections",
+      "storage": "Storage",
+      "firm": "Firm settings"
+    },
+    "storage": {
+      "title": "Storage",
+      "pageSubtitle": "Connect your Google Drive for secure document storage.",
+      "hint": "Documents are stored in your Google Drive — never on the server or a public link. Connect below so uploads and downloads work.",
+      "status": {
+        "connected": "Connected",
+        "notConnected": "Not connected",
+        "reconnectRequired": "Reconnect required"
+      },
+      "googleDrive": {
+        "name": "Google Drive",
+        "connect": "Connect Google Drive",
+        "reconnect": "Reconnect",
+        "disconnect": "Disconnect",
+        "connectedAs": "Connected as {email}",
+        "notConnected": "Not connected — documents cannot be uploaded until you connect.",
+        "connectedAt": "Connected {when}",
+        "lastSync": "Last sync {when}",
+        "connectedSuccess": "Google Drive connected successfully.",
+        "disconnectedSuccess": "Google Drive disconnected.",
+        "isDefault": "This connection is the firm's default for client-portal uploads.",
+        "noPublicLinks": "Downloads are proxied through TaxDesk PK — files are never shared via a public Google Drive link.",
+        "rootFolderNote": "TaxDesk PK uses a folder named \"TaxDesk PK\" in your Drive (Clients and System subfolders)."
+      },
+      "errors": {
+        "loadFailed": "Could not load Google Drive status.",
+        "connectFailed": "Could not start the Google Drive connection.",
+        "disconnectFailed": "Could not disconnect Google Drive.",
+        "callback": {
+          "invalid_request": "The Google Drive connection request was invalid. Please try again.",
+          "invalid_state": "This connection link is no longer valid. Please try connecting again.",
+          "state_expired": "This connection link expired. Please try connecting again.",
+          "state_reused": "This connection link was already used. Please try connecting again.",
+          "connect_failed": "Could not complete the Google Drive connection. Please try again.",
+          "generic": "Could not complete the Google Drive connection. Please try again."
+        }
+      }
+    },
     "firm": "Firm Settings",
     "users": "Users & Roles",
     "rulesLibrary": "Tax Rules Library",

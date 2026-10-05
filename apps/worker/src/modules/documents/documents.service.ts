@@ -237,13 +237,18 @@ export class DocumentsService {
 
     const documentId = randomUUID()
     const storageKey = `firms/${user.firmId}/documents/${documentId}/${sanitizeFilename(file.originalname)}`
+    const driver = this.storageDriver()
 
-    await this.storage.putObject({
+    const putResult = (await this.storage.putObject({
       key: storageKey,
       body: file.buffer,
       contentType: validation.mime,
       contentLength: file.size,
-    })
+      firmId: user.firmId,
+      ...(user.sessionType === 'staff' ? { storageOwnerUserId: user.userId } : {}),
+      clientId: taxYearContext.clientId,
+      taxYear: taxYearContext.taxYear,
+    })) ?? {}
 
     try {
       const created = await this.prismaRls.withRlsContext(async (tx) => {
@@ -260,6 +265,10 @@ export class DocumentsService {
             uploadedById: user.sessionType === 'staff' ? user.userId : null,
             status: 'UPLOADED',
             processingStatus: 'PENDING',
+            storageProvider: driver === 'google-drive' ? 'GOOGLE_DRIVE' : 'LOCAL',
+            storageOwnerUserId: putResult.resolvedOwnerUserId ?? null,
+            driveFileId: putResult.providerFileId ?? null,
+            driveFolderId: putResult.providerFolderId ?? null,
           },
           select: this.detailSelect(),
         })
@@ -325,6 +334,7 @@ export class DocumentsService {
       version: true,
       category: true,
       originalName: true,
+      taxYearFile: { select: { taxYear: true } },
     })
     if (!previous) {
       throw new NotFoundException(this.notFoundProblem())
@@ -332,13 +342,18 @@ export class DocumentsService {
 
     const documentId = randomUUID()
     const storageKey = `firms/${user.firmId}/documents/${documentId}/${sanitizeFilename(file.originalname)}`
+    const driver = this.storageDriver()
 
-    await this.storage.putObject({
+    const putResult = (await this.storage.putObject({
       key: storageKey,
       body: file.buffer,
       contentType: validation.mime,
       contentLength: file.size,
-    })
+      firmId: user.firmId,
+      storageOwnerUserId: user.userId,
+      clientId: previous.clientId,
+      taxYear: previous.taxYearFile?.taxYear,
+    })) ?? {}
 
     try {
       const created = await this.prismaRls.withRlsContext(async (tx) => {
@@ -358,6 +373,10 @@ export class DocumentsService {
             version: previous.version + 1,
             status: 'UPLOADED',
             processingStatus: 'PENDING',
+            storageProvider: driver === 'google-drive' ? 'GOOGLE_DRIVE' : 'LOCAL',
+            storageOwnerUserId: putResult.resolvedOwnerUserId ?? null,
+            driveFileId: putResult.providerFileId ?? null,
+            driveFolderId: putResult.providerFolderId ?? null,
           },
           select: this.detailSelect(),
         })
@@ -480,6 +499,12 @@ export class DocumentsService {
     })
   }
 
+  /** Current STORAGE_DRIVER — mirrors StorageModule's resolution. */
+  private storageDriver(): string {
+    const storage = this.config.get('storage') as { driver?: string }
+    return (process.env['STORAGE_DRIVER'] ?? storage.driver ?? 's3').toString().toLowerCase()
+  }
+
   private async resolveTaxYearFile(user: AuthenticatedUser, body: UploadDocumentBody) {
     return this.prismaRls.withRlsContext(async (tx) => {
       if (body.taxYearFileId) {
@@ -488,13 +513,13 @@ export class DocumentsService {
             id: body.taxYearFileId,
             client: { firmId: user.firmId },
           },
-          select: { id: true, clientId: true },
+          select: { id: true, clientId: true, taxYear: true },
         })
         if (!file) {
           throw new NotFoundException(this.notFoundProblem())
         }
         await this.assertClientAccess(user, file.clientId, tx)
-        return { taxYearFileId: file.id, clientId: file.clientId }
+        return { taxYearFileId: file.id, clientId: file.clientId, taxYear: file.taxYear }
       }
 
       const clientId = body.clientId!
@@ -503,17 +528,17 @@ export class DocumentsService {
 
       const existing = await tx.taxYearFile.findUnique({
         where: { clientId_taxYear: { clientId, taxYear } },
-        select: { id: true, clientId: true },
+        select: { id: true, clientId: true, taxYear: true },
       })
       if (existing) {
-        return { taxYearFileId: existing.id, clientId: existing.clientId }
+        return { taxYearFileId: existing.id, clientId: existing.clientId, taxYear: existing.taxYear }
       }
 
       const created = await tx.taxYearFile.create({
         data: { clientId, taxYear },
-        select: { id: true, clientId: true },
+        select: { id: true, clientId: true, taxYear: true },
       })
-      return { taxYearFileId: created.id, clientId: created.clientId }
+      return { taxYearFileId: created.id, clientId: created.clientId, taxYear: created.taxYear }
     })
   }
 

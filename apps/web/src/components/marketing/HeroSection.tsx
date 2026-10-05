@@ -1,22 +1,12 @@
 'use client'
 
-
-
 import { Button } from '@taxdesk/ui'
-
 import { useTranslations } from 'next-intl'
 
-
-
 import { BrandLogo } from '@/components/marketing/BrandLogo'
-
 import { HeroProductVisual } from '@/components/marketing/HeroProductVisual'
-
 import { HeroTrustStrip } from '@/components/marketing/HeroTrustStrip'
-
 import { Link } from '@/i18n/navigation'
-
-
 
 export function HeroSection() {
 

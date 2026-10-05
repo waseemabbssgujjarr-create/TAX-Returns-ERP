@@ -19,7 +19,10 @@ The browser talks to Next.js; API/auth can use Next rewrites or `NEXT_PUBLIC_API
 
 - **PostgreSQL 16** (two DB roles: `DATABASE_URL` for app, `DATABASE_MIGRATIONS_URL` for migrations only)
 - **Redis** (BullMQ queues in the worker)
-- **S3-compatible storage** (or `STORAGE_DRIVER=local` only if you accept filesystem storage on the server)
+- **Google Drive per-user storage is REQUIRED in production** (`STORAGE_DRIVER=google-drive`) —
+  see [Document storage: Google Drive per-user](#document-storage-google-drive-per-user) below.
+  `STORAGE_DRIVER=local` is refused at worker startup when `NODE_ENV=production` (dev/E2E only).
+  S3/MinIO (`STORAGE_DRIVER=s3`) remains supported but is **not required**.
 
 ---
 
@@ -96,7 +99,7 @@ git checkout main
    - `REDIS_URL`
    - `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET` (unique, strong)
    - `ENCRYPTION_MASTER_KEY`, `OTP_CONTACT_SECRET`
-   - `STORAGE_DRIVER=s3` + S3 vars (recommended on cPanel) or secured local path
+   - `STORAGE_DRIVER=google-drive` + `GOOGLE_OAUTH_*` vars (**required in production** — see below)
    - `NEXT_PUBLIC_APP_URL=https://tax.aderalabs.tech`
    - `WORKER_PORT=3001`, `NODE_ENV=production`
 
@@ -127,6 +130,63 @@ Optional demo data (non-production only):
 ```bash
 pnpm db:seed:demo
 ```
+
+---
+
+## Document storage: Google Drive per-user
+
+TaxDesk PK stores client documents in **each staff member's own Google Drive**
+account rather than a shared bucket. There is no central storage credential
+to provision — only an OAuth client that lets staff connect their own Drive.
+
+### 1. Create the Google OAuth client (one-time, per environment)
+
+1. In [Google Cloud Console](https://console.cloud.google.com), create (or
+   reuse) a project and enable the **Google Drive API**.
+2. **APIs & Services → OAuth consent screen** — configure as **Internal**
+   (Google Workspace) or **External** with the firm's staff emails added as
+   test users while in testing mode.
+3. **APIs & Services → Credentials → Create Credentials → OAuth client ID**,
+   type **Web application**.
+4. Add an **Authorized redirect URI** that exactly matches
+   `GOOGLE_OAUTH_REDIRECT_URI`, e.g.:
+   `https://api.tax.aderalabs.tech/integrations/google-drive/callback`
+5. Copy the generated **Client ID** and **Client secret**.
+
+### 2. Set production env vars
+
+```bash
+STORAGE_DRIVER=google-drive
+GOOGLE_OAUTH_CLIENT_ID="<client id>.apps.googleusercontent.com"
+GOOGLE_OAUTH_CLIENT_SECRET="<client secret>"
+GOOGLE_OAUTH_REDIRECT_URI="https://api.tax.aderalabs.tech/integrations/google-drive/callback"
+WORKER_PUBLIC_URL="https://api.tax.aderalabs.tech"
+```
+
+Worker startup **refuses** `STORAGE_DRIVER=local` whenever `NODE_ENV=production`
+(local disk storage is dev/E2E-only — not durable, not shared across app
+instances, and never acceptable for real client documents). S3/MinIO env vars
+(`S3_*`) are **not required** when using `google-drive`.
+
+### 3. Each staff member connects their own Drive
+
+After deploying, every staff user who uploads/downloads documents visits
+**Settings → Storage → Google Drive** (`/en/settings/storage`) in the web app and
+clicks **Connect Google Drive**. This:
+
+- Redirects to Google's consent screen (scope: `drive.file` — the app can
+  only see files/folders it creates, never the user's whole Drive).
+- On return, the worker encrypts the refresh token with the existing KMS
+  envelope-encryption scheme (`ENCRYPTION_MASTER_KEY`) and stores it per user.
+- Creates a `TaxDesk PK/Clients/<clientId>/<taxYear>` folder structure inside
+  **that user's own Drive**.
+
+The **first** staff member to connect becomes the firm's default owner for
+client-portal uploads (clients don't have their own Drive connection).
+
+Downloads are **never** served via a public/shareable Drive link — the worker
+always proxies bytes through its own HMAC-signed `/storage/drive-object`
+endpoint using the owning user's refreshed OAuth access token server-side.
 
 ---
 

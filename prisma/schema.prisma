@@ -55,6 +55,7 @@ model Firm {
   payments         Payment[]
   exportArtifacts  ExportArtifact[]
   irisFilings      IrisFiling[]
+  googleDriveConnections GoogleDriveConnection[]
 
   @@map("firms")
 }
@@ -115,8 +116,10 @@ model User {
   refreshTokens      RefreshToken[]
   recoveryCodes      RecoveryCode[]
   documentsUploaded  Document[]     @relation("DocumentUploadedBy")
+  documentsStorageOwned Document[]  @relation("DocumentStorageOwner")
   noticesAssigned    Notice[]       @relation("NoticeAssignee")
   taxPlanScenarios   TaxPlanScenario[] @relation("TaxPlanCreatedBy")
+  googleDriveConnections GoogleDriveConnection[]
 
   @@unique([firmId, email])
   @@map("users")
@@ -394,6 +397,14 @@ enum DocumentReviewStatus {
   REJECTED
 }
 
+/// Which physical backend holds the object bytes for a given document.
+/// LOCAL is dev/test-only (see StorageModule) — refused for client documents
+/// in production NODE_ENV. GOOGLE_DRIVE is the production per-user backend.
+enum StorageProvider {
+  LOCAL
+  GOOGLE_DRIVE
+}
+
 model Document {
   id                String                   @id @default(uuid())
   taxYearFileId     String                   @map("tax_year_file_id")
@@ -417,18 +428,116 @@ model Document {
   verifiedById      String?                  @map("verified_by_id")
   verifiedAt        DateTime?                @map("verified_at")
   aiCallId          String?                  @map("ai_call_id")
+  // ── Storage backend metadata (Google Drive per-user storage) ────────────────
+  // Backend that physically stores this document's bytes.
+  storageProvider   StorageProvider          @default(LOCAL) @map("storage_provider")
+  // The staff user whose connected Google Drive owns the file (per-user storage).
+  // Null for LOCAL-backed documents or when a firm-default connection was used.
+  storageOwnerUserId String?                 @map("storage_owner_user_id")
+  // Google Drive file id — opaque, never a public link.
+  driveFileId       String?                  @map("drive_file_id")
+  // Google Drive parent folder id (TaxDesk PK/Clients/<clientId>/<taxYear>).
+  driveFolderId     String?                  @map("drive_folder_id")
   createdAt         DateTime                 @default(now()) @map("created_at")
   updatedAt         DateTime                 @updatedAt @map("updated_at")
 
   taxYearFile     TaxYearFile  @relation(fields: [taxYearFileId], references: [id], onDelete: Cascade)
   client          Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
   uploadedBy      User?        @relation("DocumentUploadedBy", fields: [uploadedById], references: [id], onDelete: SetNull)
+  storageOwner    User?        @relation("DocumentStorageOwner", fields: [storageOwnerUserId], references: [id], onDelete: SetNull)
   previousVersion Document?    @relation("DocumentVersionChain", fields: [previousVersionId], references: [id], onDelete: SetNull)
   nextVersions    Document[]   @relation("DocumentVersionChain")
 
   @@index([firmId, clientId, createdAt(sort: Desc)])
   @@index([taxYearFileId])
+  @@index([storageOwnerUserId])
   @@map("documents")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Google Drive per-user storage integration
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum GoogleDriveConnectionStatus {
+  CONNECTED
+  REVOKED
+  ERROR
+}
+
+/// One row per staff user who has connected their own Google Drive account.
+/// Refresh tokens are never stored in plaintext — envelope-encrypted via KMS
+/// (wrappedDataKey from KeyManagementService.generateDataKey(), refresh token
+/// encrypted with that unwrapped data key). The plaintext data key is never
+/// persisted.
+model GoogleDriveConnection {
+  id                     String                      @id @default(uuid())
+  firmId                 String                      @map("firm_id")
+  userId                 String                      @map("user_id")
+  googleAccountEmail     String                      @map("google_account_email")
+  // OAuth scopes actually granted by Google (space-separated).
+  scope                  String
+  // KMS-wrapped (encrypted) 256-bit data key — see KeyManagementService.
+  wrappedDataKey         String                      @map("wrapped_data_key")
+  // Refresh token encrypted with the unwrapped data key (AES-256-GCM blob).
+  // Null once revoked — never retained after disconnect.
+  encryptedRefreshToken  String?                     @map("encrypted_refresh_token")
+  // "TaxDesk PK" root folder id inside this user's own Drive. Null until the
+  // first successful connect completes folder bootstrap.
+  rootFolderId           String?                     @map("root_folder_id")
+  status                 GoogleDriveConnectionStatus @default(CONNECTED)
+  // First connection for a firm becomes the fallback owner for portal
+  // uploads and non-user-scoped artifacts (exports, AI working copies).
+  isDefault              Boolean                     @default(false) @map("is_default")
+  connectedAt            DateTime                    @default(now()) @map("connected_at")
+  revokedAt              DateTime?                   @map("revoked_at")
+  lastSyncedAt           DateTime?                    @map("last_synced_at")
+  lastErrorMessage       String?                     @map("last_error_message")
+  createdAt              DateTime                    @default(now()) @map("created_at")
+  updatedAt              DateTime                    @updatedAt @map("updated_at")
+
+  firm Firm @relation(fields: [firmId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([firmId, userId])
+  @@index([firmId, isDefault])
+  @@map("google_drive_connections")
+}
+
+/// Short-lived, single-use OAuth CSRF/replay-protection tokens. The row id
+/// IS the opaque state value sent to Google — unguessable (crypto random),
+/// consumed exactly once, expires quickly. Deliberately has NO row-level
+/// security: the OAuth callback arrives as a top-level browser redirect from
+/// Google with no bearer token, so the firm/user identity for the subsequent
+/// RLS-scoped writes must be recoverable from this row alone (mirrors the
+/// FirmDirectory pre-auth bootstrap pattern).
+model GoogleDriveOAuthState {
+  id         String    @id
+  firmId     String    @map("firm_id")
+  userId     String    @map("user_id")
+  expiresAt  DateTime  @map("expires_at")
+  consumedAt DateTime? @map("consumed_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@index([expiresAt])
+  @@map("google_drive_oauth_states")
+}
+
+/// Internal provider bookkeeping: maps an opaque documents.storageKey to the
+/// Google Drive fileId/folderId that actually holds the bytes, plus the
+/// owning user's connection. Owned exclusively by GoogleDriveStorageAdapter —
+/// no other module queries this table directly.
+model GoogleDriveObject {
+  id            String   @id @default(uuid())
+  firmId        String   @map("firm_id")
+  key           String   @unique
+  driveFileId   String   @map("drive_file_id")
+  driveFolderId String?  @map("drive_folder_id")
+  ownerUserId   String   @map("owner_user_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([firmId])
+  @@map("google_drive_objects")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

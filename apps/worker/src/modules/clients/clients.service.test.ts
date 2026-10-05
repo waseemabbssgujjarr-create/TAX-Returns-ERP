@@ -91,6 +91,8 @@ describe('ClientsService', () => {
       expect(findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: {
+            firmId: associate.firmId,
+            isArchived: false,
             accessList: { some: { userId: associate.userId } },
           },
         }),

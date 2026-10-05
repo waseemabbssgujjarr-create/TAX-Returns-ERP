@@ -239,6 +239,26 @@ export type AuditEntry =
       action: 'iris_filing.status_sync'
       payload: { taxYearFileId: string; outcome: string; status: string }
     })
+  | (BaseAudit & {
+      action: 'integration.google_drive.connect_started'
+      payload: Record<string, never>
+    })
+  | (BaseAudit & {
+      action: 'integration.google_drive.connected'
+      payload: { googleAccountEmail: string; isDefault: boolean }
+    })
+  | (BaseAudit & {
+      action: 'integration.google_drive.disconnected'
+      payload: { reason: string }
+    })
+  | (BaseAudit & {
+      action: 'integration.google_drive.oauth_state_rejected'
+      payload: { reason: 'expired' | 'consumed' | 'not_found' }
+    })
+  | (BaseAudit & {
+      action: 'integration.google_drive.callback_error'
+      payload: { reason: string }
+    })
 
 /** @internal type-level test: secrets must not appear in audit payloads */
 export type _AuditSecretSafety = AuditEntry extends { payload: infer P }

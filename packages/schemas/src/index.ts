@@ -283,3 +283,23 @@ export {
 } from './exports'
 
 export type { CreateExportBody } from './exports'
+
+// ── Google Drive per-user storage ─────────────────────────────────────────────
+export {
+  GoogleDriveConnectionStatusSchema,
+  GoogleDriveStatusSchema,
+  GoogleDriveConnectStartResponseSchema,
+  GoogleDriveDisconnectResponseSchema,
+  DisconnectGoogleDriveBodySchema,
+  GoogleDriveConnectionSummarySchema,
+  GoogleDriveConnectionsListSchema,
+} from './googleDrive'
+
+export type {
+  GoogleDriveConnectionStatus,
+  GoogleDriveStatus,
+  GoogleDriveConnectStartResponse,
+  DisconnectGoogleDriveBody,
+  GoogleDriveConnectionSummary,
+  GoogleDriveConnectionsList,
+} from './googleDrive'

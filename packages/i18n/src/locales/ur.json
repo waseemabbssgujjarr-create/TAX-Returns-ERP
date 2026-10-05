@@ -14,6 +14,7 @@
     "calendar": "کیلنڈر",
     "billing": "بلنگ",
     "firm": "فرم سیٹنگز",
+    "storage": "سٹوریج",
     "adminUsers": "صارفین",
     "adminSessions": "سیشنز",
     "adminAudit": "آڈٹ لاگ",
@@ -26,7 +27,9 @@
     "adminRoles": "کردار",
     "adminSecurity": "سیکیورٹی واقعات",
     "adminFirmSettings": "فرم سیٹنگز",
-    "adminIntegrations": "انضمام"
+    "adminIntegrations": "انضمام",
+    "adminStorage": "سٹوریج",
+    "storage": "سٹوریج"
   },
   "auth": {
     "brand": "TaxDesk PK",
@@ -350,6 +353,49 @@
   },
   "settings": {
     "title": "سیٹنگز",
+    "subNav": {
+      "aria": "سیٹنگز کے حصے",
+      "storage": "سٹوریج",
+      "firm": "فرم سیٹنگز"
+    },
+    "storage": {
+      "title": "سٹوریج",
+      "pageSubtitle": "محفوظ دستاویزات کے لیے اپنا گوگل ڈرائیو جوڑیں۔",
+      "hint": "دستاویزات آپ کے گوگل ڈرائیو میں محفوظ ہوتی ہیں — سرور یا عوامی لنک پر نہیں۔ اپ لوڈ اور ڈاؤن لوڈ کے لیے نیچے جوڑیں۔",
+      "status": {
+        "connected": "منسلک",
+        "notConnected": "غیر منسلک",
+        "reconnectRequired": "دوبارہ جوڑنا ضروری"
+      },
+      "googleDrive": {
+        "name": "گوگل ڈرائیو",
+        "connect": "گوگل ڈرائیو جوڑیں",
+        "reconnect": "دوبارہ جوڑیں",
+        "disconnect": "منقطع کریں",
+        "connectedAs": "{email} کے طور پر منسلک",
+        "notConnected": "غیر منسلک — جوڑے بغیر دستاویزات اپ لوڈ نہیں ہو سکتیں۔",
+        "connectedAt": "منسلک {when}",
+        "lastSync": "آخری ہم آہنگی {when}",
+        "connectedSuccess": "گوگل ڈرائیو کامیابی سے منسلک ہو گیا۔",
+        "disconnectedSuccess": "گوگل ڈرائیو منقطع ہو گیا۔",
+        "isDefault": "یہ کنکشن کلائنٹ پورٹل اپ لوڈز کے لیے فرم کا ڈیفالٹ ہے۔",
+        "noPublicLinks": "ڈاؤن لوڈز TaxDesk PK کے ذریعے پراکسی ہوتے ہیں — عوامی گوگل ڈرائیو لنک نہیں۔",
+        "rootFolderNote": "TaxDesk PK آپ کے ڈرائیو میں \"TaxDesk PK\" فولڈر استعمال کرتا ہے (Clients اور System ذیلی فولڈر)۔"
+      },
+      "errors": {
+        "loadFailed": "گوگل ڈرائیو کی حیثیت لوڈ نہیں ہو سکی۔",
+        "connectFailed": "گوگل ڈرائیو کنکشن شروع نہیں ہو سکا۔",
+        "disconnectFailed": "گوگل ڈرائیو منقطع نہیں ہو سکا۔",
+        "callback": {
+          "invalid_request": "گوگل ڈرائیو کنکشن کی درخواست غلط تھی۔ دوبارہ کوشش کریں۔",
+          "invalid_state": "یہ کنکشن لنک اب درست نہیں۔ دوبارہ جوڑنے کی کوشش کریں۔",
+          "state_expired": "یہ کنکشن لنک ختم ہو گیا۔ دوبارہ جوڑنے کی کوشش کریں۔",
+          "state_reused": "یہ کنکشن لنک پہلے ہی استعمال ہو چکا۔ دوبارہ جوڑنے کی کوشش کریں۔",
+          "connect_failed": "گوگل ڈرائیو کنکشن مکمل نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
+          "generic": "گوگل ڈرائیو کنکشن مکمل نہیں ہو سکا۔ دوبارہ کوشش کریں۔"
+        }
+      }
+    },
     "firm": "فرم سیٹنگز",
     "users": "صارفین اور کردار",
     "rulesLibrary": "ٹیکس قواعد لائبریری",

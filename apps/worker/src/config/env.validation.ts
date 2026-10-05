@@ -29,13 +29,23 @@ const envSchema = z
     REDIS_HOST: z.string().default('localhost'),
     REDIS_PORT: z.coerce.number().default(6379),
 
-    // Storage
-    S3_ENDPOINT: z.string().url(),
-    S3_REGION: z.string(),
-    S3_BUCKET: z.string(),
-    S3_ACCESS_KEY_ID: z.string(),
-    S3_SECRET_ACCESS_KEY: z.string(),
+    // Storage driver — local (dev/E2E only) | s3 (MinIO) | google-drive (production).
+    STORAGE_DRIVER: z.enum(['local', 's3', 'google-drive']).default('local'),
+
+    // S3/MinIO — only required when STORAGE_DRIVER=s3 (not mandatory in production;
+    // production uses google-drive instead — see superRefine below).
+    S3_ENDPOINT: z.string().url().optional(),
+    S3_REGION: z.string().optional(),
+    S3_BUCKET: z.string().optional(),
+    S3_ACCESS_KEY_ID: z.string().optional(),
+    S3_SECRET_ACCESS_KEY: z.string().optional(),
     S3_SIGNED_URL_EXPIRY: z.coerce.number().default(900),
+
+    // Google Drive OAuth — only required when STORAGE_DRIVER=google-drive.
+    GOOGLE_OAUTH_CLIENT_ID: z.string().optional(),
+    GOOGLE_OAUTH_CLIENT_SECRET: z.string().optional(),
+    GOOGLE_OAUTH_REDIRECT_URI: z.string().url().optional(),
+    WORKER_PUBLIC_URL: z.string().url().optional(),
 
     // Auth — JWT
     JWT_ACCESS_SECRET: z.string().min(32),
@@ -72,6 +82,50 @@ const envSchema = z
         message: 'OPENAI_API_KEY is required in production',
         path: ['OPENAI_API_KEY'],
       })
+    }
+
+    // Production MUST use Google Drive per-user storage — local disk is dev/E2E-only
+    // (not durable, not shared across instances) and S3/MinIO is no longer required.
+    if (data.NODE_ENV === 'production' && data.STORAGE_DRIVER !== 'google-drive') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'STORAGE_DRIVER must be "google-drive" in production',
+        path: ['STORAGE_DRIVER'],
+      })
+    }
+
+    if (data.STORAGE_DRIVER === 's3') {
+      for (const key of [
+        'S3_ENDPOINT',
+        'S3_REGION',
+        'S3_BUCKET',
+        'S3_ACCESS_KEY_ID',
+        'S3_SECRET_ACCESS_KEY',
+      ] as const) {
+        if (!data[key]) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: `${key} is required when STORAGE_DRIVER=s3`,
+            path: [key],
+          })
+        }
+      }
+    }
+
+    if (data.STORAGE_DRIVER === 'google-drive') {
+      for (const key of [
+        'GOOGLE_OAUTH_CLIENT_ID',
+        'GOOGLE_OAUTH_CLIENT_SECRET',
+        'GOOGLE_OAUTH_REDIRECT_URI',
+      ] as const) {
+        if (!data[key]) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: `${key} is required when STORAGE_DRIVER=google-drive`,
+            path: [key],
+          })
+        }
+      }
     }
   })
 

@@ -7,6 +7,7 @@ export const ADMIN_NAV_ITEMS = [
   { segment: 'audit-logs', labelKey: 'adminAudit' },
   { segment: 'security-events', labelKey: 'adminSecurity' },
   { segment: 'integrations', labelKey: 'adminIntegrations' },
+  { segment: 'storage', labelKey: 'adminStorage' },
 ] as const
 
 export type AdminNavSegment = (typeof ADMIN_NAV_ITEMS)[number]['segment']

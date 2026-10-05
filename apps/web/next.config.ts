@@ -157,6 +157,10 @@ const nextConfig: NextConfig = {
         source: '/storage/:path*',
         destination: `${apiBase}/storage/:path*`,
       },
+      {
+        source: '/integrations/:path*',
+        destination: `${apiBase}/integrations/:path*`,
+      },
     ]
   },
 

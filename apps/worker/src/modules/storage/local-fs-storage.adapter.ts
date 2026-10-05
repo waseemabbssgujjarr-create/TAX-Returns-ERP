@@ -5,7 +5,11 @@ import path from 'node:path'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
-import type { ObjectStorageProvider, PutObjectInput } from './object-storage.interface'
+import type {
+  ObjectStorageProvider,
+  PutObjectInput,
+  PutObjectResult,
+} from './object-storage.interface'
 
 /**
  * Local filesystem object storage for development/E2E when MinIO is unavailable.
@@ -44,10 +48,11 @@ export class LocalFsStorageAdapter implements ObjectStorageProvider {
     return path.join(this.root, this.bucket, safe)
   }
 
-  async putObject(input: PutObjectInput): Promise<void> {
+  async putObject(input: PutObjectInput): Promise<PutObjectResult> {
     const full = this.objectPath(input.key)
     await fs.mkdir(path.dirname(full), { recursive: true })
     await fs.writeFile(full, input.body)
+    return {}
   }
 
   async deleteObject(key: string): Promise<void> {

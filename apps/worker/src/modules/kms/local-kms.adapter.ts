@@ -79,7 +79,11 @@ export class LocalKmsAdapter implements KeyManagementService {
   }
 
   unwrapDataKey(wrapped: string): Promise<Buffer> {
-    return Promise.resolve(aesGcmDecrypt(this.masterKey, wrapped))
+    try {
+      return Promise.resolve(aesGcmDecrypt(this.masterKey, wrapped))
+    } catch (err) {
+      return Promise.reject(err instanceof Error ? err : new Error(String(err)))
+    }
   }
 
   encryptWithDataKey(dataKey: Buffer, plaintext: Buffer): Promise<string> {
@@ -93,7 +97,11 @@ export class LocalKmsAdapter implements KeyManagementService {
     if (dataKey.length !== DATA_KEY_LENGTH) {
       return Promise.reject(new Error(`Data key must be ${DATA_KEY_LENGTH} bytes`))
     }
-    return Promise.resolve(aesGcmDecrypt(dataKey, ciphertext))
+    try {
+      return Promise.resolve(aesGcmDecrypt(dataKey, ciphertext))
+    } catch (err) {
+      return Promise.reject(err instanceof Error ? err : new Error(String(err)))
+    }
   }
 }
 

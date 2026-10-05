@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 
-export default async function SettingsIndexPage({
+/** Legacy admin storage URL → Settings → Storage. */
+export default async function AdminStorageRedirectPage({
   params,
 }: {
   params: Promise<{ locale: string }>

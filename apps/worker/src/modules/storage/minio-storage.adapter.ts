@@ -8,7 +8,11 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
-import type { ObjectStorageProvider, PutObjectInput } from './object-storage.interface'
+import type {
+  ObjectStorageProvider,
+  PutObjectInput,
+  PutObjectResult,
+} from './object-storage.interface'
 
 @Injectable()
 export class MinioStorageAdapter implements ObjectStorageProvider {
@@ -41,7 +45,7 @@ export class MinioStorageAdapter implements ObjectStorageProvider {
     })
   }
 
-  async putObject(input: PutObjectInput): Promise<void> {
+  async putObject(input: PutObjectInput): Promise<PutObjectResult> {
     await this.client.send(
       new PutObjectCommand({
         Bucket: this.bucket,
@@ -53,6 +57,7 @@ export class MinioStorageAdapter implements ObjectStorageProvider {
       }),
     )
     this.logger.debug(`Stored object ${input.key}`)
+    return {}
   }
 
   async deleteObject(key: string): Promise<void> {

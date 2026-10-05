@@ -12,6 +12,8 @@ export const envConfig = () => ({
     port: parseInt(process.env['REDIS_PORT'] ?? '6379', 10),
   },
   storage: {
+    // local|s3|google-drive. Production MUST be google-drive — local is dev/E2E-only
+    // and is refused at StorageModule init when NODE_ENV=production.
     driver: process.env['STORAGE_DRIVER'] ?? 's3',
     endpoint: process.env['S3_ENDPOINT'],
     region: process.env['S3_REGION'],
@@ -20,6 +22,11 @@ export const envConfig = () => ({
     secretAccessKey: process.env['S3_SECRET_ACCESS_KEY'],
     signedUrlExpiry: parseInt(process.env['S3_SIGNED_URL_EXPIRY'] ?? '900', 10),
     localRoot: process.env['LOCAL_STORAGE_ROOT'],
+  },
+  google: {
+    clientId: process.env['GOOGLE_OAUTH_CLIENT_ID'],
+    clientSecret: process.env['GOOGLE_OAUTH_CLIENT_SECRET'],
+    redirectUri: process.env['GOOGLE_OAUTH_REDIRECT_URI'],
   },
   auth: {
     jwtAccessSecret: process.env['JWT_ACCESS_SECRET'],

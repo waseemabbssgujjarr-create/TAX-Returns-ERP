@@ -84,6 +84,10 @@ export default [
     ignores: [
       'apps/worker/src/modules/auth/tenant-bootstrap.service.ts',
       'apps/worker/src/modules/auth/tenant-bootstrap.service.test.ts',
+      // google_drive_oauth_states has no RLS (pre-auth OAuth callback, no bearer
+      // token yet) — mirrors the tenant-bootstrap.service.ts bootstrap-client pattern.
+      'apps/worker/src/modules/google-drive/google-drive-oauth.service.ts',
+      'apps/worker/src/modules/google-drive/google-drive-oauth.service.test.ts',
     ],
     rules: {
       'no-restricted-imports': 'off',

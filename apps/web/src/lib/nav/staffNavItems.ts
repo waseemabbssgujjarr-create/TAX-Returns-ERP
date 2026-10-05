@@ -4,6 +4,7 @@ import {
   FileStack,
   FileText,
   LayoutDashboard,
+  HardDrive,
   Receipt,
   Shield,
   Users,
@@ -24,6 +25,7 @@ export const STAFF_NAV_ITEMS: StaffNavItem[] = [
   { labelKey: 'documents', href: 'documents', icon: FileText, shortcut: 'G F' },
   { labelKey: 'calendar', href: 'calendar', icon: CalendarDays, shortcut: 'G L' },
   { labelKey: 'billing', href: 'billing', icon: Receipt, shortcut: 'G B' },
+  { labelKey: 'storage', href: 'settings/storage', icon: HardDrive, shortcut: 'G T' },
   { labelKey: 'firm', href: 'admin/firm-settings', icon: Building2, shortcut: 'G S' },
   { labelKey: 'admin', href: 'admin/users', icon: Shield, shortcut: 'G A' },
 ]

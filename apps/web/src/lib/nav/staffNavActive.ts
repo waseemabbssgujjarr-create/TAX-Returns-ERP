@@ -13,5 +13,9 @@ export function isStaffNavActive(pathname: string, locale: string, href: string)
     return pathname.startsWith(`/${locale}/admin`) && !pathname.startsWith(firm)
   }
 
+  if (href.startsWith('settings/')) {
+    return pathname.startsWith(`/${locale}/settings`)
+  }
+
   return pathname === base || pathname.startsWith(`${base}/`)
 }
