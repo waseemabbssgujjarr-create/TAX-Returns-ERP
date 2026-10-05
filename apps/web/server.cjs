@@ -8,6 +8,10 @@ app
   .prepare()
   .then(() => {
     const port = Number(process.env.PORT);
+    if (!Number.isFinite(port) || port <= 0) {
+      console.error('PORT must be set by the cPanel Node.js application (host-provided).');
+      process.exit(1);
+    }
     createServer((req, res) => {
       handle(req, res);
     }).listen(port, '0.0.0.0', () => {

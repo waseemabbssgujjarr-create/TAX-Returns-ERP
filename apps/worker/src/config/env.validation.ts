@@ -25,7 +25,9 @@ const envSchema = z
     DATABASE_MIGRATIONS_URL: z.string().url().optional(),
     DATABASE_DIRECT_URL: z.string().url().optional(),
 
-    // Redis
+    // Redis — production (Upstash): REDIS_URL=rediss://default:PASSWORD@HOST:6379
+    // Local dev fallback: REDIS_HOST + REDIS_PORT when REDIS_URL is unset.
+    REDIS_URL: z.string().optional(),
     REDIS_HOST: z.string().default('localhost'),
     REDIS_PORT: z.coerce.number().default(6379),
 
@@ -76,6 +78,14 @@ const envSchema = z
   })
   .superRefine((data, ctx) => {
     // Migrations URLs are deployment-only (prisma migrate / cpanel:build), not worker runtime.
+    if (data.NODE_ENV === 'production' && !data.REDIS_URL?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'REDIS_URL is required in production (e.g. Upstash rediss:// URL for BullMQ)',
+        path: ['REDIS_URL'],
+      })
+    }
+
     if (data.NODE_ENV === 'production' && data.OPENAI_API_KEY.length === 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -117,6 +127,7 @@ const envSchema = z
         'GOOGLE_OAUTH_CLIENT_ID',
         'GOOGLE_OAUTH_CLIENT_SECRET',
         'GOOGLE_OAUTH_REDIRECT_URI',
+        'WORKER_PUBLIC_URL',
       ] as const) {
         if (!data[key]) {
           ctx.addIssue({

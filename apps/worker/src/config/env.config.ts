@@ -8,6 +8,7 @@ export const envConfig = () => ({
     migrationsUrl: process.env['DATABASE_MIGRATIONS_URL'] ?? process.env['DATABASE_DIRECT_URL'],
   },
   redis: {
+    url: process.env['REDIS_URL'],
     host: process.env['REDIS_HOST'] ?? 'localhost',
     port: parseInt(process.env['REDIS_PORT'] ?? '6379', 10),
   },

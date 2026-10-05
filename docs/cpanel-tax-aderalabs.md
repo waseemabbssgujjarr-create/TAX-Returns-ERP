@@ -1,6 +1,21 @@
 # Deploy TaxDesk PK on cPanel — `tax.aderalabs.tech`
 
-This guide explains how to **clone or pull** this monorepo on cPanel and run updates for the subdomain **https://tax.aderalabs.tech**. It aligns with `.env.example` and root `package.json` scripts; it does **not** replace Docker-based local dev (`docker-compose.yml`).
+Live deployment guide for **AdEra Labs FinTax / TaxDesk PK** on cPanel with external Upstash Redis, cPanel PostgreSQL, Google Drive document storage, and OpenAI document extraction.
+
+## Production architecture
+
+| Layer | URL / service | Role |
+|-------|----------------|------|
+| **Web** | https://tax.aderalabs.tech | Next.js 15 (Node 20, `apps/web/server.cjs`, host `PORT`) |
+| **API + jobs** | https://api.tax.aderalabs.tech | NestJS worker (`apps/worker/dist/main.js`, `PORT` / `WORKER_PORT`, bind `0.0.0.0`) |
+| **PostgreSQL** | cPanel Postgres | Runtime: `iqpigeon_taxdesk_app` via `DATABASE_URL` (RLS, no DDL). Migrations: `iqpigeon_taxdesk_migrations` via `DATABASE_MIGRATIONS_URL` **deploy only** |
+| **Redis** | [Upstash](https://upstash.com) | `REDIS_URL=rediss://default:PASSWORD@HOST:6379` — BullMQ in worker (native Redis protocol, **not** Upstash REST) |
+| **Documents** | Each staff member's **Google Drive** | `STORAGE_DRIVER=google-drive`, OAuth callback `https://api.tax.aderalabs.tech/integrations/google-drive/callback` |
+| **AI** | OpenAI API | `OPENAI_API_KEY` required in production (worker-only; never `NEXT_PUBLIC_*`) |
+
+Client document **binaries are not stored** on cPanel disk, MinIO, or S3 in production — only metadata in Postgres and files in the connected user's Drive.
+
+Monorepo root on server: `repos/TAX-Returns-ERP` (adjust to your cPanel Git path).
 
 ## What you are deploying
 
@@ -8,21 +23,21 @@ TaxDesk PK is a **pnpm monorepo**, not a static site:
 
 | Component | Path | Runtime |
 |-----------|------|---------|
-| Next.js web app | `apps/web` | Node.js 20+, `next start` (port e.g. 3000) |
-| NestJS API + jobs | `apps/worker` | Node.js 20+, `node dist/main` (port e.g. 3001) |
-| Shared packages | `packages/*` | Built as part of `pnpm build` |
-| Database schema | `prisma/` | PostgreSQL via `pnpm prisma:migrate` |
+| Next.js web app | `apps/web` | Node 20, **`node apps/web/server.cjs`** (repo root), `PORT` from cPanel |
+| NestJS API + BullMQ | `apps/worker` | Node 20, **`node apps/worker/dist/main.js`**, `PORT` then `WORKER_PORT` |
+| Shared packages | `packages/*` | Built via `pnpm build` |
+| Database schema | `prisma/` | `pnpm prisma:migrate` with migrations role only |
 
-The browser talks to Next.js; API/auth can use Next rewrites or `NEXT_PUBLIC_API_URL` pointing at the worker (see `.env.example`).
+The browser loads the web app at `tax.aderalabs.tech`; authenticated API calls use `NEXT_PUBLIC_API_URL=https://api.tax.aderalabs.tech`.
 
-**Dependencies the app expects in production:**
+**Production requirements:**
 
-- **PostgreSQL 16** (two DB roles: `DATABASE_URL` for app, `DATABASE_MIGRATIONS_URL` for migrations only)
-- **Redis** (BullMQ queues in the worker)
-- **Google Drive per-user storage is REQUIRED in production** (`STORAGE_DRIVER=google-drive`) —
-  see [Document storage: Google Drive per-user](#document-storage-google-drive-per-user) below.
-  `STORAGE_DRIVER=local` is refused at worker startup when `NODE_ENV=production` (dev/E2E only).
-  S3/MinIO (`STORAGE_DRIVER=s3`) remains supported but is **not required**.
+- `NODE_ENV=production`
+- `STORAGE_DRIVER=google-drive` (local disk refused at startup)
+- `REDIS_URL` (Upstash `rediss://…`)
+- `OPENAI_API_KEY` + model env vars
+- `GOOGLE_OAUTH_*` + `WORKER_PUBLIC_URL=https://api.tax.aderalabs.tech`
+- Runtime worker env: **`DATABASE_URL` only** — do **not** require `DATABASE_MIGRATIONS_URL` on the running API process
 
 ---
 
@@ -54,7 +69,8 @@ Use cPanel Git + Node only when your plan supports **Node.js 20+**, **SSH or Ter
 3. In cPanel → **SSL/TLS Status** (or **AutoSSL**), issue a certificate for `tax.aderalabs.tech`.
 4. Set production URLs in env (never commit these in git):
    - `NEXT_PUBLIC_APP_URL=https://tax.aderalabs.tech`
-   - `NEXT_PUBLIC_API_URL` — either `https://api.tax.aderalabs.tech` (separate worker vhost) or leave empty if Next.js proxies `/auth` to the worker internally on localhost.
+   - `NEXT_PUBLIC_API_URL=https://api.tax.aderalabs.tech`
+5. Create API subdomain `api.tax.aderalabs.tech` → second Node.js app (worker) or reverse proxy to worker port.
 
 ---
 
@@ -94,14 +110,18 @@ git checkout main
 
 3. Minimum production checklist (see `.env.example` for full list):
 
-   - `DATABASE_URL` — app role, no DDL
-   - `DATABASE_MIGRATIONS_URL` / `DATABASE_DIRECT_URL` — migrations role only for deploy step
-   - `REDIS_URL`
-   - `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET` (unique, strong)
+   - `NODE_ENV=production`
+   - `DATABASE_URL` → `iqpigeon_taxdesk_app` (runtime; RLS; no BYPASSRLS; no DDL)
+   - `DATABASE_MIGRATIONS_URL` → `iqpigeon_taxdesk_migrations` — **deploy/migrate step only**
+   - `REDIS_URL=rediss://default:PASSWORD@HOST:6379` (Upstash)
+   - `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `JWT_ACCESS_EXPIRES_IN=15m`, `JWT_REFRESH_EXPIRES_IN=7d`
+   - `OPENAI_API_KEY`, `OPENAI_EXTRACTION_MODEL`, `OPENAI_CLASSIFICATION_MODEL`
    - `ENCRYPTION_MASTER_KEY`, `OTP_CONTACT_SECRET`
-   - `STORAGE_DRIVER=google-drive` + `GOOGLE_OAUTH_*` vars (**required in production** — see below)
-   - `NEXT_PUBLIC_APP_URL=https://tax.aderalabs.tech`
-   - `WORKER_PORT=3001`, `NODE_ENV=production`
+   - `STORAGE_DRIVER=google-drive`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`
+   - `GOOGLE_OAUTH_REDIRECT_URI=https://api.tax.aderalabs.tech/integrations/google-drive/callback`
+   - `WORKER_PUBLIC_URL=https://api.tax.aderalabs.tech`
+   - `SMTP_*`, `EMAIL_FROM`
+   - `NEXT_PUBLIC_APP_NAME=TaxDesk PK`, `NEXT_PUBLIC_APP_URL=https://tax.aderalabs.tech`, `NEXT_PUBLIC_API_URL=https://api.tax.aderalabs.tech`
 
 4. In cPanel **Setup Node.js App**, add the same variables in the UI if the panel does not read `.env` automatically.
 
@@ -148,10 +168,11 @@ to provision — only an OAuth client that lets staff connect their own Drive.
    test users while in testing mode.
 3. **APIs & Services → Credentials → Create Credentials → OAuth client ID**,
    type **Web application**.
-4. Add an **Authorized redirect URI** that exactly matches
-   `GOOGLE_OAUTH_REDIRECT_URI`, e.g.:
+4. **Authorized JavaScript origins:** `https://tax.aderalabs.tech`
+5. **Authorized redirect URI** (must match `GOOGLE_OAUTH_REDIRECT_URI` exactly):
    `https://api.tax.aderalabs.tech/integrations/google-drive/callback`
-5. Copy the generated **Client ID** and **Client secret**.
+6. Enable **Google Drive API**; use scopes `drive.file` + user email only (configured in worker).
+7. Copy **Client ID** and **Client secret**.
 
 ### 2. Set production env vars
 
@@ -192,22 +213,30 @@ endpoint using the owning user's refreshed OAuth access token server-side.
 
 ## Running the apps on cPanel
 
-You usually need **two** Node applications (or one Node app + worker via systemd on a VPS):
+Configure **two** Node.js 20.x applications (Production mode):
 
-### Web (Next.js)
+### Web (Next.js) — `tax.aderalabs.tech`
 
-- **Application root:** `apps/web` **or** repo root with start command `pnpm --filter @taxdesk/web start`
-- **Application mode:** Production
-- **Node version:** 20.x
-- **Startup file / script:** `node apps/web/server.cjs` from the repo root (or `node server.cjs` if the application root is `apps/web`). Alternatives: `node_modules/next/dist/bin/next` with args `start -p $PORT`, or `pnpm --filter @taxdesk/web start`
-- Map the subdomain `tax.aderalabs.tech` to this app in **Setup Node.js App** (Passenger or proxy to the Node port).
+| Setting | Value |
+|---------|--------|
+| Application root | `repos/TAX-Returns-ERP` (monorepo root) |
+| Startup file | `apps/web/server.cjs` |
+| Node | 20.x, production |
+| Port | Host-provided `PORT` (required; server exits if unset) |
 
-### Worker (NestJS)
+Build before start: `pnpm cpanel:build` or full `pnpm build` from repo root.
 
-- **Application root:** `apps/worker`
-- **Start:** `node dist/main` after build (or `pnpm --filter @taxdesk/worker start`)
-- **Port:** cPanel sets `PORT`; worker falls back to `WORKER_PORT` (default `3001`). Runtime needs `DATABASE_URL` only — set `DATABASE_MIGRATIONS_URL` for `pnpm cpanel:build` / migrate, not for `node dist/main`.
-- Expose via internal `127.0.0.1` on that port or a separate subdomain `api.tax.aderalabs.tech` with its own Node app / reverse proxy.
+### Worker (NestJS API + BullMQ) — `api.tax.aderalabs.tech`
+
+| Setting | Value |
+|---------|--------|
+| Application root | `repos/TAX-Returns-ERP` |
+| Startup file | `apps/worker/dist/main.js` |
+| Node | 20.x, production |
+| Listen | `process.env.PORT` → `WORKER_PORT` → `3001`, bind `0.0.0.0` |
+
+Runtime env: `DATABASE_URL`, `REDIS_URL`, secrets, Google/OpenAI — **no** `DATABASE_MIGRATIONS_URL`.
+Run migrations separately with migrations URL: `DATABASE_MIGRATIONS_URL=… pnpm prisma:migrate`.
 
 Restart both apps after each deploy from cPanel Node UI or:
 
@@ -244,12 +273,13 @@ pnpm build
 
 ---
 
-## PostgreSQL on cPanel
+## PostgreSQL on cPanel (AdEra Labs)
 
-- **Shared hosting:** often **MySQL only** — use a **remote PostgreSQL** provider and put the connection string in `DATABASE_URL` / migration URLs on the server.
-- **VPS cPanel:** you may install Postgres yourself or use a managed DB; run `infra/postgres/init.sql` logic via your DBA or follow `docker-compose.yml` + `infra/postgres/` for role separation.
+- **Runtime:** `DATABASE_URL` → database/user `iqpigeon_taxdesk_app` — subject to **FORCE ROW LEVEL SECURITY**, not table owner, no `BYPASSRLS`, no DDL.
+- **Migrations:** `DATABASE_MIGRATIONS_URL` → `iqpigeon_taxdesk_migrations` — owner role for `pnpm prisma:migrate` only.
+- Preserve audit append-only rules, FirmDirectory protection, and Google Drive tenant tables from `prisma/migrations/` (including `20261005000000_google_drive_storage`).
 
-Never run `prisma migrate` with the app user if your init scripts require the migrations owner role.
+Never run `prisma migrate deploy` with the runtime app role.
 
 ---
 

@@ -5,6 +5,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core'
 import { ScheduleModule } from '@nestjs/schedule'
 
 import { envConfig } from './config/env.config'
+import { resolveRedisConnectionOptions } from './config/redis.config'
 import { DatabaseModule } from './database/database.module'
 import { RlsTransactionInterceptor } from './database/rls-transaction.interceptor'
 import { AdminModule } from './modules/admin/admin.module'
@@ -39,10 +40,7 @@ import { TaxYearsModule } from './modules/tax-years/tax-years.module'
     // ── Queue (BullMQ / Redis) ────────────────────────────────────────────────
     BullModule.forRootAsync({
       useFactory: () => ({
-        connection: {
-          host: process.env['REDIS_HOST'] ?? 'localhost',
-          port: parseInt(process.env['REDIS_PORT'] ?? '6379', 10),
-        },
+        connection: resolveRedisConnectionOptions(),
         defaultJobOptions: {
           attempts: 3,
           backoff: { type: 'exponential', delay: 2000 },
