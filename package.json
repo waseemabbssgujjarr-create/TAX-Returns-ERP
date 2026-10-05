@@ -9,7 +9,7 @@
   },
   "packageManager": "pnpm@9.12.0",
   "scripts": {
-    "build": "pnpm -r build",
+    "build": "corepack pnpm -r build",
     "dev": "pnpm --parallel -r dev",
     "dev:local": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-local.ps1",
     "lint": "pnpm -r lint",
