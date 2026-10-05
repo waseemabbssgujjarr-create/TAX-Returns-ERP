@@ -9,7 +9,8 @@
   },
   "packageManager": "pnpm@9.12.0",
   "scripts": {
-    "build": "corepack pnpm -r build",
+    "build": "node ./node_modules/pnpm/bin/pnpm.cjs -r --workspace-concurrency=1 build",
+    "build:parallel": "node ./node_modules/pnpm/bin/pnpm.cjs -r build",
     "dev": "pnpm --parallel -r dev",
     "dev:local": "powershell -ExecutionPolicy Bypass -File ./scripts/dev-local.ps1",
     "lint": "pnpm -r lint",
@@ -21,7 +22,7 @@
     "clean": "pnpm -r clean && rimraf node_modules",
     "prepare": "node -e \"if(process.env.NODE_ENV==='production')process.exit(0);const{spawnSync}=require('child_process');const root=process.env.INIT_CWD||process.cwd();let entry;try{entry=require.resolve('husky/bin.js',{paths:[root]})}catch{process.exit(0)}const r=spawnSync(process.execPath,[entry],{cwd:root,stdio:'inherit'});process.exit(r.status??0)\"",
     "cpanel:install": "corepack prepare pnpm@9.12.0 --activate && pnpm install --frozen-lockfile",
-    "cpanel:build": "pnpm prisma:generate && pnpm prisma:migrate && pnpm --filter @taxdesk/web build",
+    "cpanel:build": "node ./node_modules/pnpm/bin/pnpm.cjs prisma:generate && node ./node_modules/pnpm/bin/pnpm.cjs prisma:migrate && node ./node_modules/pnpm/bin/pnpm.cjs --filter @taxdesk/web build",
     "cpanel_install": "pnpm cpanel:install",
     "cpanel_build": "pnpm cpanel:build",
     "prisma:generate": "prisma generate",
@@ -47,7 +48,8 @@
     "typescript": "5.6.3"
   },
   "dependencies": {
-    "@prisma/client": "5.20.0"
+    "@prisma/client": "5.20.0",
+    "pnpm": "9.12.0"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
