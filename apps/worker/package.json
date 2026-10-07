@@ -2,6 +2,10 @@
   "name": "@taxdesk/worker",
   "version": "0.1.0",
   "private": true,
+  "files": [
+    "dist",
+    "package.json"
+  ],
   "scripts": {
     "dev": "nest start --watch",
     "build": "nest build",

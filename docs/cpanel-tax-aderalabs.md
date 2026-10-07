@@ -127,9 +127,33 @@ git checkout main
 
 ---
 
-## Install, build, migrate (each deploy)
+## Recommended: pre-built bundles (4 GB / low memory)
 
-Run from the repo root (SSH or cPanel terminal). Requires **Node 20+** and **pnpm 9+** (`corepack enable` then `corepack prepare pnpm@9.12.0 --activate` if needed).
+Building the full monorepo **on cPanel often OOMs**. Prefer building on your PC or CI, then uploading **production-only** folders (no `pnpm install` on the server):
+
+```bash
+# On a build machine (not cPanel) — from repo root:
+pnpm install
+pnpm cpanel:bundle
+pnpm cpanel:bundle:verify
+```
+
+This writes:
+
+| Bundle | Path | cPanel startup |
+|--------|------|----------------|
+| Web | `dist/cpanel/web` | `server.cjs` (Next.js **standalone**) |
+| Worker | `dist/cpanel/worker` | `node dist/main.js` |
+
+Upload each folder to the matching Node.js app root (zip/rsync/scp). Set env vars in cPanel as below. Run **`pnpm prisma:migrate`** once per release from SSH or your workstation with `DATABASE_MIGRATIONS_URL` (not on the running worker env).
+
+The worker bundle includes **production `node_modules` only**, workspace packages, and **Prisma Linux query engines** (`debian-openssl-*`) generated at bundle time.
+
+---
+
+## Install, build, migrate on-server (fallback)
+
+Run from the repo root (SSH or cPanel terminal). Requires **Node 20+** and **pnpm 9+** (`corepack enable` then `corepack prepare pnpm@9.12.0 --activate` if needed). May OOM on 4 GB accounts.
 
 ```bash
 cd ~/repos/TAX-Returns-ERP   # adjust path
@@ -141,7 +165,7 @@ pnpm prisma:migrate          # uses DATABASE_MIGRATIONS_URL — run only on depl
 pnpm build
 ```
 
-On cPanel you can use `pnpm cpanel:install` then `pnpm cpanel:build` (generate + migrate + `@taxdesk/web` build). Start the Next.js app with `node apps/web/server.cjs` (`PORT` from the environment; no hardcoded port).
+On cPanel you can use `npm run build` (runs `prebuild` pnpm workspace install + sequential build). Start the Next.js app with `node apps/web/server.cjs` (`PORT` from the environment; no hardcoded port).
 
 If migrations must use a different env file, export `DATABASE_MIGRATIONS_URL` only for that command, then run the worker with runtime env that **excludes** migrations URL (see comments in `.env.example`).
 

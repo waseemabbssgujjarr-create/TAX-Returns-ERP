@@ -26,6 +26,8 @@
     "cpanel:build": "node ./node_modules/pnpm/bin/pnpm.cjs prisma:generate && node ./node_modules/pnpm/bin/pnpm.cjs prisma:migrate && node ./node_modules/pnpm/bin/pnpm.cjs --filter @taxdesk/web build",
     "cpanel_install": "pnpm cpanel:install",
     "cpanel_build": "pnpm cpanel:build",
+    "cpanel:bundle": "node scripts/cpanel-bundle.mjs",
+    "cpanel:bundle:verify": "node scripts/cpanel-verify-bundle.mjs",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev",

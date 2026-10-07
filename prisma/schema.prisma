@@ -12,7 +12,9 @@
 //   - Migrations connect as taxdesk_migrations (table owner)
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // cPanel Linux (Node 20) + local dev — engines bundled at build time, no generate on server
+  binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x"]
 }
 
 datasource db {
