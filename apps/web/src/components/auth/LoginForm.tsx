@@ -152,16 +152,17 @@ export function LoginForm() {
         </div>
       </div>
 
-      <Link href="/password-reset" className="text-sm font-medium">
-        {t('forgotPassword')}
-      </Link>
-
-      <SubmitButton
-        isLoading={isSubmitting}
-        className="sticky bottom-[calc(env(safe-area-inset-bottom)+1rem)] w-full sm:static"
-      >
-        {t('submitButton')}
-      </SubmitButton>
+      <div className="auth-form-actions">
+        <Link
+          href="/password-reset"
+          className="text-primary focus-visible:ring-primary w-fit text-sm font-semibold underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+        >
+          {t('forgotPassword')}
+        </Link>
+        <SubmitButton isLoading={isSubmitting} className="w-full">
+          {t('submitButton')}
+        </SubmitButton>
+      </div>
 
       <p className="text-muted-foreground text-center text-sm">
         {t('noAccess')}{' '}

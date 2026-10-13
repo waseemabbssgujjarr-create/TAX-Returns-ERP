@@ -1591,6 +1591,24 @@
         "title": "Request received",
         "body": "Thank you. AdEra Labs FinTax will review your request and contact you about provisioning a TaxDesk PK workspace. No account has been created yet."
       }
+    },
+    "v2": {
+      "auth": {
+        "kicker": "Secure by design",
+        "title": "Your practice, locked down and always on.",
+        "body": "Staff sign in with a firm code, a password and two-step verification. Clients use their own portal.",
+        "chip1": "Two-step verification",
+        "chip2": "Role-based access",
+        "chip3": "English · اردو",
+        "note": "Need access? Your firm administrator can invite you.",
+        "back": "Back to home"
+      },
+      "signup": {
+        "kicker": "Firm onboarding",
+        "b1": "A workspace provisioned for your firm",
+        "b2": "Clients, documents and tax years in one place",
+        "b3": "English and Urdu interface"
+      }
     }
   },
   "legal": {

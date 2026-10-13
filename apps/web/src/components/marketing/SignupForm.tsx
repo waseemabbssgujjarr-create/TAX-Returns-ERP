@@ -26,8 +26,13 @@ function buildSignupSchema(t: (key: string) => string) {
 
 type SignupFormValues = z.infer<ReturnType<typeof buildSignupSchema>>
 
-export function SignupForm() {
+type SignupFormProps = {
+  variant?: 'marketing' | 'auth'
+}
+
+export function SignupForm({ variant = 'marketing' }: SignupFormProps) {
   const t = useTranslations('marketing.signup')
+  const isAuth = variant === 'auth'
   const [submitted, setSubmitted] = useState(false)
 
   const schema = useMemo(() => buildSignupSchema(t), [t])
@@ -56,7 +61,11 @@ export function SignupForm() {
   if (submitted) {
     return (
       <div
-        className="border-border bg-surface flex flex-col items-center gap-4 rounded-xl border px-6 py-10 text-center shadow-sm"
+        className={
+          isAuth
+            ? 'flex flex-col items-center gap-4 py-4 text-center'
+            : 'border-border bg-surface flex flex-col items-center gap-4 rounded-xl border px-6 py-10 text-center shadow-sm'
+        }
         role="status"
       >
         <CheckCircle2 className="text-success size-10" aria-hidden="true" />
@@ -68,7 +77,12 @@ export function SignupForm() {
 
   return (
     <form
-      className="border-border bg-surface flex flex-col gap-5 rounded-xl border p-6 shadow-sm sm:p-8"
+      className={
+        isAuth
+          ? 'flex flex-col gap-4'
+          : 'border-border bg-surface flex flex-col gap-5 rounded-xl border p-6 shadow-sm sm:p-8'
+      }
+      data-auth-wide={isAuth ? '' : undefined}
       noValidate
       aria-label={t('formAria')}
       onSubmit={(e) => {
@@ -76,7 +90,14 @@ export function SignupForm() {
         void handleSubmit(onSubmit)(e)
       }}
     >
-      <div className="grid gap-5 sm:grid-cols-2">
+      {isAuth ? (
+        <div>
+          <h1 className="text-foreground text-lg font-semibold">{t('title')}</h1>
+          <p className="text-muted-foreground mt-1 text-sm">{t('intro')}</p>
+        </div>
+      ) : null}
+
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
         <Field label={t('fields.firmName')} error={errors.firmName?.message} htmlFor="signup-firm">
           <input
             id="signup-firm"
@@ -146,11 +167,17 @@ export function SignupForm() {
         />
       </Field>
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <Button type="submit" size="lg" disabled={isSubmitting}>
+      <div
+        className={
+          isAuth
+            ? 'mt-1 flex flex-col gap-3'
+            : 'flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'
+        }
+      >
+        <Button type="submit" size="lg" disabled={isSubmitting} className={isAuth ? 'w-full' : undefined}>
           {t('submit')}
         </Button>
-        <p className="text-muted-foreground text-sm">
+        <p className={`text-muted-foreground text-sm ${isAuth ? 'text-center' : ''}`}>
           {t('hasAccess')}{' '}
           <Link
             href="/login"

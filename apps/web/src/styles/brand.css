@@ -1,0 +1,196 @@
+/* TaxDesk PK — "The Ledger" brand layer: parchment + Pakistan green + gold stamp.
+   Shared by marketing pages and auth pages. Presentation only. */
+.marketing-shell,
+.auth-shell {
+  --gold: #c9a227;
+  --gold-soft: #ecd98f;
+  --ink: #06241b;
+  --stamp: #b3261e;
+  --color-primary: #0a6b4a;
+  --color-primary-hover: #085a3e;
+  --color-primary-active: #064a33;
+  --color-primary-subtle: #e2f2e9;
+  --color-surface: #fbf8ef;
+  --color-surface-subtle: #f3eedd;
+  --color-surface-hover: #ece5cf;
+  --color-foreground: #10231c;
+  --color-muted-foreground: #4f5f57;
+  --color-border: #e0d8bf;
+  --color-border-strong: #cbbf9c;
+}
+[data-theme='dark'] .marketing-shell,
+[data-theme='dark'] .auth-shell,
+.mk-dark {
+  --color-primary: #12946a;
+  --color-primary-hover: #17a97a;
+  --color-primary-active: #0d7a56;
+  --color-primary-subtle: #0b3a2d;
+  --color-surface: #07221b;
+  --color-surface-subtle: #051a15;
+  --color-surface-hover: #0d3128;
+  --color-foreground: #eef6f1;
+  --color-muted-foreground: #a5bbb1;
+  --color-border: #1a4538;
+  --color-border-strong: #25594a;
+}
+.mk-dark {
+  color: var(--color-foreground);
+}
+@keyframes mk-rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes mk-float {
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+}
+@keyframes mk-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes mk-stamp {
+  0% {
+    opacity: 0;
+    transform: rotate(-14deg) scale(2.2);
+  }
+  60% {
+    opacity: 1;
+    transform: rotate(-6deg) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-6deg) scale(1);
+  }
+}
+@keyframes mk-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(201, 162, 39, 0);
+  }
+}
+@keyframes mk-shimmer {
+  to {
+    background-position: 200% 0;
+  }
+}
+.mk-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 650;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  text-decoration: none !important;
+  overflow: hidden;
+  isolation: isolate;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s,
+    background 0.25s,
+    border-color 0.25s;
+}
+.mk-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s;
+}
+.mk-btn:hover::after {
+  transform: translateX(120%);
+}
+.mk-btn:hover {
+  transform: translateY(-2px);
+}
+.mk-btn:active {
+  transform: scale(0.97);
+}
+.mk-btn--gold {
+  background: linear-gradient(135deg, #ecd075, #c9a227);
+  color: #06241b !important;
+  box-shadow: 0 12px 32px -14px rgba(201, 162, 39, 0.9);
+}
+.mk-btn--ghost {
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(8px);
+}
+.mk-btn--ghost:hover {
+  border-color: var(--gold-soft);
+  background: rgba(255, 255, 255, 0.14);
+}
+.mk-btn--solid {
+  background: var(--color-primary);
+  color: #fff !important;
+  box-shadow: 0 12px 30px -14px var(--color-primary);
+}
+.mk-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #04150f;
+}
+.mk-backdrop video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.07);
+  transition:
+    opacity 1.4s ease,
+    transform 9s ease-out;
+}
+.mk-backdrop video.on {
+  opacity: 1;
+  transform: scale(1);
+}
+.mk-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(236, 217, 143, 0.4);
+  background: rgba(201, 162, 39, 0.12);
+  color: var(--gold-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.mk-kicker::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: mk-pulse 1.8s infinite;
+}
+html[lang='ur'] .mk-kicker {
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.95rem;
+}

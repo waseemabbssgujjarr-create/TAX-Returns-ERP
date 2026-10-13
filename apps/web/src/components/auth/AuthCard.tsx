@@ -16,7 +16,7 @@ export function AuthCard({ children, className }: AuthCardProps) {
       initial={reduceMotion ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={reduceMotion ? { duration: 0 } : { duration: 0.2, ease: 'easeOut' }}
-      className={cn('bg-surface w-full max-w-sm rounded-lg px-6 py-8 shadow-md', className)}
+      className={cn('mk-auth-card px-6 py-8 sm:px-8 sm:py-9', className)}
     >
       {children}
     </motion.div>
