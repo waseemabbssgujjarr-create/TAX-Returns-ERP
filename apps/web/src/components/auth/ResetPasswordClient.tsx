@@ -2,8 +2,8 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle2, Loader2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -55,7 +55,7 @@ export function ResetPasswordClient() {
     }
   }, [token])
 
-  const onSubmit = handleSubmit(async (values) => {
+  const submitForm = async (values: FormValues) => {
     if (!token) return
     setBanner(null)
     try {
@@ -80,7 +80,7 @@ export function ResetPasswordClient() {
     } catch {
       setBanner(t('networkError'))
     }
-  })
+  }
 
   if (view.kind === 'invalid') {
     return (
@@ -144,7 +144,14 @@ export function ResetPasswordClient() {
   }
 
   return (
-    <form className="space-y-4" onSubmit={onSubmit} noValidate>
+    <form
+      className="space-y-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        void handleSubmit(submitForm)(e)
+      }}
+      noValidate
+    >
       <div>
         <h1 className="text-lg font-semibold">{t('confirmTitle')}</h1>
         <p className="text-muted-foreground mt-2 text-sm">{t('confirmSubtitle')}</p>

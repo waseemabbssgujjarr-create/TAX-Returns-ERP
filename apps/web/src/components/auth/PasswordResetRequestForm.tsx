@@ -37,7 +37,7 @@ export function PasswordResetRequestForm() {
     defaultValues: { firmSlug: '', email: '' },
   })
 
-  const onSubmit = handleSubmit(async (values) => {
+  const submitForm = async (values: FormValues) => {
     setBanner(null)
     try {
       const result = await postPasswordResetRequest({
@@ -56,7 +56,7 @@ export function PasswordResetRequestForm() {
       }
       setBanner(t('networkError'))
     }
-  })
+  }
 
   if (sent) {
     return (
@@ -71,7 +71,14 @@ export function PasswordResetRequestForm() {
   }
 
   return (
-    <form className="space-y-4" onSubmit={onSubmit} noValidate>
+    <form
+      className="space-y-4"
+      onSubmit={(e) => {
+        e.preventDefault()
+        void handleSubmit(submitForm)(e)
+      }}
+      noValidate
+    >
       <div>
         <h1 className="text-lg font-semibold">{t('title')}</h1>
         <p className="text-muted-foreground mt-2 text-sm">{t('subtitle')}</p>

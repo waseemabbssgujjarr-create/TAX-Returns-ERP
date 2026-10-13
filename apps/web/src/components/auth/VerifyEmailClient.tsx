@@ -2,8 +2,8 @@
 
 import { Button } from '@taxdesk/ui'
 import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 
 import { ErrorBanner } from '@/components/auth/ErrorBanner'
