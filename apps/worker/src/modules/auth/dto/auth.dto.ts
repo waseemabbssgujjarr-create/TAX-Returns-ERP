@@ -90,6 +90,28 @@ export const VerifyEmailSchema = z.object({
   token: z.string().min(10).max(200),
 })
 
+export const PasswordResetRequestSchema = z.object({
+  firmSlug: z
+    .string()
+    .min(2)
+    .max(60)
+    .regex(/^[a-z0-9-]+$/),
+  email: z.string().email(),
+})
+
+export const PasswordResetConfirmSchema = z
+  .object({
+    token: z.string().min(10).max(200),
+    password: z.string().min(12).max(128),
+    confirmPassword: z.string().min(12).max(128),
+  })
+  .refine((v) => v.password === v.confirmPassword, {
+    message: 'Passwords must match',
+    path: ['confirmPassword'],
+  })
+
 export type RegisterBody = z.infer<typeof RegisterSchema>
 export type ResendVerificationBody = z.infer<typeof ResendVerificationSchema>
 export type VerifyEmailBody = z.infer<typeof VerifyEmailSchema>
+export type PasswordResetRequestBody = z.infer<typeof PasswordResetRequestSchema>
+export type PasswordResetConfirmBody = z.infer<typeof PasswordResetConfirmSchema>

@@ -158,7 +158,29 @@
     },
     "passwordReset": {
       "title": "Reset password",
-      "comingSoon": "Password reset is coming soon."
+      "subtitle": "Enter your firm ID and work email. We will send a reset link if an account matches.",
+      "firmSlugLabel": "Firm ID",
+      "emailLabel": "Work email",
+      "submitButton": "Send reset link",
+      "sentTitle": "Check your email",
+      "sentBody": "If an account matches these details, a password reset link has been sent.",
+      "deliveryFailed": "We could not send email right now. Try again in a few minutes or contact support.",
+      "cooldown": "Please wait a few minutes before requesting another reset email.",
+      "networkError": "Could not reach the server. Try again shortly.",
+      "backToSignIn": "Back to sign in",
+      "confirmTitle": "Choose a new password",
+      "confirmSubtitle": "Enter a strong password for your workspace.",
+      "passwordLabel": "New password",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmSubmit": "Update password",
+      "successTitle": "Password updated",
+      "successBody": "You can sign in with your new password.",
+      "invalidTitle": "Invalid reset link",
+      "invalidBody": "This link is not valid. Request a new password reset from the sign-in page.",
+      "expiredTitle": "Reset link expired",
+      "expiredBody": "This link has expired. Request a new password reset.",
+      "usedTitle": "Link already used",
+      "usedBody": "This reset link was already used. Request a new one if you still need to change your password."
     }
   },
   "dashboard": {

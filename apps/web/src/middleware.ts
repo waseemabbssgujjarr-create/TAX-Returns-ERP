@@ -13,7 +13,14 @@ const intlMiddleware = createMiddleware({
   localePrefix: 'always',
 })
 
-const PUBLIC_AUTH_PATHS = new Set(['/login', '/2fa', '/2fa-setup', '/recover', '/password-reset'])
+const PUBLIC_AUTH_PATHS = new Set([
+  '/login',
+  '/2fa',
+  '/2fa-setup',
+  '/recover',
+  '/password-reset',
+  '/reset-password',
+])
 
 function stripLocale(pathname: string): { locale: string; path: string } {
   const segments = pathname.split('/').filter(Boolean)

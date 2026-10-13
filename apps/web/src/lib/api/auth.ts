@@ -212,3 +212,34 @@ export async function postResendVerification(body: {
     body: JSON.stringify(body),
   })
 }
+
+export type PasswordResetRequestResponse =
+  | { status: 'reset_email_sent' }
+  | { status: 'reset_email_pending'; emailDeliveryFailed: true }
+
+export async function postPasswordResetRequest(body: {
+  firmSlug: string
+  email: string
+}): Promise<PasswordResetRequestResponse> {
+  return apiFetch<PasswordResetRequestResponse>('/auth/password-reset/request', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+}
+
+export type PasswordResetConfirmResponse =
+  | { status: 'password_updated'; firmSlug: string }
+  | { status: 'invalid_token' }
+  | { status: 'expired_token' }
+  | { status: 'used_token' }
+
+export async function postPasswordResetConfirm(body: {
+  token: string
+  password: string
+  confirmPassword: string
+}): Promise<PasswordResetConfirmResponse> {
+  return apiFetch<PasswordResetConfirmResponse>('/auth/password-reset/confirm', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+}

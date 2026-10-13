@@ -22,6 +22,7 @@ const PUBLIC_AUTH_PATHS = new Set([
   '/2fa-setup',
   '/recover',
   '/password-reset',
+  '/reset-password',
   '/portal/login',
 ])
 

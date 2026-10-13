@@ -4,7 +4,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  NotImplementedException,
   Post,
   Req,
   Res,
@@ -33,12 +32,16 @@ import {
   OtpVerifySchema,
   TotpSetupConfirmSchema,
   TotpVerifySchema,
+  PasswordResetConfirmSchema,
+  PasswordResetRequestSchema,
   RegisterSchema,
   ResendVerificationSchema,
   VerifyEmailSchema,
   type LoginBody,
   type RegisterBody,
   type ResendVerificationBody,
+  type PasswordResetConfirmBody,
+  type PasswordResetRequestBody,
   type VerifyEmailBody,
   type OtpSendBody,
   type OtpVerifyBody,
@@ -47,6 +50,7 @@ import {
 } from './dto/auth.dto'
 import { extractBearerToken } from './jwt.util'
 import { OtpService } from './otp.service'
+import { PasswordResetService } from './password-reset.service'
 import { RegistrationService } from './registration.service'
 import { withStaffBootstrapContext } from './rls-bootstrap.util'
 import { TokenService } from './token.service'
@@ -65,6 +69,7 @@ export class AuthController {
     private readonly totpService: TotpService,
     private readonly otpService: OtpService,
     private readonly registrationService: RegistrationService,
+    private readonly passwordResetService: PasswordResetService,
     private readonly prismaRls: PrismaRlsClient,
   ) {}
 
@@ -315,12 +320,19 @@ export class AuthController {
 
   @Public()
   @Post('password-reset/request')
-  @HttpCode(HttpStatus.NOT_IMPLEMENTED)
-  passwordResetStub() {
-    throw new NotImplementedException({
-      type: 'https://taxdesk.pk/problems/not-implemented',
-      title: 'Not implemented',
-      status: 501,
-    })
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 900_000 } })
+  @UsePipes(new ZodValidationPipe(PasswordResetRequestSchema))
+  passwordResetRequest(@Body() body: PasswordResetRequestBody) {
+    return this.passwordResetService.requestReset(body)
+  }
+
+  @Public()
+  @Post('password-reset/confirm')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 30, ttl: 900_000 } })
+  @UsePipes(new ZodValidationPipe(PasswordResetConfirmSchema))
+  passwordResetConfirm(@Body() body: PasswordResetConfirmBody) {
+    return this.passwordResetService.confirmReset(body.token, body.password)
   }
 }
