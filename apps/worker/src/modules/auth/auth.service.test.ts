@@ -18,6 +18,7 @@ describe('AuthService.login', () => {
   let notifications: NotificationProvider
   let resolveFirmMock: ReturnType<typeof vi.fn>
   let withRlsContextMock: ReturnType<typeof vi.fn>
+  let issuePartialJwtMock: ReturnType<typeof vi.fn>
 
   const meta = { ipAddress: '127.0.0.1', userAgent: 'vitest' }
   const firmId = '11111111-1111-1111-1111-111111111111'
@@ -34,8 +35,11 @@ describe('AuthService.login', () => {
       withRlsContext: withRlsContextMock,
     } as unknown as PrismaRlsClient
 
+    issuePartialJwtMock = vi
+      .fn()
+      .mockReturnValue({ accessToken: 'partial-token', jti: 'jti' })
     tokenService = {
-      issuePartialJwt: vi.fn().mockReturnValue({ accessToken: 'partial-token', jti: 'jti' }),
+      issuePartialJwt: issuePartialJwtMock,
     } as unknown as TokenService
 
     notifications = {
@@ -62,10 +66,11 @@ describe('AuthService.login', () => {
     await expectInvalidCredentials(
       service.login({ firmSlug: 'missing', email: 'a@b.com', password: 'x' }, meta),
     )
+    expect(resolveFirmMock).toHaveBeenCalledWith('missing', { includeInactive: true })
   })
 
   it('returns generic 401 for unknown user and runs bcrypt compare', async () => {
-    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0 })
+    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0, isActive: true })
     withRlsContextMock.mockResolvedValue(null)
     const compareSpy = vi.spyOn(bcrypt, 'compare')
 
@@ -77,7 +82,7 @@ describe('AuthService.login', () => {
 
   it('returns generic 401 for wrong password', async () => {
     const hash = await bcrypt.hash('correct', BCRYPT_PASSWORD_COST)
-    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0 })
+    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0, isActive: true })
     withRlsContextMock
       .mockResolvedValueOnce({
         id: 'user-1',
@@ -99,7 +104,7 @@ describe('AuthService.login', () => {
 
   it('returns generic 401 for locked account', async () => {
     const hash = await bcrypt.hash('pass', BCRYPT_PASSWORD_COST)
-    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0 })
+    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0, isActive: true })
     withRlsContextMock.mockResolvedValue({
       id: 'user-1',
       email: 'a@b.com',
@@ -117,9 +122,9 @@ describe('AuthService.login', () => {
     )
   })
 
-  it('returns email_not_verified for unverified active password match', async () => {
+  it('returns email_not_verified when password matches but email is not verified', async () => {
     const hash = await bcrypt.hash('pass', BCRYPT_PASSWORD_COST)
-    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0 })
+    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0, isActive: false })
     withRlsContextMock.mockResolvedValue({
       id: 'user-1',
       email: 'a@b.com',
@@ -140,11 +145,64 @@ describe('AuthService.login', () => {
       const response = (err as UnauthorizedException).getResponse() as { reason?: string }
       expect(response.reason).toBe('email_not_verified')
     }
+    expect(issuePartialJwtMock).not.toHaveBeenCalled()
+  })
+
+  it('returns generic 401 for wrong password on unverified user', async () => {
+    const hash = await bcrypt.hash('pass', BCRYPT_PASSWORD_COST)
+    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0, isActive: false })
+    withRlsContextMock
+      .mockResolvedValueOnce({
+        id: 'user-1',
+        email: 'a@b.com',
+        passwordHash: hash,
+        failedLoginCount: 0,
+        lockedUntil: null,
+        totpEnabled: false,
+        role: 'OWNER',
+        isActive: false,
+        emailVerifiedAt: null,
+      })
+      .mockResolvedValueOnce({ lockedUntil: null, failedLoginCount: 1, firmName: null })
+
+    try {
+      await service.login({ firmSlug: 'firm', email: 'a@b.com', password: 'wrong' }, meta)
+      throw new Error('expected rejection')
+    } catch (err) {
+      expect(err).toBeInstanceOf(UnauthorizedException)
+      const response = (err as UnauthorizedException).getResponse() as {
+        title: string
+        reason?: string
+      }
+      expect(response.title).toBe(INVALID_CREDENTIALS_MESSAGE)
+      expect(response.reason).toBeUndefined()
+    }
+  })
+
+  it('returns generic 401 for verified user when firm is inactive', async () => {
+    const hash = await bcrypt.hash('pass', BCRYPT_PASSWORD_COST)
+    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0, isActive: false })
+    withRlsContextMock.mockResolvedValue({
+      id: 'user-1',
+      email: 'a@b.com',
+      passwordHash: hash,
+      failedLoginCount: 0,
+      lockedUntil: null,
+      totpEnabled: true,
+      role: 'OWNER',
+      isActive: true,
+      emailVerifiedAt: new Date(),
+    })
+
+    await expectInvalidCredentials(
+      service.login({ firmSlug: 'firm', email: 'a@b.com', password: 'pass' }, meta),
+    )
+    expect(issuePartialJwtMock).not.toHaveBeenCalled()
   })
 
   it('returns requiresTotpSetup when totp disabled', async () => {
     const hash = await bcrypt.hash('pass', BCRYPT_PASSWORD_COST)
-    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0 })
+    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0, isActive: true })
     withRlsContextMock
       .mockResolvedValueOnce({
         id: 'user-1',
@@ -168,7 +226,7 @@ describe('AuthService.login', () => {
 
   it('returns requiresTotp when totp enabled', async () => {
     const hash = await bcrypt.hash('pass', BCRYPT_PASSWORD_COST)
-    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0 })
+    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0, isActive: true })
     withRlsContextMock
       .mockResolvedValueOnce({
         id: 'user-1',
@@ -192,7 +250,7 @@ describe('AuthService.login', () => {
 
   it('locks after third failure in single withRlsContext', async () => {
     const hash = await bcrypt.hash('pass', BCRYPT_PASSWORD_COST)
-    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0 })
+    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0, isActive: true })
     withRlsContextMock
       .mockResolvedValueOnce({
         id: 'user-1',

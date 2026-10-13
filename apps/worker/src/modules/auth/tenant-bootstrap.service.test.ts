@@ -65,9 +65,20 @@ describe('TenantBootstrapService.resolveFirm', () => {
       .mockResolvedValueOnce([{ idleTimeoutMinutes: 45 }])
 
     const result = await service.resolveFirm('  Acme-Corp  ')
-    expect(result).toEqual({ firmId, idleTimeoutMinutes: 45 })
+    expect(result).toEqual({ firmId, idleTimeoutMinutes: 45, isActive: true })
     expect(mockTransaction).toHaveBeenCalledTimes(1)
     expect(mockExecuteRaw).toHaveBeenCalled()
+  })
+
+  it('returns inactive firm when includeInactive is true', async () => {
+    const firmId = '33333333-3333-3333-3333-333333333333'
+    mockQueryRaw
+      .mockResolvedValueOnce([{ firm_id: firmId, is_active: false }])
+      .mockResolvedValueOnce([{ idleTimeoutMinutes: 30 }])
+
+    const result = await service.resolveFirm('pending-firm', { includeInactive: true })
+    expect(result).toEqual({ firmId, idleTimeoutMinutes: 30, isActive: false })
+    expect(mockTransaction).toHaveBeenCalledTimes(1)
   })
 
   it('canonicalizes slug to lowercase before lookup', async () => {

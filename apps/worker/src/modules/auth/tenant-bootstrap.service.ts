@@ -6,6 +6,7 @@ const SLUG_PATTERN = /^[a-z0-9-]{2,60}$/
 export interface ResolvedFirm {
   firmId: string
   idleTimeoutMinutes: number
+  isActive: boolean
 }
 
 /**
@@ -51,6 +52,6 @@ export class TenantBootstrapService implements OnModuleDestroy {
 
     const idle = idleRows[0]?.idleTimeoutMinutes ?? 0
 
-    return { firmId, idleTimeoutMinutes: idle }
+    return { firmId, idleTimeoutMinutes: idle, isActive: row.is_active }
   }
 }

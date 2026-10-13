@@ -44,7 +44,9 @@ export class AuthService {
   ) {}
 
   async login(dto: LoginDto, meta: RequestMeta): Promise<LoginResult> {
-    const firm = await this.tenantBootstrap.resolveFirm(dto.firmSlug)
+    const firm = await this.tenantBootstrap.resolveFirm(dto.firmSlug, {
+      includeInactive: true,
+    })
     if (!firm) {
       await sleep(UNKNOWN_FIRM_DELAY_MS)
       await bcrypt.compare(dto.password, DUMMY_PASSWORD_HASH)
@@ -67,15 +69,6 @@ export class AuthService {
 
       if (user.lockedUntil && user.lockedUntil > new Date()) {
         throw this.invalidCredentials()
-      }
-
-      if (!user.isActive || !user.emailVerifiedAt) {
-        throw new UnauthorizedException({
-          type: 'https://taxdesk.pk/problems/unauthorized',
-          title: INVALID_CREDENTIALS_MESSAGE,
-          status: 401,
-          reason: 'email_not_verified',
-        })
       }
 
       const passwordOk = await bcrypt.compare(dto.password, user.passwordHash)
@@ -139,6 +132,19 @@ export class AuthService {
           ).catch(() => undefined)
         }
 
+        throw this.invalidCredentials()
+      }
+
+      if (!user.emailVerifiedAt || !user.isActive) {
+        throw new UnauthorizedException({
+          type: 'https://taxdesk.pk/problems/unauthorized',
+          title: INVALID_CREDENTIALS_MESSAGE,
+          status: 401,
+          reason: 'email_not_verified',
+        })
+      }
+
+      if (!firm.isActive) {
         throw this.invalidCredentials()
       }
 
