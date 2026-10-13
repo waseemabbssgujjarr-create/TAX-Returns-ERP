@@ -58,6 +58,7 @@ model Firm {
   exportArtifacts  ExportArtifact[]
   irisFilings      IrisFiling[]
   googleDriveConnections GoogleDriveConnection[]
+  emailVerificationTokens EmailVerificationToken[]
 
   @@map("firms")
 }
@@ -108,10 +109,13 @@ model User {
   passwordChangedAt      DateTime? @map("password_changed_at")
   failedLoginCount       Int       @default(0) @map("failed_login_count")
   lockedUntil            DateTime? @map("locked_until")
+  emailVerifiedAt        DateTime? @map("email_verified_at")
+  lastVerificationSentAt DateTime? @map("last_verification_sent_at")
   createdAt              DateTime  @default(now()) @map("created_at")
   updatedAt              DateTime  @updatedAt @map("updated_at")
 
   firm          Firm           @relation(fields: [firmId], references: [id])
+  emailVerificationTokens EmailVerificationToken[]
   clientAccess       ClientAccess[]
   clientNotes        ClientNote[]
   auditLogs          AuditLog[]
@@ -184,6 +188,23 @@ model OtpCode {
   @@index([firmId, contactHmac])
   @@index([expiresAt])
   @@map("otp_codes")
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(uuid())
+  firmId    String    @map("firm_id")
+  userId    String    @map("user_id")
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  consumedAt DateTime? @map("consumed_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  firm Firm @relation(fields: [firmId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([firmId, userId])
+  @@index([expiresAt])
+  @@map("email_verification_tokens")
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

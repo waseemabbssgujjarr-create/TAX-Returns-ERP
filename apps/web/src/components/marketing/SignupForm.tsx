@@ -8,20 +8,31 @@ import { useMemo, useState, type ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { ErrorBanner } from '@/components/auth/ErrorBanner'
 import { Link } from '@/i18n/navigation'
+import { postRegister } from '@/lib/api/auth'
+import { ApiError } from '@/lib/api/base'
 
 const FIRM_SIZE_VALUES = ['solo', 'small', 'medium', 'large'] as const
 
 function buildSignupSchema(t: (key: string) => string) {
-  return z.object({
-    firmName: z.string().min(2, t('errors.firmName')),
-    contactName: z.string().min(2, t('errors.contactName')),
-    email: z.string().email(t('errors.email')),
-    phone: z.string().min(7, t('errors.phone')).max(24, t('errors.phone')),
-    city: z.string().min(2, t('errors.city')),
-    firmSize: z.enum(FIRM_SIZE_VALUES, { required_error: t('errors.firmSize') }),
-    notes: z.string().max(2000).optional(),
-  })
+  return z
+    .object({
+      firmName: z.string().min(2, t('errors.firmName')),
+      contactName: z.string().min(2, t('errors.contactName')),
+      email: z.string().email(t('errors.email')),
+      password: z.string().min(12, t('errors.password')),
+      confirmPassword: z.string().min(12, t('errors.password')),
+      phone: z.string().min(7, t('errors.phone')).max(24, t('errors.phone')),
+      city: z.string().min(2, t('errors.city')),
+      firmSize: z.enum(FIRM_SIZE_VALUES, { required_error: t('errors.firmSize') }),
+      notes: z.string().max(2000).optional(),
+      acceptTerms: z.boolean().refine((v) => v, t('errors.acceptTerms')),
+    })
+    .refine((v) => v.password === v.confirmPassword, {
+      message: t('errors.passwordMatch'),
+      path: ['confirmPassword'],
+    })
 }
 
 type SignupFormValues = z.infer<ReturnType<typeof buildSignupSchema>>
@@ -30,10 +41,15 @@ type SignupFormProps = {
   variant?: 'marketing' | 'auth'
 }
 
-export function SignupForm({ variant = 'marketing' }: SignupFormProps) {
+type SuccessState =
+  | { kind: 'sent'; firmSlug: string }
+  | { kind: 'delivery_failed'; firmSlug: string }
+
+export function SignupForm({ variant = 'auth' }: SignupFormProps) {
   const t = useTranslations('marketing.signup')
   const isAuth = variant === 'auth'
-  const [submitted, setSubmitted] = useState(false)
+  const [success, setSuccess] = useState<SuccessState | null>(null)
+  const [banner, setBanner] = useState<string | null>(null)
 
   const schema = useMemo(() => buildSignupSchema(t), [t])
 
@@ -47,18 +63,52 @@ export function SignupForm({ variant = 'marketing' }: SignupFormProps) {
       firmName: '',
       contactName: '',
       email: '',
+      password: '',
+      confirmPassword: '',
       phone: '',
       city: '',
       firmSize: 'small',
       notes: '',
+      acceptTerms: false,
     },
   })
 
-  const onSubmit = () => {
-    setSubmitted(true)
+  const onSubmit = async (values: SignupFormValues) => {
+    setBanner(null)
+    try {
+      const payload = {
+        firmName: values.firmName,
+        contactName: values.contactName,
+        email: values.email,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        phone: values.phone,
+        city: values.city,
+        firmSize: values.firmSize,
+        acceptTerms: true as const,
+        ...(values.notes?.trim() ? { notes: values.notes.trim() } : {}),
+      }
+      const result = await postRegister(payload)
+
+      if (result.status === 'verification_pending' && result.emailDeliveryFailed) {
+        setSuccess({ kind: 'delivery_failed', firmSlug: result.firmSlug })
+        return
+      }
+
+      setSuccess({ kind: 'sent', firmSlug: result.firmSlug })
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 409) {
+        setBanner(t('errors.conflict'))
+      } else if (err instanceof TypeError || (err instanceof ApiError && err.status >= 500)) {
+        setBanner(t('errors.network'))
+      } else {
+        setBanner(t('errors.generic'))
+      }
+    }
   }
 
-  if (submitted) {
+  if (success) {
+    const isDeliveryFailed = success.kind === 'delivery_failed'
     return (
       <div
         className={
@@ -68,9 +118,25 @@ export function SignupForm({ variant = 'marketing' }: SignupFormProps) {
         }
         role="status"
       >
-        <CheckCircle2 className="text-success size-10" aria-hidden="true" />
-        <h2 className="text-foreground text-lg font-semibold">{t('success.title')}</h2>
-        <p className="text-foreground/80 max-w-md text-sm leading-relaxed">{t('success.body')}</p>
+        <CheckCircle2
+          className={isDeliveryFailed ? 'text-warning size-10' : 'text-success size-10'}
+          aria-hidden="true"
+        />
+        <h2 className="text-foreground text-lg font-semibold">
+          {isDeliveryFailed ? t('success.deliveryFailedTitle') : t('success.title')}
+        </h2>
+        <p className="text-foreground/80 max-w-md text-sm leading-relaxed">
+          {isDeliveryFailed ? t('success.deliveryFailedBody') : t('success.body')}
+        </p>
+        <p className="text-muted-foreground text-xs">
+          {t('success.firmSlugHint', { slug: success.firmSlug })}
+        </p>
+        <Link
+          href={`/verify-email?firm=${encodeURIComponent(success.firmSlug)}`}
+          className="text-primary text-sm font-semibold underline-offset-2 hover:underline"
+        >
+          {t('success.verifyLink')}
+        </Link>
       </div>
     )
   }
@@ -96,6 +162,8 @@ export function SignupForm({ variant = 'marketing' }: SignupFormProps) {
           <p className="text-muted-foreground mt-1 text-sm">{t('intro')}</p>
         </div>
       ) : null}
+
+      {banner ? <ErrorBanner message={banner} /> : null}
 
       <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
         <Field label={t('fields.firmName')} error={errors.firmName?.message} htmlFor="signup-firm">
@@ -138,6 +206,28 @@ export function SignupForm({ variant = 'marketing' }: SignupFormProps) {
             {...register('phone')}
           />
         </Field>
+        <Field label={t('fields.password')} error={errors.password?.message} htmlFor="signup-password">
+          <input
+            id="signup-password"
+            type="password"
+            autoComplete="new-password"
+            className={inputClass(errors.password)}
+            {...register('password')}
+          />
+        </Field>
+        <Field
+          label={t('fields.confirmPassword')}
+          error={errors.confirmPassword?.message}
+          htmlFor="signup-confirm-password"
+        >
+          <input
+            id="signup-confirm-password"
+            type="password"
+            autoComplete="new-password"
+            className={inputClass(errors.confirmPassword)}
+            {...register('confirmPassword')}
+          />
+        </Field>
         <Field label={t('fields.city')} error={errors.city?.message} htmlFor="signup-city">
           <input
             id="signup-city"
@@ -161,11 +251,26 @@ export function SignupForm({ variant = 'marketing' }: SignupFormProps) {
       <Field label={t('fields.notes')} error={errors.notes?.message} htmlFor="signup-notes">
         <textarea
           id="signup-notes"
-          rows={4}
+          rows={3}
           className={inputClass(errors.notes)}
           {...register('notes')}
         />
       </Field>
+
+      <label className="flex items-start gap-2 text-sm">
+        <input type="checkbox" className="mt-1" {...register('acceptTerms')} />
+        <span>
+          {t('fields.acceptTerms')}{' '}
+          <Link href="/terms" className="text-primary font-medium underline-offset-2 hover:underline">
+            {t('fields.termsLink')}
+          </Link>
+        </span>
+      </label>
+      {errors.acceptTerms ? (
+        <p className="text-destructive text-xs" role="alert">
+          {errors.acceptTerms.message}
+        </p>
+      ) : null}
 
       <div
         className={

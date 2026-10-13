@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -10,7 +11,7 @@ import { z } from 'zod'
 import { ErrorBanner } from '@/components/auth/ErrorBanner'
 import { SubmitButton } from '@/components/auth/SubmitButton'
 import { Link, useRouter } from '@/i18n/navigation'
-import { postLogin } from '@/lib/api/auth'
+import { getProblemReason, postLogin } from '@/lib/api/auth'
 import { ApiError } from '@/lib/api/base'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -29,6 +30,7 @@ type LoginFormValues = z.infer<typeof LoginSchema>
 export function LoginForm() {
   const t = useTranslations('auth.login')
   const router = useRouter()
+  const searchParams = useSearchParams()
   const setToken = useAuthStore((s) => s.setToken)
   const [showPassword, setShowPassword] = useState(false)
   const [banner, setBanner] = useState<string | null>(null)
@@ -41,7 +43,11 @@ export function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(LoginSchema),
-    defaultValues: { firmSlug: '', email: '', password: '' },
+    defaultValues: {
+      firmSlug: searchParams.get('firm')?.toLowerCase().trim() ?? '',
+      email: '',
+      password: '',
+    },
   })
 
   const onSubmit = async (values: LoginFormValues) => {
@@ -56,7 +62,11 @@ export function LoginForm() {
       }
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
-        setBanner(t('invalidCredentials'))
+        if (getProblemReason(err) === 'email_not_verified') {
+          setBanner(t('emailNotVerified'))
+        } else {
+          setBanner(t('invalidCredentials'))
+        }
       } else if (
         err instanceof TypeError ||
         (err instanceof ApiError && (err.status === 502 || err.status === 503 || err.status === 504))

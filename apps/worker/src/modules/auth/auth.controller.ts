@@ -33,7 +33,13 @@ import {
   OtpVerifySchema,
   TotpSetupConfirmSchema,
   TotpVerifySchema,
+  RegisterSchema,
+  ResendVerificationSchema,
+  VerifyEmailSchema,
   type LoginBody,
+  type RegisterBody,
+  type ResendVerificationBody,
+  type VerifyEmailBody,
   type OtpSendBody,
   type OtpVerifyBody,
   type TotpSetupConfirmBody,
@@ -41,6 +47,7 @@ import {
 } from './dto/auth.dto'
 import { extractBearerToken } from './jwt.util'
 import { OtpService } from './otp.service'
+import { RegistrationService } from './registration.service'
 import { withStaffBootstrapContext } from './rls-bootstrap.util'
 import { TokenService } from './token.service'
 import { TotpService } from './totp.service'
@@ -57,8 +64,45 @@ export class AuthController {
     private readonly tokenService: TokenService,
     private readonly totpService: TotpService,
     private readonly otpService: OtpService,
+    private readonly registrationService: RegistrationService,
     private readonly prismaRls: PrismaRlsClient,
   ) {}
+
+  @Public()
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  @Throttle({ default: { limit: 10, ttl: 900_000 } })
+  @UsePipes(new ZodValidationPipe(RegisterSchema))
+  async register(@Body() body: RegisterBody) {
+    return this.registrationService.register({
+      firmName: body.firmName,
+      contactName: body.contactName,
+      email: body.email,
+      password: body.password,
+      phone: body.phone,
+      city: body.city,
+      firmSize: body.firmSize,
+      notes: body.notes,
+    })
+  }
+
+  @Public()
+  @Post('register/verify')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 30, ttl: 900_000 } })
+  @UsePipes(new ZodValidationPipe(VerifyEmailSchema))
+  verifyRegistration(@Body() body: VerifyEmailBody) {
+    return this.registrationService.verifyEmail(body.token)
+  }
+
+  @Public()
+  @Post('register/resend')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 900_000 } })
+  @UsePipes(new ZodValidationPipe(ResendVerificationSchema))
+  resendVerification(@Body() body: ResendVerificationBody) {
+    return this.registrationService.resendVerification(body)
+  }
 
   @Public()
   @Post('login')

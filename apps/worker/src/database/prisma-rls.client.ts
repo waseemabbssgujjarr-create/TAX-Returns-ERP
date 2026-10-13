@@ -51,6 +51,18 @@ export class PrismaRlsClient {
    * Sets firm_id + auth_flow=refresh_rotation so refresh_tokens RLS allows
    * firm-scoped lookup by token hash without a known userId yet.
    */
+  /** Firm bootstrap writes (registration) before a user session exists. */
+  async withRegistrationBootstrap<T>(
+    firmId: string,
+    userId: string,
+    fn: (tx: Prisma.TransactionClient) => Promise<T>,
+  ): Promise<T> {
+    return this.prisma.$transaction(async (tx) => {
+      await applyRlsSessionVariables(tx, { firmId, userId, sessionType: 'staff' })
+      return fn(tx)
+    })
+  }
+
   async withPreAuthFirmContext<T>(
     firmId: string,
     fn: (tx: Prisma.TransactionClient) => Promise<T>,

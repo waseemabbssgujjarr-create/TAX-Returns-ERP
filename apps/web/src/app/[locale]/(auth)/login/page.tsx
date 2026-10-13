@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { getTranslations } from 'next-intl/server'
 
 import { LoginForm } from '@/components/auth/LoginForm'
@@ -9,5 +10,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default function LoginPage() {
-  return <LoginForm />
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
+  )
 }

@@ -25,7 +25,7 @@ export class TenantBootstrapService implements OnModuleDestroy {
     await this.prismaBootstrap.$disconnect()
   }
 
-  async resolveFirm(slug: string): Promise<ResolvedFirm | null> {
+  async resolveFirm(slug: string, opts?: { includeInactive?: boolean }): Promise<ResolvedFirm | null> {
     const canonical = slug.toLowerCase().trim()
     if (!SLUG_PATTERN.test(canonical)) {
       return null
@@ -36,7 +36,7 @@ export class TenantBootstrapService implements OnModuleDestroy {
     >`SELECT firm_id, is_active FROM firm_directory WHERE slug = ${canonical}`
 
     const row = rows[0]
-    if (!row || !row.is_active) {
+    if (!row || (!row.is_active && !opts?.includeInactive)) {
       return null
     }
 

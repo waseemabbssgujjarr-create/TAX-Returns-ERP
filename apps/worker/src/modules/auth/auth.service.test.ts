@@ -87,6 +87,8 @@ describe('AuthService.login', () => {
         lockedUntil: null,
         totpEnabled: true,
         role: 'OWNER',
+        isActive: true,
+        emailVerifiedAt: new Date(),
       })
       .mockResolvedValueOnce({ lockedUntil: null, failedLoginCount: 1, firmName: null })
 
@@ -106,11 +108,38 @@ describe('AuthService.login', () => {
       lockedUntil: new Date(Date.now() + 60_000),
       totpEnabled: true,
       role: 'OWNER',
+      isActive: true,
+      emailVerifiedAt: new Date(),
     })
 
     await expectInvalidCredentials(
       service.login({ firmSlug: 'firm', email: 'a@b.com', password: 'pass' }, meta),
     )
+  })
+
+  it('returns email_not_verified for unverified active password match', async () => {
+    const hash = await bcrypt.hash('pass', BCRYPT_PASSWORD_COST)
+    resolveFirmMock.mockResolvedValue({ firmId, idleTimeoutMinutes: 0 })
+    withRlsContextMock.mockResolvedValue({
+      id: 'user-1',
+      email: 'a@b.com',
+      passwordHash: hash,
+      failedLoginCount: 0,
+      lockedUntil: null,
+      totpEnabled: false,
+      role: 'OWNER',
+      isActive: false,
+      emailVerifiedAt: null,
+    })
+
+    try {
+      await service.login({ firmSlug: 'firm', email: 'a@b.com', password: 'pass' }, meta)
+      throw new Error('expected rejection')
+    } catch (err) {
+      expect(err).toBeInstanceOf(UnauthorizedException)
+      const response = (err as UnauthorizedException).getResponse() as { reason?: string }
+      expect(response.reason).toBe('email_not_verified')
+    }
   })
 
   it('returns requiresTotpSetup when totp disabled', async () => {
@@ -125,6 +154,8 @@ describe('AuthService.login', () => {
         lockedUntil: null,
         totpEnabled: false,
         role: 'OWNER',
+        isActive: true,
+        emailVerifiedAt: new Date(),
       })
       .mockResolvedValueOnce(undefined)
 
@@ -147,6 +178,8 @@ describe('AuthService.login', () => {
         lockedUntil: null,
         totpEnabled: true,
         role: 'OWNER',
+        isActive: true,
+        emailVerifiedAt: new Date(),
       })
       .mockResolvedValueOnce(undefined)
 
@@ -169,6 +202,8 @@ describe('AuthService.login', () => {
         lockedUntil: null,
         totpEnabled: true,
         role: 'OWNER',
+        isActive: true,
+        emailVerifiedAt: new Date(),
       })
       .mockImplementationOnce((fn: (tx: unknown) => Promise<unknown>) => {
         const tx = {

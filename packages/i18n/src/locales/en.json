@@ -57,11 +57,37 @@
       "showPassword": "Show password",
       "hidePassword": "Hide password",
       "invalidCredentials": "Email or password is incorrect.",
+      "emailNotVerified": "Verify your email before signing in. Use the link we sent or request a new one from the verification page.",
       "accountLocked": "Account locked. Please check your email.",
       "networkError": "Connection error. Please try again.",
       "apiUnavailable": "Cannot reach the API. Start Docker Desktop, then run: docker compose up -d postgres redis && pnpm dev",
       "noAccess": "Don't have firm access?",
       "registerLink": "Request access"
+    },
+    "verifyEmail": {
+      "pageTitle": "Verify email — TaxDesk PK",
+      "verifying": "Verifying your email…",
+      "successTitle": "Email verified",
+      "alreadyTitle": "Already verified",
+      "successBody": "Your firm workspace is ready. Sign in with your firm ID and password, then complete two-step verification setup.",
+      "signIn": "Continue to sign in",
+      "invalidTitle": "Invalid verification link",
+      "invalidBody": "This link is not valid. Register again or request a new verification email below.",
+      "expiredTitle": "Verification link expired",
+      "expiredBody": "This link has expired. Request a new verification email below.",
+      "usedTitle": "Link already used",
+      "usedBody": "This verification link was already used. Sign in or request a new email if you still need help.",
+      "errorTitle": "Verification failed",
+      "networkError": "Could not reach the server. Try again shortly.",
+      "resendHeading": "Resend verification email",
+      "firmSlugLabel": "Firm ID",
+      "emailLabel": "Work email",
+      "resendButton": "Send verification email",
+      "resent": "If an unverified account matches these details, a new email has been sent.",
+      "resendCooldown": "Please wait a few minutes before requesting another email.",
+      "resendFailed": "Could not send the verification email. Try again later.",
+      "emailDeliveryFailed": "We saved your registration but could not send email. Check SMTP settings or try resend shortly.",
+      "backToSignIn": "Back to sign in"
     },
     "twoFa": {
       "title": "Two-factor authentication",
@@ -1556,12 +1582,12 @@
       }
     },
     "signup": {
-      "metaTitle": "Request firm access — TaxDesk PK",
-      "metaDescription": "Request TaxDesk PK workspace provisioning for your tax firm. AdEra Labs FinTax reviews and enables access — no self-service account creation.",
-      "title": "Request firm access",
-      "intro": "TaxDesk PK is provisioned by AdEra Labs FinTax for each firm. Submit your details and we will follow up with onboarding — this form does not create a live login.",
+      "metaTitle": "Create your firm — TaxDesk PK",
+      "metaDescription": "Register your tax firm on TaxDesk PK. Verify your work email to activate your workspace.",
+      "title": "Create your firm",
+      "intro": "Register your practice, verify your work email, then sign in to complete two-step verification setup.",
       "formAria": "Firm access request form",
-      "submit": "Submit request",
+      "submit": "Create firm account",
       "hasAccess": "Already have credentials?",
       "signInLink": "Sign in",
       "fields": {
@@ -1571,7 +1597,11 @@
         "phone": "Phone",
         "city": "City",
         "firmSize": "Firm size",
-        "notes": "Notes (optional)"
+        "notes": "Notes (optional)",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "acceptTerms": "I agree to the",
+        "termsLink": "Terms of Service"
       },
       "firmSizes": {
         "solo": "Solo practitioner",
@@ -1585,11 +1615,21 @@
         "email": "Enter a valid email address.",
         "phone": "Enter a valid phone number.",
         "city": "Enter your city.",
-        "firmSize": "Select firm size."
+        "firmSize": "Select firm size.",
+        "password": "Use at least 12 characters.",
+        "passwordMatch": "Passwords must match.",
+        "acceptTerms": "Accept the terms to continue.",
+        "conflict": "Registration could not be completed with these details.",
+        "network": "Could not reach the server. Try again.",
+        "generic": "Registration failed. Check your details and try again."
       },
       "success": {
-        "title": "Request received",
-        "body": "Thank you. AdEra Labs FinTax will review your request and contact you about provisioning a TaxDesk PK workspace. No account has been created yet."
+        "title": "Check your email",
+        "body": "We sent a verification link to your work email. Open it to activate your firm workspace, then sign in.",
+        "deliveryFailedTitle": "Account created — email not sent",
+        "deliveryFailedBody": "Your firm registration was saved, but we could not send the verification email. Use resend on the verification page once email delivery is fixed.",
+        "firmSlugHint": "Your firm ID: {slug}",
+        "verifyLink": "Open verification help"
       }
     },
     "v2": {

@@ -54,3 +54,42 @@ export type TotpVerifyBody = z.infer<typeof TotpVerifySchema>
 export type TotpSetupConfirmBody = z.infer<typeof TotpSetupConfirmSchema>
 export type OtpSendBody = z.infer<typeof OtpSendSchema>
 export type OtpVerifyBody = z.infer<typeof OtpVerifySchema>
+
+const firmSizeValues = ['solo', 'small', 'medium', 'large'] as const
+
+export const RegisterSchema = z
+  .object({
+    firmName: z.string().trim().min(2).max(120),
+    contactName: z.string().trim().min(2).max(120),
+    email: z.string().email(),
+    password: z.string().min(12).max(128),
+    confirmPassword: z.string().min(12).max(128),
+    phone: z.string().trim().min(7).max(24),
+    city: z.string().trim().min(2).max(80),
+    firmSize: z.enum(firmSizeValues),
+    notes: z.string().max(2000).optional(),
+    acceptTerms: z.literal(true, {
+      errorMap: () => ({ message: 'Terms must be accepted' }),
+    }),
+  })
+  .refine((v) => v.password === v.confirmPassword, {
+    message: 'Passwords must match',
+    path: ['confirmPassword'],
+  })
+
+export const ResendVerificationSchema = z.object({
+  firmSlug: z
+    .string()
+    .min(2)
+    .max(60)
+    .regex(/^[a-z0-9-]+$/),
+  email: z.string().email(),
+})
+
+export const VerifyEmailSchema = z.object({
+  token: z.string().min(10).max(200),
+})
+
+export type RegisterBody = z.infer<typeof RegisterSchema>
+export type ResendVerificationBody = z.infer<typeof ResendVerificationSchema>
+export type VerifyEmailBody = z.infer<typeof VerifyEmailSchema>

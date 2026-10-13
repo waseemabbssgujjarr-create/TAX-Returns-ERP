@@ -16,6 +16,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard'
 import { RolesGuard } from './guards/roles.guard'
 import { OtpService } from './otp.service'
 import { PortalClientLookup } from './portal-client.lookup'
+import { RegistrationService } from './registration.service'
 import { TenantBootstrapService } from './tenant-bootstrap.service'
 import { TokenService } from './token.service'
 import { TotpService } from './totp.service'
@@ -56,6 +57,7 @@ import { TotpService } from './totp.service'
     TokenService,
     TotpService,
     OtpService,
+    RegistrationService,
     TenantBootstrapService,
     PortalClientLookup,
     FirmGuard,

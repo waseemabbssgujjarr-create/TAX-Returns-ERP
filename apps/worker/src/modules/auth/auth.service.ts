@@ -69,6 +69,15 @@ export class AuthService {
         throw this.invalidCredentials()
       }
 
+      if (!user.isActive || !user.emailVerifiedAt) {
+        throw new UnauthorizedException({
+          type: 'https://taxdesk.pk/problems/unauthorized',
+          title: INVALID_CREDENTIALS_MESSAGE,
+          status: 401,
+          reason: 'email_not_verified',
+        })
+      }
+
       const passwordOk = await bcrypt.compare(dto.password, user.passwordHash)
       if (!passwordOk) {
         const failure = await this.prismaRls.withRlsContext(async (tx) => {
